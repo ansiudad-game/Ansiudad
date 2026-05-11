@@ -4,52 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juega — Ansiudad</title>
+    <link rel="stylesheet" href="css/fonts-helveticaneue.css" />
     <link rel="stylesheet" href="./juego.css">
     <link rel="stylesheet" href="css/menu.css">
     <link rel="shortcut icon" href="/img/fav/favicon.ico" />
 </head>
 <body>
-    <nav class="menu">
-		<ul class="menu__top">
-		    <li class="menu__logo">
-			    <a href="/index.html#" class="menu__logo-link">
-			        <img src="img/black-logo-ani.gif" alt="Logotipo Ansiudad" class="menu__logo-image">
-			    </a>
-			    <div class="menu__toggle">
-			        <label>
-			            <input type="checkbox" class="menu__toggle-checkbox">
-			            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			            	<path class="menu__toggle-line line--1" d="M0 40h62c13 0 6 28-4 18L35 35" />
-			            	<path class="menu__toggle-line line--2" d="M0 50h70" />
-			            	<path class="menu__toggle-line line--3" d="M0 60h62c13 0 6-28-4-18L35 65" />
-			            </svg>
-			        </label>
-			    </div>
-		    </li>
-		        <li class="menu__news">
-		            <div class="menu__news-item">
-		                <img src="/img/ojito.svg" alt="Ícono" class="menu__news-icon">
-		                Transforma la enseñanza y aborda la ecoansiedad junto a tus estudiantes.
-		                <span class="menu__news-highlight">Ansiudad en línea</span> juega
-		                <a href="#" target="_blank" class="menu__news-link">aquí</a>
-		            </div>
-		        <div class="menu__news-item">
-		            <img src="/img/ojito.svg" alt="Ícono" class="menu__news-icon">
-		            Transforma la enseñanza y aborda la ecoansiedad junto a tus estudiantes.
-		            <span class="menu__news-highlight">Ansiudad en línea</span> juega
-		            <a href="#" target="_blank" class="menu__news-link">aquí</a>
-		        </div>
-		    </li>
-		</ul>
-		
-		<ul class="menu__bottom">
-		    <li class="menu__item"><a href="/index.html#what" class="menu__link">¿Qué es Ansiudad?</a></li>
-			    <li class="menu__item"><a href="/index.html#how" class="menu__link">¿Cómo lo diseñamos?</a></li>
-			    <li class="menu__item"><a href="/index.html#where" class="menu__link">¿Dónde se ha jugado?</a></li>
-			    <li class="menu__item"><a href="/index.html#about" class="menu__link">¿Cuál es el desafío?</a></li>
-			    <li class="menu__item"><a href="/juego.html" class="menu__link">¿Quieres jugar?</a></li>
-		</ul>
-	</nav>
+    <nav class="menu" aria-label="Principal">
+      <div class="menu__top">
+        <div class="menu__bar">
+          <a href="/index.html#home" class="menu__logo-link">
+            <img
+              src="brand/ansiudadMorado.svg"
+              alt="Ansiudad"
+              class="menu__logo-image"
+              width="200"
+              height="24"
+              decoding="async"
+            />
+          </a>
+        </div>
+        <div class="menu__toggle-host">
+          <div class="menu__toggle">
+            <label for="menu-toggle-juego">
+              <input id="menu-toggle-juego" type="checkbox" class="menu__toggle-checkbox" aria-controls="menu-panel-juego" />
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path class="menu__toggle-line line--1" d="M0 40h62c13 0 6 28-4 18L35 35" />
+                <path class="menu__toggle-line line--2" d="M0 50h70" />
+                <path class="menu__toggle-line line--3" d="M0 60h62c13 0 6-28-4-18L35 65" />
+              </svg>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div id="menu-panel-juego" class="menu__panel" role="region" aria-label="Secciones">
+      <ul class="menu__bottom">
+        <li class="menu__item"><a href="/index.html#que-es" class="menu__link">¿Qué es Ansiudad?</a></li>
+        <li class="menu__item"><a href="/index.html#desafio" class="menu__link">¿Cuál es el desafío?</a></li>
+        <li class="menu__item"><a href="/index.html#diseno" class="menu__link">¿Cómo lo diseñamos?</a></li>
+        <li class="menu__item"><a href="/index.html#donde" class="menu__link">¿Dónde se ha jugado?</a></li>
+        <li class="menu__item"><a href="/index.html#contacto" class="menu__link">Contacto</a></li>
+        <li class="menu__item"><a href="/juego.html" class="menu__link">¿Quieres jugar?</a></li>
+      </ul>
+      </div>
+    </nav>
     <main data-taxi>
         <div id="loader-container">
             <div id="loader"></div>

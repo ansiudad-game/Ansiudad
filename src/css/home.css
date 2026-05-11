@@ -1,0 +1,109 @@
+/*
+  <section id="home" class="home"> — hero, vídeo, capas, título.
+*/
+.home {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.colorLayer,
+.colorLayer2,
+.contrastLayer,
+.monochromeLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.colorLayer::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffd178;
+  mix-blend-mode: multiply;
+}
+
+.colorLayer2::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #6600ff;
+  mix-blend-mode: color;
+}
+
+.contrastLayer {
+  filter: contrast(1.5);
+}
+
+.monochromeLayer {
+  filter: grayscale(1);
+}
+
+.home video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.home__title {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: var(--morado-claro);
+  z-index: 10;
+}
+
+.home__title p {
+  font-family: var(--font-titles);
+  font-weight: 700;
+  font-size: clamp(2.55rem, 4.25vw, 5.1rem);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.home__title img {
+  width: clamp(180px, 72vw, 510px);
+  max-width: 100%;
+  height: auto;
+  margin-top: 0.15rem;
+}
+
+.home__title::after {
+  content: "\00BB";
+  position: absolute;
+  top: 100%;
+  left: 0%;
+  text-align: center;
+  font-size: 3rem;
+  width: 100%;
+  transform: rotate(90deg);
+  animation: home-scroll-hint 0.5s linear alternate infinite;
+}
+
+@keyframes home-scroll-hint {
+  to {
+    top: 120%;
+  }
+}

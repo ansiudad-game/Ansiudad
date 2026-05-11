@@ -1,0 +1,56 @@
+/*
+  Bloques .section-text (desafío, diseño, dónde, qué es texto), títulos h2,
+  .logos, .howAnchor — compartido entre varios <section class="theme-container">.
+*/
+.section-text {
+  width: 100%;
+  max-width: 100vw;
+  min-height: 50vh;
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 6vw, 15vw)
+    clamp(2rem, 6vw, 4rem);
+  font-size: clamp(1rem, 2.8vw, 1.8em);
+  line-height: 1.35;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.section-text p b {
+  font-family: var(--font-family);
+  font-weight: 700;
+}
+
+.section-text h2 {
+  font-family: var(--font-titles);
+  font-size: clamp(1.75rem, 7vw, 6rem);
+  line-height: 1.05;
+  margin-bottom: clamp(1rem, 3vw, 2.5rem);
+  text-transform: uppercase;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+.logos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.logo {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.howAnchor {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 60px;
+}
+
+@media (min-width: 880px) {
+  .logo {
+    max-width: 300px;
+  }
+}

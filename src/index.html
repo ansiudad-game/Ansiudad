@@ -1,8 +1,8 @@
 <!--
 Theme: Ansiudad 
-Version: 2,0
-Author: Mn
-Date: 11-24
+Version: 3,0
+Author: Aviz
+Date: 05-26 to 07-26
 -->
 
 <!doctype html>
@@ -50,27 +50,45 @@ Date: 11-24
     <meta name="twitter:image:width" content="750" />
     <meta name="twitter:image:height" content="392" />
     <link rel="shortcut icon" href="/img/fav/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <!-- Estilos por bloque de página (orden = cascada) -->
+    <link rel="stylesheet" type="text/css" href="css/fonts-helveticaneue.css" />
+    <link rel="stylesheet" type="text/css" href="css/base-tokens.css" />
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/home.css" />
+    <link rel="stylesheet" type="text/css" href="css/theme-que-es.css" />
+    <link rel="stylesheet" type="text/css" href="css/section-text.css" />
+    <link rel="stylesheet" type="text/css" href="css/gallery-overlay.css" />
+    <link rel="stylesheet" type="text/css" href="css/wrap-stacks.css" />
+    <link rel="stylesheet" type="text/css" href="css/footer-contacto.css" />
+    <link rel="stylesheet" type="text/css" href="css/site-bottom.css" />
     <link rel="stylesheet" type="text/css" href="css/menu.css" />
     <script>
       document.documentElement.className = "js";
     </script>
   </head>
   <body>
-    <nav class="menu">
-      <ul class="menu__top">
-        <li class="menu__logo">
-          <a href="#" class="menu__logo-link">
+    <nav class="menu" aria-label="Principal">
+      <div class="menu__top">
+        <div class="menu__bar">
+          <a href="#home" class="menu__logo-link">
             <img
-              src="img/black-logo-ani.gif"
-              alt="Logotipo Ansiudad"
+              src="brand/ansiudadMorado.svg"
+              alt="Ansiudad"
               class="menu__logo-image"
+              width="200"
+              height="24"
+              decoding="async"
             />
           </a>
+        </div>
+
+        <div class="menu__toggle-host">
           <div class="menu__toggle">
-            <label>
-              <input type="checkbox" class="menu__toggle-checkbox" />
-              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <label for="menu-toggle">
+              <input
+                id="menu-toggle" type="checkbox" class="menu__toggle-checkbox" aria-controls="menu-panel"
+              />
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path
                   class="menu__toggle-line line--1"
                   d="M0 40h62c13 0 6 28-4 18L35 35"
@@ -83,42 +101,28 @@ Date: 11-24
               </svg>
             </label>
           </div>
-        </li>
-        <li class="menu__news">
-          <div class="menu__news-item">
-            <img src="/img/ojito.svg" alt="Ícono" class="menu__news-icon" />
-            Transforma la enseñanza y aborda la ecoansiedad junto a tus
-            estudiantes.
-            <span class="menu__news-highlight">Ansiudad en línea</span> juega
-            <a href="#" target="_blank" class="menu__news-link">aquí</a>
-          </div>
-          <div class="menu__news-item">
-            <img src="/img/ojito.svg" alt="Ícono" class="menu__news-icon" />
-            Transforma la enseñanza y aborda la ecoansiedad junto a tus
-            estudiantes.
-            <span class="menu__news-highlight">Ansiudad en línea</span> juega
-            <a href="#" target="_blank" class="menu__news-link">aquí</a>
-          </div>
-        </li>
-      </ul>
+        </div>
+      </div>
 
+      <div id="menu-panel" class="menu__panel" role="region" aria-label="Secciones">
       <ul class="menu__bottom">
         <li class="menu__item">
-          <a href="#what" class="menu__link">¿Qué es Ansiudad?</a>
+          <a href="#que-es" class="menu__link">¿Qué es Ansiudad?</a>
         </li>
         <li class="menu__item">
-          <a href="#how" class="menu__link">¿Cómo lo diseñamos?</a>
+          <a href="#desafio" class="menu__link">¿Cuál es el desafío?</a>
         </li>
         <li class="menu__item">
-          <a href="#where" class="menu__link">¿Dónde se ha jugado?</a>
+          <a href="#diseno" class="menu__link">¿Cómo lo diseñamos?</a>
         </li>
         <li class="menu__item">
-          <a href="#about" class="menu__link">¿Cuál es el desafío?</a>
+          <a href="#donde" class="menu__link">¿Dónde se ha jugado?</a>
         </li>
         <li class="menu__item">
-          <a href="/juego.html" class="menu__link">¿Quieres jugar?</a>
+          <a href="#contacto" class="menu__link">Contacto</a>
         </li>
       </ul>
+      </div>
     </nav>
 
     <main>
@@ -129,11 +133,11 @@ Date: 11-24
           <div class="colorLayer2">
             <div class="contrastLayer">
               <div class="monochromeLayer">
-                <video id="backgroundVideo" autoplay muted loop playsinline>
+                <!-- <video id="backgroundVideo" autoplay muted loop playsinline>
                   <source src="vid/ansiudad.mp4" type="video/mp4" />
                   <source src="vid/ansiudad.webm" type="video/webm" />
                   Tu navegador no soporta la reproducción de videos.
-                </video>
+                </video> -->
               </div>
             </div>
           </div>
@@ -144,6 +148,7 @@ Date: 11-24
         </div>
       </section>
 
+      <section id="que-es" class="theme-container">
       <div id="what" class="intro">
         <div class="intro__title">
           <span>¿Qué es</span>
@@ -397,7 +402,43 @@ Date: 11-24
           </div>
         </div>
       </div>
+      </section>
 
+      <section id="desafio" class="theme-container section-text">
+        <div class="howAnchor"></div>
+        <h2>¿Cuál es el desafío?</h2>
+        <p>
+          <b>Ansiudad</b> se encuentra en un punto crítico. Incidentes
+          inesperados han azotado a la metrópoli, dejando al gobierno desbordado
+          para enfrentar los desafíos que se presentan. Sin embargo, en medio de
+          la crisis, surge una oportunidad para que sus habitantes tomen el
+          control y lideren el cambio.
+        </p>
+        <br />
+        <p>
+          En este juego, te convertirás en un ansiudadanx comprometido y
+          propositivo que forma parte de un Consejo Ansiudadano. Tu objetivo es
+          trabajar en equipo para proponer soluciones innovadoras y efectivas
+          que mejoren la calidad de vida de todxs en <b>Ansiudad</b>.
+        </p>
+        <br />
+        <p>
+          Cada participante asumirá un rol social distinto, con intereses
+          específicos y objetivos que deberás equilibrar y proteger en relación
+          con lxs demás jugadorxs. A través de la colaboración, trabajarás con
+          otros ansiudadanos para analizar problemas, debatir soluciones y tomar
+          decisiones que afectarán a <b>Ansiudad</b>.
+        </p>
+        <br />
+        <p>
+          <b>
+            ¿Podrás encontrar un equilibrio entre lo individual y lo colectivo y
+            liderar a Ansiudad hacia un mejor futuro? Tu misión.
+          </b>
+        </p>
+      </section>
+
+      <section id="diseno" class="theme-container">
       <section id="how" class="section-text">
         <div class="howAnchor"></div>
         <h2>¿Cómo lo diseñamos?</h2>
@@ -608,7 +649,9 @@ Date: 11-24
           </div>
         </div>
       </div>
+      </section>
 
+      <section id="donde" class="theme-container">
       <section id="where" class="section-text">
         <div class="howAnchor"></div>
         <h2>¿Dónde se ha jugado?</h2>
@@ -829,41 +872,9 @@ Date: 11-24
           </div>
         </div>
       </div>
-
-      <section id="about" class="section-text">
-        <div class="howAnchor"></div>
-        <h2>¿Cuál es el desafío?</h2>
-        <p>
-          <b>Ansiudad</b> se encuentra en un punto crítico. Incidentes
-          inesperados han azotado a la metrópoli, dejando al gobierno desbordado
-          para enfrentar los desafíos que se presentan. Sin embargo, en medio de
-          la crisis, surge una oportunidad para que sus habitantes tomen el
-          control y lideren el cambio.
-        </p>
-        <br />
-        <p>
-          En este juego, te convertirás en un ansiudadanx comprometido y
-          propositivo que forma parte de un Consejo Ansiudadano. Tu objetivo es
-          trabajar en equipo para proponer soluciones innovadoras y efectivas
-          que mejoren la calidad de vida de todxs en <b>Ansiudad</b>.
-        </p>
-        <br />
-        <p>
-          Cada participante asumirá un rol social distinto, con intereses
-          específicos y objetivos que deberás equilibrar y proteger en relación
-          con lxs demás jugadorxs. A través de la colaboración, trabajarás con
-          otros ansiudadanos para analizar problemas, debatir soluciones y tomar
-          decisiones que afectarán a <b>Ansiudad</b>.
-        </p>
-        <br />
-        <p>
-          <b>
-            ¿Podrás encontrar un equilibrio entre lo individual y lo colectivo y
-            liderar a Ansiudad hacia un mejor futuro? Tu misión.
-          </b>
-        </p>
       </section>
 
+      <section id="contacto" class="theme-container">
       <section id="credits" class="footer">
         <img src="img/onlyA-black.gif" />
         <h3>Ansiudad ©</h3>
@@ -876,16 +887,15 @@ Date: 11-24
           <a href="https://www.instagram.com/whosbecker/">Emmanuel Balderas</a>
         </p>
         <p>2025</p>
-        <div style="width: 50%; margin-top: 1rem;">
-          <h2 style="align-self: flex-start; margin-bottom: 1rem;">Contacto</h2>
-          <p style="font-weight: bold; align-self: flex-start">ansiudad@gmail.com</p>
-          <p style="font-weight: bold; align-self: flex-start; margin-bottom: 1rem;">anorzagaray@centro.edu.mx</p>
+        <div class="footer__contact">
+          <h2>Contacto</h2>
+          <p>ansiudad@gmail.com</p>
+          <p>anorzagaray@centro.edu.mx</p>
           <a
             href="https://www.instagram.com/ansiudad/"
             target="_blank"
             class="social"
             id="social-ig"
-            style="margin-top: 2rem;"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -900,11 +910,30 @@ Date: 11-24
               ></path>
             </svg>
           </a>
-            
-          </a>
         </div>
       </section>
+      </section>
     </main>
+
+    <aside class="site-bottom" aria-label="Accesos rápidos">
+      <div class="site-bottom__inner">
+        <span class="site-bottom__spacer" aria-hidden="true"></span>
+        <a href="#home" class="site-bottom__mark" aria-label="Volver al inicio">
+          <img
+            src="brand/A_morado.svg"
+            alt=""
+            class="site-bottom__mark-img"
+            width="80"
+            height="45"
+            decoding="async"
+          />
+        </a>
+        <div class="site-bottom__actions">
+          <a href="/juego.html" class="site-bottom__cta">¿Quieres jugar?</a>
+        </div>
+      </div>
+    </aside>
+
     <script type="module" src="/js/menu.js"></script>
     <script async type="module" src="/index.js"></script>
     <script type="module" src="/script.js"></script>

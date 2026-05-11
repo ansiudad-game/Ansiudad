@@ -2,30 +2,7 @@
 {
     margin: 0;
     padding: 0;
-    font-family: 'Helvetica Neue', sans-serif;
-}
-@font-face {
-  font-family: 'Helvetica Neue';
-  src: url('/fonts/HelveticaNeue-Roman.eot');
-  src: url('/fonts/HelveticaNeue-Roman.eot?#iefix') format('embedded-opentype'),
-      url('/fonts/HelveticaNeue-Roman.woff2') format('woff2'),
-      url('/fonts/HelveticaNeue-Roman.woff') format('woff'),
-      url('/fonts/HelveticaNeue-Roman.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Helvetica NB';
-  src: url('/fonts/HelveticaNeue-Bold.eot');
-  src: url('/fonts/HelveticaNeue-Bold.eot?#iefix') format('embedded-opentype'),
-      url('/fonts/HelveticaNeue-Bold.woff2') format('woff2'),
-      url('/fonts/HelveticaNeue-Bold.woff') format('woff'),
-      url('/fonts/HelveticaNeue-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
+    font-family: "HelveticaNeue", sans-serif;
 }
 
 html,
@@ -120,9 +97,6 @@ main {
             right: 20px;
             width: 30px;
         }
-
-
-
 
 /* Global UI */
 .regular-btn {
@@ -453,7 +427,7 @@ div.guideline-container {
 
 .guidelines {
     text-align: right;
-    font: 'Helvetica NB';
+    font-family: "HelveticaNeue", sans-serif;
     font-weight: 700;
 }
 
@@ -498,7 +472,7 @@ img#loading-animation {
 
 .regular-btn.goToNextStepBtn {
     color: #dbdbdb;
-    font-family: 'Helvetica NB';
+    font-family: "HelveticaNeue", sans-serif;
     font-size: larger;
     padding: 1rem 2rem;
     border-radius: 2px;
@@ -519,7 +493,7 @@ img#loading-animation {
 button#firstStepBtn.regular-btn.submitBtn {
     background-color: #aa9ffd;
     padding: 1rem 2rem;
-    font-family: 'Helvetica NB';
+    font-family: "HelveticaNeue", sans-serif;
     border: none;
     border-radius: 50px;
     color: #272723;
@@ -648,7 +622,7 @@ div.theme-input-group {
 button#another-one {
     background-color: rgba(148, 33, 255, 0.8);
     padding: 1rem 2rem;
-    font-family: 'Helvetica NB';
+    font-family: "HelveticaNeue", sans-serif;
     border: none;
     font-size: 1.2rem;
     border-radius: 12px;
@@ -662,7 +636,7 @@ button#another-one:hover {
 button#back-home {
     background-color: rgba(148, 33, 255, 0.8);
     padding: 1rem 2rem;
-    font-family: 'Helvetica NB';
+    font-family: "HelveticaNeue", sans-serif;
     border: none;
     font-size: 1.2rem;
     border-radius: 12px;

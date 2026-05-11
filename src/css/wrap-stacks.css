@@ -1,0 +1,40 @@
+/*
+  Muros de cartas 3D entre secciones — <div class="wrap">, .wrap__inner, .content.
+*/
+.wrap {
+  position: relative;
+  min-height: 100vh;
+}
+
+.wrap__inner {
+  position: relative;
+  perspective: 1000px;
+}
+
+.content {
+  width: 100%;
+  max-width: 100vw;
+  position: relative;
+  transform-style: preserve-3d;
+  display: grid;
+  grid-template-areas: "card";
+  grid-template-columns: 100%;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.content .card {
+  grid-area: card;
+  background: rgba(255, 255, 255, 1);
+}
+
+@media (min-width: 880px) {
+  .content {
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+  .card-wrap {
+    grid-template-columns: repeat(2, 300px);
+  }
+}
