@@ -53,6 +53,7 @@ Date: 05-26 to 07-26
     <!-- Estilos por bloque de página (orden = cascada) -->
     <link rel="stylesheet" type="text/css" href="css/fonts-helveticaneue.css" />
     <link rel="stylesheet" type="text/css" href="css/base-tokens.css" />
+    <link rel="stylesheet" type="text/css" href="css/noise-overlay.css" />
     <link rel="stylesheet" type="text/css" href="css/layout.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/theme-que-es.css" />
@@ -72,7 +73,7 @@ Date: 05-26 to 07-26
         <div class="menu__bar">
           <a href="#home" class="menu__logo-link">
             <img
-              src="brand/ansiudadMorado.svg"
+              src="img/onlyA-black.gif"
               alt="Ansiudad"
               class="menu__logo-image"
               width="200"
@@ -128,25 +129,45 @@ Date: 05-26 to 07-26
     <main>
       <div id="loader" class="loader hidden">Loading...</div>
 
-      <section id="home" class="home">
-        <div class="colorLayer">
-          <div class="colorLayer2">
-            <div class="contrastLayer">
-              <div class="monochromeLayer">
-                <!-- <video id="backgroundVideo" autoplay muted loop playsinline>
-                  <source src="vid/ansiudad.mp4" type="video/mp4" />
-                  <source src="vid/ansiudad.webm" type="video/webm" />
-                  Tu navegador no soporta la reproducción de videos.
-                </video> -->
-              </div>
-            </div>
-          </div>
+          <!--SECCION 1-->
+    <section id="home" class="home">
+      <!-- BACKGROUND: capas + ruido (debajo del cielo) -->
+      <div class="scene-wrapper" id="scene">
+        <div class="bg-noise" aria-hidden="true"></div>
+        <div class="layer" id="l1" data-base-x="0" data-base-y="100">
+          <img src="brand/mountain.svg" style="width:116%; height:116%; object-fit:cover;" alt="montanas" />
         </div>
-        <div class="home__title">
-          <p>Bienvenidos a</p>
-          <img src="img/white-logo-ani.gif" alt="Ansiudad Logo" />
+        <div class="layer" id="l2" data-base-x="0" data-base-y="10">
+          <img src="brand/city.svg" style="width:116%; height:116%; object-fit:cover;" alt="ciudad" />
         </div>
-      </section>
+        <div class="layer" id="l3" data-base-x="0" data-base-y="-200">
+          <img src="brand/wheel.svg" style="width:110%; height:116%; object-fit:cover;" alt="rueda" />
+        </div>
+        <div class="layer" id="l4" data-base-x="0" data-base-y="100">
+          <img src="brand/trees.svg" style="width:125%; height:116%; object-fit:cover;" alt="árboles" />
+        </div>
+      </div>
+      <div class="TOP" aria-hidden="true">
+        <img src="brand/sky.svg" alt="" class="TOP__img" decoding="async" />
+      </div>
+      <div class="home_text">
+        <div class="page-title-container">
+          <span class="page-title page-title--left home__welcome-line">Bienvenidxs a</span>
+          <span class="page-title page-title--right">
+            <a href="#home" class="home__welcome-logo" aria-label="Inicio — Ansiudad">
+              <img
+                src="brand/animated-logo.gif"
+                alt=""
+                class="home__welcome-logo-img"
+                width="400"
+                height="42"
+                decoding="async"
+              />
+            </a>
+          </span>
+        </div>
+      </div>
+    </section>
 
       <section id="que-es" class="theme-container">
       <div id="what" class="intro">

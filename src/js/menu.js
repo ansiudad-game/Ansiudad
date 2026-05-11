@@ -79,7 +79,7 @@ function closeMenu() {
 
   gsap
     .timeline({
-      onComplete: () => {
+      onComplete: () => { 
         menuPanel.classList.remove(PANEL_EXPANDED);
         menuBottom.classList.remove('menu__bottom--visible');
         gsap.set(menuPanel, { clearProps: 'clipPath' });

@@ -23,7 +23,9 @@
 
 main {
   position: relative;
-  top: 60px;
+  top: 0;
+  /* Por encima de la capa global de ruido (noise-overlay.css, z-index: 1) */
+  z-index: 2;
 }
 
 .theme-container {

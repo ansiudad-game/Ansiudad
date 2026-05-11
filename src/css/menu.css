@@ -1,7 +1,7 @@
 .menu {
   --menu-chrome-bg: color-mix(in srgb, var(--amarillo-claro) 65%, transparent);
   --menu-chrome-blur: blur(12px);
-  --menu-chrome-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --menu-chrome-shadow: 0 8px 12px color-mix(in srgb, var(--morado-oscuro) 15%, transparent);
 
   position: fixed;
   top: 0;
@@ -235,7 +235,6 @@
   line-height: 1.25;
   color: var(--morado);
   font-weight: 300;
-  text-decoration: none;
 }
 
 .menu__link:hover {
@@ -243,6 +242,13 @@
   border-radius: 180px 0 180px 180px;
   font-style: italic;
   font-weight: 900;
+}
+.menu__link:active {
+  background-color: color-mix(in srgb, var(--morado-oscuro) 78%, transparent);
+  border-radius: 180px 0 180px 180px;
+  font-style: italic;
+  font-weight: 900;
+  color: var(--amarillo-claro);
 }
 
 @media (min-width: 880px) {

@@ -14,6 +14,50 @@ if (experience && !window.location.pathname.includes('juego')) {
   experience.destroy();
 }
 
+/**
+ * BACKGROUND
+ */
+const scene = document.getElementById('scene');
+const mouse = { x: 0, y: 0 };
+const current = { x: 0, y: 0 };
+
+const layers = [
+    { el: document.getElementById('l1'), depth: 0.015 }, // más lejano
+    { el: document.getElementById('l2'), depth: 0.032 },
+    { el: document.getElementById('l3'), depth: 0.058 },
+    { el: document.getElementById('l4'), depth: 0.088 }, // más cercano
+].filter((x) => x.el);
+
+const getBase = (el) => {
+    const bx = Number(el.dataset.baseX ?? 0);
+    const by = Number(el.dataset.baseY ?? 0);
+    return { bx: Number.isFinite(bx) ? bx : 0, by: Number.isFinite(by) ? by : 0 };
+};
+
+window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX - window.innerWidth / 2;
+    mouse.y = e.clientY - window.innerHeight / 2;
+});
+
+window.addEventListener('load', () => {
+    document.body.classList.add('bg-loaded');
+});
+
+function animate() {
+    current.x += (mouse.x - current.x) * 0.07; // lerp → suavizado
+    current.y += (mouse.y - current.y) * 0.07;
+
+    layers.forEach(({ el, depth }) => {
+        const { bx, by } = getBase(el);
+        const x = bx + current.x * depth;
+        const y = by + current.y * depth;
+        el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+
+    requestAnimationFrame(animate);
+}
+
+if (scene && layers.length) animate();
 //Cartas 
 gsap.registerPlugin(ScrollTrigger);
 
