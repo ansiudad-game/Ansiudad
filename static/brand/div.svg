@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 6000 470.32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #dbdb7b;
+      }
+    </style>
+  </defs>
+  <g id="SKY">
+    <polygon class="cls-1" points="0 0 0 139.2 837.03 470.32 815.74 139.2 1295.96 139.2 2364.98 470.32 2713.22 139.2 2792.91 139.2 2827.16 470.32 3539.72 139.2 4206.77 139.2 5593.34 446.17 6000 139.2 6000 0 0 0"/>
+  </g>
+</svg>
