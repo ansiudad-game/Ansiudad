@@ -28,9 +28,13 @@ const layers = [
     { el: document.getElementById('l4'), depth: 0.088 }, // más cercano
 ].filter((x) => x.el);
 
+const mobileParallaxMq = window.matchMedia('(max-width: 900px)');
+
 const getBase = (el) => {
     const bx = Number(el.dataset.baseX ?? 0);
-    const by = Number(el.dataset.baseY ?? 0);
+    const mobileY = el.dataset.baseYMobile;
+    const useMobileY = mobileParallaxMq.matches && mobileY != null && mobileY !== '';
+    const by = Number(useMobileY ? mobileY : (el.dataset.baseY ?? 0));
     return { bx: Number.isFinite(bx) ? bx : 0, by: Number.isFinite(by) ? by : 0 };
 };
 

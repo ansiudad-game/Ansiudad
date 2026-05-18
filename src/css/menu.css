@@ -33,7 +33,7 @@
   justify-content: space-between;
   padding: 0 8px 0 16px;
   box-sizing: border-box;
-  z-index: 51;
+  z-index: 0;
   background-color: transparent;
   transition:
     background-color 0.28s ease,
@@ -43,7 +43,6 @@
 
 .menu__top:hover,
 .menu:has(.menu__panel--expanded) .menu__top {
-  background-color: var(--menu-chrome-bg);
   backdrop-filter: var(--menu-chrome-blur);
   -webkit-backdrop-filter: var(--menu-chrome-blur);
   box-shadow: var(--menu-chrome-shadow);

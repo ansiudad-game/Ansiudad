@@ -8,21 +8,9 @@
   height: 100vh;
   min-height: 100dvh;
   overflow: hidden;
-  scroll-margin-top: 72px;
+  /* scroll-margin-top: 72px; */
 }
 
-/* Franja bajo el menú fijo (sustituye el “hueco” visual del antiguo main top) */
-#home::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background-color: var(--amarillo-oscuro);
-  z-index: 49;
-  pointer-events: none;
-}
 
 .TOP {
   position: absolute;
@@ -30,7 +18,7 @@
   left: 0;
   width: 100%;
   height: auto;
-  z-index: 4;
+  z-index: 0;
   overflow: hidden;
   line-height: 0;
   pointer-events: none;
@@ -39,7 +27,6 @@
   isolation: isolate;
 }
 
-/* Cielo sólido encima de capas y ruido; sin transparencia ni mezcla */
 .TOP__img,
 .TOP img {
   display: block;
@@ -51,8 +38,6 @@
   opacity: 1;
   mix-blend-mode: normal;
 }
-
-/* BG paralaje + ruido (debajo del cielo) */
 .scene-wrapper {
   position: absolute;
   inset: 0;
@@ -71,21 +56,71 @@
   filter: blur(18px);
 }
 
-#l1 { z-index: -10; --layer-opacity: 0.45; --layer-filter: blur(1.2px) drop-shadow(40px 0 40px #b2acf3); }
-#l2 { z-index: -8;  --layer-opacity: 0.65; --layer-filter: drop-shadow(10px 10px 10px #2f2345); }
-#l3 { z-index: -6;  --layer-opacity: 0.70; --layer-filter: drop-shadow(10px 8px 5px rgba(0,0,0,0.6)); }
-#l4 { z-index: -4;  --layer-opacity: 0.95; --layer-filter: drop-shadow(10px 12px 10px rgba(0,0,0,0.8)); }
+#l1 { z-index: -10; --layer-opacity: 0.12; --layer-filter: blur(1.2px) drop-shadow(40px 0 40px #b2acf3); }
+
+#l2 {
+z-index: -8;
+  --layer-opacity: 0.35;
+  --layer-filter: drop-shadow(10px 10px 10px color-mix(in srgb, var(--morado-claro) 55%, transparent));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+#l2 > img {
+  width: 116%;
+  height: var(--city-layer-height, 70%) !important;
+  object-fit: cover;
+  object-position: center bottom;
+}
+#l3 {
+  z-index: -6;
+  --layer-opacity: 0.50;
+  --layer-filter: drop-shadow(10px 8px 8px color-mix(in srgb, var(--morado-claro) 45%, transparent));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Desktop: contain mantiene la rueda completa; móvil: cover + anclaje abajo */
+#l3 > img {
+  width: 100%;
+  height: 116%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+@media (max-width: 900px) {
+  #l3 > img {
+    width: 115%;
+    height: var(--wheel-layer-height, 100%) !important;
+    object-fit: cover;
+    object-position: center 92%;
+  }
+}
+#l4 {z-index: -4;--layer-opacity: 0.95;--layer-filter: drop-shadow(10px 12px 10px color-mix(in srgb, var(--morado-claro) 50%, transparent));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+#l4 > img {
+  width: 125%;
+  height: var(--trees-layer-height, 45%) !important;
+  object-fit: cover;
+  object-position: center bottom;
+}
 
 /* Animación de entrada del BG (de atrás hacia adelante) */
 body.bg-loaded .layer {
   opacity: var(--layer-opacity, 1);
   filter: var(--layer-filter, none);
-  transition: opacity 1500ms ease, filter 1500ms ease;
+  transition: opacity 1500ms ease, filter 2000ms ease;
 }
 body.bg-loaded #l1 { transition-delay: 0ms; }
-body.bg-loaded #l2 { transition-delay: 500ms; }
-body.bg-loaded #l3 { transition-delay: 1000ms; }
-body.bg-loaded #l4 { transition-delay: 1500ms; }
+body.bg-loaded #l2 { transition-delay: 800ms; }
+body.bg-loaded #l3 { transition-delay: 1500ms; }
+body.bg-loaded #l4 { transition-delay: 2000ms; }
 
 /* Bounce de abajo hacia arriba (se anima el img para no chocar con el parallax) */
 .layer > img {
@@ -151,6 +186,7 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
 .page-title {
   font-family: var(--font-titles);
   font-weight: 900;
+  font-style: italic;
   font-size: clamp(1.35rem, 4vw, 3.25rem);
   line-height: 1.1;
   text-transform: uppercase;
@@ -168,9 +204,8 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
   justify-content: center;
 }
 
-/* Entrada: izquierda → derecha (sincronizado con body.bg-loaded, window load) */
-.home__welcome-line,
-.home__welcome-logo {
+/* Entrada: izquierda → derecha (texto "Bienvenidxs a") */
+.home__welcome-line {
   opacity: 0;
   transform: translate3d(-120%, 0, 0);
   will-change: transform, opacity;
@@ -180,8 +215,55 @@ body.bg-loaded .home__welcome-line {
   animation: home-slide-in-lr 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
 }
 
-body.bg-loaded .home__welcome-logo {
-  animation: home-slide-in-lr 1.05s cubic-bezier(0.22, 1, 0.36, 1) 0.38s both;
+/* Logo 3×: AN → S!U → DAD (bounce + rotación por bloque) */
+.home-logo__part {
+  opacity: 0;
+  transform: scale(0.77) rotate(var(--logo-part-rotate, -12deg));
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.home-logo__part--an {
+  --logo-part-rotate: -14deg;
+}
+
+.home-logo__part--siu {
+  --logo-part-rotate: 11deg;
+}
+
+.home-logo__part--dad {
+  --logo-part-rotate: -9deg;
+}
+
+body.bg-loaded .home-logo__part--an {
+  animation: home-logo-part-in 0.8s cubic-bezier(0.34, 1.5, 0.64, 1) 0.82s both;
+}
+
+body.bg-loaded .home-logo__part--siu {
+  animation: home-logo-part-in 0.8s cubic-bezier(0.34, 1.5, 0.64, 1) 1.12s both;
+}
+
+body.bg-loaded .home-logo__part--dad {
+  animation: home-logo-part-in 0.85s cubic-bezier(0.34, 1.5, 0.64, 1) 1.42s both;
+}
+
+@keyframes home-logo-part-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(var(--logo-part-rotate, -12deg));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08) rotate(calc(var(--logo-part-rotate, -12deg) * -0.35));
+  }
+  72% {
+    transform: scale(0.96) rotate(calc(var(--logo-part-rotate, -12deg) * 0.2));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 @keyframes home-slide-in-lr {
@@ -202,12 +284,12 @@ body.bg-loaded .home__welcome-logo {
   line-height: 0;
 }
 
-/* ~2× respecto al tamaño anterior */
-.home__welcome-logo-img {
-  height: clamp(44px, 10vw, 68px);
+.home__welcome-logo-svg {
+  display: block;
+  height: clamp(70px, 50vw, 250px);
   width: auto;
   max-width: min(400px, 88vw);
-  object-fit: contain;
+  color: var(--morado-oscuro);
 }
 
 .page-title-container::after {
@@ -234,7 +316,7 @@ body.bg-loaded .home__welcome-logo {
 
 @media (prefers-reduced-motion: reduce) {
   body.bg-loaded .home__welcome-line,
-  body.bg-loaded .home__welcome-logo {
+  .home-logo__part {
     animation: none;
     opacity: 1;
     transform: none;
