@@ -97,7 +97,7 @@ const init = () => {
 };
 
 
-preloadImages('.grid__img').then(() => {
+preloadImages('.card__img').then(() => {
   document.body.classList.remove('loading');
   init();
 });

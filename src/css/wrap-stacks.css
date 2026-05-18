@@ -18,8 +18,11 @@
   transform-style: preserve-3d;
   display: grid;
   grid-template-areas: "card";
-  grid-template-columns: 100%;
+  grid-template-columns: min(100%, 255px);
+  justify-content: center;
+  justify-items: center;
   place-items: center;
+  margin-inline: auto;
   box-sizing: border-box;
 }
 

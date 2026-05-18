@@ -157,8 +157,10 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
   inset: 0;
   z-index: 10;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: clamp(0.5rem, 2vh, 1rem);
   padding: 0 1rem 8vh;
   box-sizing: border-box;
   pointer-events: none;
@@ -291,7 +293,33 @@ body.bg-loaded .home-logo__part--dad {
   max-width: min(400px, 88vw);
   color: var(--morado-oscuro);
 }
+.slogan-container {
+  position: relative;
+  z-index: 10;
+  max-width: min(96vw, 28rem);
+  padding: 0.35rem 0.75rem;
+  text-align: center;
+  pointer-events: none;
+}
 
+.slogan-text {
+  margin: 0;
+  font-family: var(--font-titles);
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(0.85rem, 2.8vw, 1.05rem);
+  line-height: 1.35;
+  color: var(--morado-claro);
+  text-wrap: balance;
+}
+
+.slogan-text p {
+  margin: 0;
+}
+
+body.bg-loaded .slogan-container {
+  animation: home-slide-in-lr 0.85s cubic-bezier(0.22, 1, 0.36, 1) 1.55s both;
+}
 .page-title-container::after {
   content: "\00BB";
   position: absolute;

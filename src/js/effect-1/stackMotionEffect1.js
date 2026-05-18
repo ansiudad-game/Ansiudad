@@ -13,7 +13,7 @@ export class StackMotionEffect {
 
     this.wrapElement = stackEl;
     this.contentElement = this.wrapElement.querySelector('.content');
-    this.imageElements = [this.contentElement.querySelectorAll('.card')];
+    this.imageElements = this.contentElement.querySelectorAll('.card');
     this.imagesTotal = this.imageElements.length;
 
     // Calls the method to set up the initial effect.
