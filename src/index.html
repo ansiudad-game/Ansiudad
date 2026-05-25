@@ -1116,7 +1116,48 @@ Date: 05-26 to 07-26
   </section>
 </section>
 
-    <script type="module" src="/js/menu.js"></script>
+    <aside class="site-bottom" aria-label="Accesos rápidos">
+      <div class="site-bottom__inner">
+        <a
+          href="/juego.html"
+          class="site-bottom__play-btn"
+          aria-label="¿Quieres jugar? Ir al juego"
+        >
+          <span class="site-bottom__play-btn__ring">
+            <svg
+              class="site-bottom__play-btn__label"
+              viewBox="0 0 120 120"
+              aria-hidden="true"
+            >
+              <defs>
+                <path
+                  id="site-bottom-play-arc"
+                  d="M 18 76 A 42 42 0 0 1 102 76"
+                />
+              </defs>
+              <text>
+                <textPath
+                  href="#site-bottom-play-arc"
+                  startOffset="50%"
+                  text-anchor="middle"
+                >
+                  ¿Quieres jugar?
+                </textPath>
+              </text>
+            </svg>
+            <img
+              class="site-bottom__play-btn__llama"
+              src="brand/pachallama-closeup.gif"
+              alt=""
+              width="120"
+              height="120"
+              decoding="async"
+            />
+          </span>
+        </a>
+      </div>
+    </aside>
+
     <script async type="module" src="/index.js"></script>
     <script type="module" src="/script.js"></script>
   </body>
