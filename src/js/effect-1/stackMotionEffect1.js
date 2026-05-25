@@ -35,54 +35,52 @@ export class StackMotionEffect {
 
   // Defines the scroll effect logic for the stack.
   scroll() {
-    // Initially hides the content element and prepares it for the animation by setting its transform property. 
-    // This sets the initial 3D rotation of the stack and its cards, defining their starting visual appearance.
-    this.contentElement.style.transform = 'rotate3d(1, 0, 0, -25deg) rotate3d(0, 1, 0, 50deg) rotate3d(0, 0, 1, 25deg)';
-    this.contentElement.style.opacity = 0;
+    if (!this.contentElement) return;
 
-    // Clears previous timeline if exists to prevent conflicts.
+    this.contentElement.style.transform =
+      'rotate3d(1, 0, 0, -25deg) rotate3d(0, 1, 0, 50deg) rotate3d(0, 0, 1, 25deg)';
+
     if (this.tl) {
+      this.tl.scrollTrigger?.kill();
       this.tl.kill();
     }
 
-    // Creates a new timeline for the scroll-triggered animation.
+    gsap.set(this.contentElement, { autoAlpha: 0 });
+
     this.tl = gsap.timeline({
       defaults: {
         ease: 'power1',
       },
       scrollTrigger: {
         trigger: this.wrapElement,
-        start: 'top center',
-        end: '+=150%',
+        start: 'top 88%',
+        end: 'bottom 15%',
         scrub: true,
-        // Sets opacity to 1 when the element comes into view.
-        onEnter: () => gsap.set(this.contentElement, {opacity: 1}),
-        onEnterBack: () => gsap.set(this.contentElement, {opacity: 1}),
-        // Hides the element when it leaves the view.
-        onLeave: () => gsap.set(this.contentElement, {opacity: 0}),
-        onLeaveBack: () => gsap.set(this.contentElement, {opacity: 0})
+        invalidateOnRefresh: true,
       },
     })
-    .fromTo(this.imageElements, {
-      // Animates from a starting z position based on the window size.
-      z: (pos) => -2.65 * winsize.width - pos * 0.03 * winsize.width,
-    }, {
-      // Animates to an ending z position, creating a 3D effect as elements scroll.
-      z: (pos) => 1.4 * winsize.width + (this.imagesTotal - pos - 1) * 0.03 * winsize.width,
-    }, 0)
-    .fromTo(this.imageElements, {
-      rotationZ: -220,
-    }, {
-      rotationY: -30,
-      rotationZ: 120,
-      // Stagger effect for individual elements to animate sequentially.
-      stagger: 0.005,
-    }, 0)
-    /*.fromTo(this.imageElements, {
-      filter: 'brightness(20%)',
-    }, {
-      filter: 'brightness(150%)',
-      stagger: 0.005,
-    }, 0);*/
+      .to(this.contentElement, { autoAlpha: 1, duration: 0.12 }, 0)
+      .fromTo(
+        this.imageElements,
+        {
+          z: (pos) => -2.65 * winsize.width - pos * 0.03 * winsize.width,
+        },
+        {
+          z: (pos) => 1.4 * winsize.width + (this.imagesTotal - pos - 1) * 0.03 * winsize.width,
+        },
+        0,
+      )
+      .fromTo(
+        this.imageElements,
+        {
+          rotationZ: -220,
+        },
+        {
+          rotationY: -30,
+          rotationZ: 120,
+          stagger: 0.005,
+        },
+        0,
+      );
   }
 }

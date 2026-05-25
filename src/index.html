@@ -51,14 +51,12 @@ Date: 05-26 to 07-26
     <meta name="twitter:image:height" content="392" />
     <link rel="shortcut icon" href="/img/fav/favicon.ico" />
     <!-- Estilos por bloque de página (orden = cascada) -->
-    <link rel="stylesheet" type="text/css" href="css/fonts-helveticaneue.css" />
-    <link rel="stylesheet" type="text/css" href="css/base-tokens.css" />
-    <link rel="stylesheet" type="text/css" href="css/noise-overlay.css" />
-    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/foundation.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/theme-que-es.css" />
-    <link rel="stylesheet" type="text/css" href="css/section-text.css" />
-    <link rel="stylesheet" type="text/css" href="css/gallery-overlay.css" />
+    <link rel="stylesheet" type="text/css" href="css/theme-desafio.css" />
+    <link rel="stylesheet" type="text/css" href="css/theme-diseno.css" />
+    <link rel="stylesheet" type="text/css" href="css/theme-donde.css" />
     <link rel="stylesheet" type="text/css" href="css/wrap-stacks.css" />
     <link rel="stylesheet" type="text/css" href="css/footer-contacto.css" />
     <link rel="stylesheet" type="text/css" href="css/site-bottom.css" />
@@ -189,68 +187,63 @@ Date: 05-26 to 07-26
         </div>
       </div>
     </section>
-
+<!-- SECCION 2 QUE ES-->
       <section id="que-es" class="theme-container">
       <div id="what" class="intro">
-        <div class="intro__title">
-          <span>¿Qué es</span>
-          <img src="brand/animated-logo.gif" alt="Ansiudad Logo" />
-          <span>?</span>
-        </div>
-        <div class="grid">
-          <div class="card">
-            <div
-              class="card__img"
-              style="background-image: url(img/1.svg)"
-            ></div>
-          </div>
-          <!-- /card -->
-          <div class="card">
-            <div
-              class="card__img"
-              style="background-image: url(img/2.svg)"
-            ></div>
-          </div>
-          <!-- /card -->
-          <div class="card">
-            <div
-              class="card__img"
-              style="background-image: url(img/3.svg)"
-            ></div>
-          </div>
-          <!-- /card -->
-          <div class="card">
-            <div
-              class="card__img"
-              style="background-image: url(img/4.svg)"
-            ></div>
-          </div>
-          <!-- /card -->
-          <div class="card">
-            <div
-              class="card__img"
-              style="background-image: url(img/5.svg)"
-            ></div>
-          </div>
-          <!-- /card -->
-          <div class="card">
-            <div
-              class="card__img"
-              style="background-image: url(img/6.svg)"
-            ></div>
+        <div class="what-flow" id="whatFlow" aria-label="Qué es Ansiudad">
+          <div class="what-flow__pin">
+            <header class="what-flow__header">
+              <div class="intro__title">
+                <span>¿Qué es</span>
+                <img src="brand/animated-logo.gif" alt="Ansiudad Logo" />
+                <span>?</span>
+              </div>
+            </header>
+
+            <div class="what-flow__layout">
+            <div class="what-flow__text-track">
+              <div class="what-flow__text-pane is-active">
+                <p>
+                  <b>Ansiudad</b> es un juego de mesa que busca acortar la distancia entre las personas y los grandes desafíos socioambientales del planeta.
+                </p>
+              </div>
+              <div class="what-flow__text-pane">
+                <p>
+                  Al combinar creatividad, trabajo en equipo y empatía, detona conversaciones que impulsan el pensamiento creativo e inclusivo.
+                </p>
+              </div>
+              <div class="what-flow__text-pane">
+                <p>
+                  <b>Nuestro Objetivo</b> Al combinar creatividad, trabajo en equipo y empatía, detona conversaciones que impulsan el pensamiento creativo e inclusivo.
+                </p>
+              </div>
+            </div>
+            <!-- STACK DE IMAGENES-->
+            <div class="what-flow__stack">
+              <div class="card what-flow__card" data-card="0">
+                <div class="card__img" style="background-image: url(img/1.svg)"></div>
+              </div>
+              <div class="card what-flow__card" data-card="1">
+                <div class="card__img" style="background-image: url(img/2.svg)"></div>
+              </div>
+              <div class="card what-flow__card" data-card="2">
+                <div class="card__img" style="background-image: url(img/3.svg)"></div>
+              </div>
+              <div class="card what-flow__card" data-card="3">
+                <div class="card__img" style="background-image: url(img/4.svg)"></div>
+              </div>
+              <div class="card what-flow__card" data-card="4">
+                <div class="card__img" style="background-image: url(img/5.svg)"></div>
+              </div>
+              <div class="card what-flow__card" data-card="5">
+                <div class="card__img" style="background-image: url(img/6.svg)"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-<!--QUE ES-->
-      <section id="whatText" class="section-text">
-        <p>
-          <b>Ansiudad</b> es un juego de mesa que busca acortar la distancia entre las personas y los grandes desafíos socioambientales del planeta. <br />
-
-          Al combinar creatividad, trabajo en equipo y empatía, detona conversaciones que impulsan el pensamiento creativo e inclusivo.
-          <b>Nuestro Objetivo</b> Al combinar creatividad, trabajo en equipo y empatía, detona conversaciones que impulsan el pensamiento creativo e inclusivo.
-        </p>
+      </div>
       </section>
-
       <div class="wrap">
         <div data-stack-1 class="wrap__inner">
           <div class="content content--1">
@@ -441,60 +434,128 @@ Date: 05-26 to 07-26
       </div>
       </section>
 <!--DESAFIO-->
-      <section id="desafio" class="theme-container section-text">
+      <section id="desafio" class="theme-container">
         <div class="howAnchor"></div>
-        <h2>¿Cuál es el desafío?</h2>
-        <p>
-          <b>Ansiudad</b> nuestra extraordinaria ciudad, atraviesa una crisis. Incidentes inesperados han rebasado al gobierno, abriendo la oportunidad de que sus habitantes tomen el control.
-        </p>
-        <br />
-        <p>
-          En este juego, te conviertes en unx ansiudadanx que forma parte de un Consejo Ansiudadano. Junto con tu equipo, deberán proponer soluciones para mejorar la vida en la ciudad.
-        </p>
-        <br />
-        <p>
-          Cada quien asume un rol con intereses propios, que deberán equilibrar con los de lxs demás, para tomar mejores decisiones.
-        </p>
-        <br />
-        <p>
-          <b>
-            ¿Podrás ayudar a construir un futuro más justo y sostenible para todxs?
-          </b>
-        </p>
-      </section>
-<!--COMO LO DISEÑAMOS-->
-      <section id="diseno" class="theme-container">
-      <section id="how" class="section-text">
-        <div class="howAnchor"></div>
-        <h2>¿Cómo lo diseñamos?</h2>
-        <p>
-          Somos <a href="#">Gabriel Sánchez</a> y
-          <a href="#">Andrea Norzagaray</a>, docentes, maestros en Estudios de
-          Diseño por CENTRO, y codiseñadores apasionados por la educación y el
-          diseño. 
-          <br /> 
-          Nuestra aventura con <b>Ansiudad</b> comenzó cuando
-          <a href="#">Paulina Cornejo</a>, coordinadora del Hub de Diseño Social
-          de <b>CENTRO</b>, nos invitó a impartir clases de Innovación Social y
-          Sostenibilidad. </br>
-          <br />
-          En este contexto, identificamos un reto clave:
-          <i
-            >nuestrxs estudiantes experimentaban ecoansiedad, un miedo crónico
-            ante la incertidumbre del futuro.</i
-          >
-          De ahí nació <b>Ansiudad</b>,  desarrollado en la 
-          <b
-            >Cátedra UNESCO: Métodos de Diseño para el Acceso Democrático a la
-            Imaginación del Futuro</b
-          >, bajo la dirección de <a href="#">Karla Paniagua</a> y
-          <a href="#">Jorge Camacho</a> y en colaboración con
-          <a href="#">Mishka de Caro</a>.
-        <div class="logos">
-          <img src="/img/unesco.png" alt="Logo UNESCO" class="logo" />
-          <img src="img/centro-hub.png" alt="Logo Centro Hub" class="logo" />
+        <div class="desafio-flow" id="desafioFlow" aria-label="¿Cuál es el desafío?">
+          <div class="desafio-flow__pin">
+            <header class="desafio-flow__header">
+              <h2 class="desafio-flow__title">¿Cuál es el desafío?</h2>
+            </header>
+
+            <div class="desafio-flow__layout">
+              <div class="desafio-flow__card-slot">
+                <div class="card desafio-flow__card" data-card="0">
+                  <div
+                    class="card__img"
+                    style="background-image: url(img/noticias1.svg)"
+                  ></div>
+                </div>
+                <div class="card desafio-flow__card" data-card="1">
+                  <div
+                    class="card__img"
+                    style="background-image: url(img/roles.svg)"
+                  ></div>
+                </div>
+                <div class="card desafio-flow__card" data-card="2">
+                  <div
+                    class="card__img"
+                    style="background-image: url(img/3-b.svg)"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="desafio-flow__text-track">
+                <div class="desafio-flow__text-pane is-active">
+                  <p>
+                    <b>Ansiudad</b> nuestra extraordinaria ciudad, atraviesa una crisis. Incidentes inesperados han rebasado al gobierno, abriendo la oportunidad de que sus habitantes tomen el control.
+                  </p>
+                </div>
+                <div class="desafio-flow__text-pane">
+                  <p>
+                    En este juego, te conviertes en unx ansiudadanx que forma parte de un Consejo Ansiudadano. Junto con tu equipo, deberán proponer soluciones para mejorar la vida en la ciudad.
+                  </p>
+                </div>
+                <div class="desafio-flow__text-pane">
+                  <p>
+                    Cada quien asume un rol con intereses propios, que deberán equilibrar con los de lxs demás, para tomar mejores decisiones.
+                  </p>
+                </div>
+                <div class="desafio-flow__finale">
+                  <p>
+                    <b>¿Podrás ayudar a construir un futuro más justo y sostenible para todxs?</b>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
+<!--COMO LO DISEÑAMOS-->
+<section id="diseno" class="theme-container">
+  <section id="how">
+    <div class="howAnchor"></div>
+    <h2>¿Cómo lo diseñamos?</h2>
+    <div class="cards-grid">
+      <!-- CARTA 1: Quiénes somos -->
+      <div class="flip-card" tabindex="0" role="button" aria-label="Quiénes somos – click para más info">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="card-icon">✦</span>
+            <h3>Quiénes somos</h3>
+            <p>Somos Gabriel Sánchez y Andrea Norzagaray, docentes y maestros en Estudios de Diseño por CENTRO.</p>
+            <span class="card-hint">Toca para saber más</span>
+          </div>
+          <div class="flip-back">
+            <h3>Gabriel &amp; Andrea</h3>
+            <p><strong>Gabriel Sánchez</strong> — Docente, diseñador y maestro en Estudios de Diseño. Apasionado por la intersección entre educación, innovación social y futuros posibles.</p>
+            <p><strong>Andrea Norzagaray</strong> — Docente, codiseñadora y maestra en Estudios de Diseño. Su práctica une el diseño participativo con la sostenibilidad y la justicia social.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARTA 2: El reto -->
+      <div class="flip-card" tabindex="0" role="button" aria-label="El reto – click para más info">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="card-icon">⚡</span>
+            <h3>El reto</h3>
+            <p>Nuestrxs estudiantes experimentaban ecoansiedad: un miedo crónico ante la incertidumbre del futuro.</p>
+            <span class="card-hint">Toca para saber más</span>
+          </div>
+          <div class="flip-back">
+            <h3>Ecoansiedad</h3>
+            <p>Al impartir clases de <strong>Innovación Social y Sostenibilidad</strong> en CENTRO, identificamos que el miedo al colapso climático y social paralizaba la imaginación creativa de nuestrxs estudiantes.</p>
+            <p>Este reto nos llevó a preguntarnos: ¿cómo diseñar herramientas que transformen la ansiedad en agencia?</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARTA 3: El proyecto -->
+      <div class="flip-card" tabindex="0" role="button" aria-label="El proyecto – click para más info">
+        <div class="flip-inner">
+          <div class="flip-front">
+            <span class="card-icon">◎</span>
+            <h3>El proyecto</h3>
+            <p>De ahí nació <strong>Ansiudad</strong>, desarrollado en la Cátedra UNESCO de CENTRO con un equipo interdisciplinario.</p>
+            <span class="card-hint">Toca para saber más</span>
+          </div>
+          <div class="flip-back">
+            <h3>Cátedra UNESCO</h3>
+            <p>Desarrollado en la <strong>Cátedra UNESCO: Métodos de Diseño para el Acceso Democrático a la Imaginación del Futuro</strong>, bajo la dirección de Karla Paniagua y Jorge Camacho.</p>
+            <p>En colaboración con <strong>Mishka de Caro</strong> y con el apoyo del <strong>Hub de Diseño Social de CENTRO</strong>, coordinado por Paulina Cornejo.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /cards-grid -->
+
+    <div class="logos">
+      <img src="/img/unesco.png" alt="Logo UNESCO" class="logo" />
+      <img src="img/centro-hub.png" alt="Logo Centro Hub" class="logo" />
+    </div>
+
+  </section>
+</section>
 
       <div class="wrap">
         <div data-stack-2 class="wrap__inner">
@@ -673,7 +734,7 @@ Date: 05-26 to 07-26
       </section>
 
       <section id="donde" class="theme-container">
-      <section id="where" class="section-text">
+      <section id="where">
         <div class="howAnchor"></div>
         <h2>¿Dónde se ha jugado?</h2>
         <b>[1]</b>

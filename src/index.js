@@ -1,4 +1,6 @@
 import { preloadImages } from '/js/main-utils.js';
+import { initWhatParallax } from '/js/what-parallax.js';
+import { initDesafioParallax } from '/js/desafio-parallax.js';
 import { StackMotionEffect as StackMotionEffect1 } from '/js/effect-1/stackMotionEffect1.js';
 import { StackMotionEffect as StackMotionEffect2 } from '/js/effect-2/stackMotionEffect2.js';
 import { StackMotionEffect as StackMotionEffect3 } from '/js/effect-3/stackMotionEffect3.js';
@@ -84,6 +86,9 @@ const initHomeSloganReveal = () => {
 };
 
 const init = () => {
+  initWhatParallax();
+  initDesafioParallax();
+
   document.querySelectorAll('[data-stack-1]').forEach((stackEl) => {
     new StackMotionEffect1(stackEl);
   });
@@ -94,26 +99,8 @@ const init = () => {
     new StackMotionEffect3(stackEl);
   });
 
-  const introCards = document.querySelectorAll('.intro .card');
-  introCards.forEach(introCard => {
-    gsap.to(introCard, {
-      ease: 'power1.in',
-      startAt: {
-        transformOrigin: '100% 50%'
-      },
-      rotationX: () => -60,
-      yPercent: () => gsap.utils.random(-100,0),
-      z: () => gsap.utils.random(-100,0),
-      scrollTrigger: {
-        trigger: introCard,
-        start: 'clamp(top bottom)',
-        end: 'clamp(bottom top)',
-        scrub: true,
-      }
-    });
-  });
-
   initHomeSloganReveal();
+  ScrollTrigger.refresh();
 };
 
 

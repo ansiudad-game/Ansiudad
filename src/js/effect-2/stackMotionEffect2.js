@@ -32,13 +32,16 @@ export class StackMotionEffect {
   }
 
   scroll() {
-    // Let's set the initial rotation for the content element
+    if (!this.contentElement) return;
+
     this.contentElement.style.transform = 'rotate3d(1, 0, 0, 55deg) rotate3d(0, 1, 0, 30deg)';
-    this.contentElement.style.opacity = 0;
 
     if (this.tl) {
+      this.tl.scrollTrigger?.kill();
       this.tl.kill();
     }
+
+    gsap.set(this.contentElement, { autoAlpha: 0 });
 
     this.tl = gsap.timeline({
       defaults: {
@@ -46,31 +49,33 @@ export class StackMotionEffect {
       },
       scrollTrigger: {
         trigger: this.wrapElement,
-        start: 'top center',
-        end: '+=150%',
+        start: 'top 88%',
+        end: 'bottom 15%',
         scrub: true,
-        onEnter: () => gsap.set(this.contentElement, {opacity: 1}),
-        onEnterBack: () => gsap.set(this.contentElement, {opacity: 1}),
-        onLeave: () => gsap.set(this.contentElement, {opacity: 0}),
-        onLeaveBack: () => gsap.set(this.contentElement, {opacity: 0}),
+        invalidateOnRefresh: true,
       },
     })
-    .fromTo(this.imageElements, {
-      z: (pos) => -1.2 * winsize.height - pos * 0.08 * winsize.height,
-    }, {
-      z: (pos) => 3 * winsize.height + (this.imagesTotal - pos - 1) * 0.08 * winsize.height,
-    }, 0)
-    .fromTo(this.imageElements, {
-      rotationZ: -130,
-    }, {
-      rotationZ: 360,
-      stagger: 0.006,
-    }, 0)
-    /*.fromTo(this.imageElements, {
-      filter: 'brightness(10%)',
-    }, {
-      filter: 'brightness(400%)',
-      stagger: 0.005,
-    }, 0);*/
+      .to(this.contentElement, { autoAlpha: 1, duration: 0.12 }, 0)
+      .fromTo(
+        this.imageElements,
+        {
+          z: (pos) => -1.2 * winsize.height - pos * 0.08 * winsize.height,
+        },
+        {
+          z: (pos) => 3 * winsize.height + (this.imagesTotal - pos - 1) * 0.08 * winsize.height,
+        },
+        0,
+      )
+      .fromTo(
+        this.imageElements,
+        {
+          rotationZ: -130,
+        },
+        {
+          rotationZ: 360,
+          stagger: 0.006,
+        },
+        0,
+      );
   }
 }

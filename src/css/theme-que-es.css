@@ -1,26 +1,47 @@
 /*
-  Dentro de <section id="que-es"> — .intro, .intro__title, rejilla .grid, .card.
+  <section id="que-es"> — #what (.intro + .what-flow parallax).
 */
-.intro {
+#what.intro {
   width: 100%;
   max-width: 100vw;
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: auto auto 1fr;
-  grid-template-areas: "intro-title";
-  place-items: center;
-  padding: 1rem var(--page-padding) 2rem;
+  background-color: var(--amarillo-oscuro);
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --- Parallax: título fijo + texto + stack de cartas --- */
+.what-flow {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  background-color: var(--amarillo-oscuro);
+}
+
+.what-flow__pin {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--amarillo-oscuro);
+}
+
+.what-flow__header {
+  flex-shrink: 0;
+  z-index: 12;
+  padding: clamp(0.5rem, 2vh, 0.85rem) var(--page-padding) 0;
   box-sizing: border-box;
 }
 
 .intro__title {
   font-family: var(--font-titles);
+  font-weight: 900;
+  font-style: italic;
   text-transform: uppercase;
-  font-size: clamp(1.75rem, 9vw, 6rem);
-  grid-area: intro-title;
+  font-size: clamp(1.75rem, 9vw, 7rem);
   position: relative;
-  z-index: 10;
-  align-self: center;
   margin: 0;
   text-align: center;
   display: flex;
@@ -30,6 +51,7 @@
   gap: clamp(0.25rem, 2vw, 0.8rem);
   max-width: 100%;
   padding-inline: 0.25rem;
+  color: var(--morado-oscuro);
 }
 
 .intro__title span {
@@ -46,21 +68,63 @@
   object-fit: contain;
 }
 
-.grid {
-  position: relative;
-  perspective: 1000px;
-  align-self: start;
-  grid-area: intro-title;
-  grid-row: 1 / span 3;
+.what-flow__layout {
+  flex: 1 1 auto;
+  min-height: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  justify-content: center;
-  justify-items: center;
-  gap: clamp(0.75rem, 3vw, 2.5rem);
-  width: 100%;
-  max-width: min(900px, 100%);
-  padding-inline: 0.25rem;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 300px);
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  padding: clamp(0.35rem, 1.5vh, 0.75rem) var(--page-padding)
+    clamp(0.75rem, 2vh, 1.25rem);
   box-sizing: border-box;
+}
+
+.what-flow__text-track {
+  position: relative;
+  min-height: clamp(6rem, 22vh, 11rem);
+  align-self: center;
+}
+
+.what-flow__text-pane {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.what-flow__text-pane.is-active {
+  visibility: visible;
+}
+
+.what-flow__text-pane {
+  font-size: clamp(1rem, 2.8vw, 1.8em);
+}
+
+.what-flow__text-pane p {
+  margin: 0;
+  line-height: 1.35;
+  color: var(--morado-oscuro);
+}
+
+.what-flow__text-pane p b {
+  font-weight: 700;
+}
+
+.what-flow__stack {
+  position: relative;
+  justify-self: center;
+  width: min(260px, 40vw);
+  height: min(360px, 46vh);
+  perspective: 900px;
+  transform-style: preserve-3d;
 }
 
 .card {
@@ -72,16 +136,30 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-radius: 10px;
-  position: relative;
   align-items: stretch;
   outline: 1px solid var(--amarillo-claro);
   background: var(--amarillo-claro);
   grid-template-areas: "card-img card-img";
 }
 
-.grid .card {
-  box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.8);
+.what-flow__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  max-width: 255px;
+  margin: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  will-change: transform, opacity;
+  transform-origin: 50% 50%;
 }
+
+.what-flow__card:nth-child(1) { z-index: 1; }
+.what-flow__card:nth-child(2) { z-index: 2; }
+.what-flow__card:nth-child(3) { z-index: 3; }
+.what-flow__card:nth-child(4) { z-index: 4; }
+.what-flow__card:nth-child(5) { z-index: 5; }
+.what-flow__card:nth-child(6) { z-index: 6; }
 
 .card__img {
   grid-area: card-img;
@@ -96,20 +174,35 @@
   overflow: hidden;
 }
 
-@media (min-width: 700px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+@media (max-width: 720px) {
+  .what-flow__header {
+    padding-top: 0.4rem;
+  }
+
+  .what-flow__layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    align-content: center;
+    padding-top: 0.25rem;
+  }
+
+  .what-flow__text-track {
+    min-height: clamp(5rem, 18vh, 8rem);
+  }
+
+  .what-flow__text-pane {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .what-flow__stack {
+    width: min(200px, 54vw);
+    height: min(280px, 38vh);
   }
 }
 
-@media (min-width: 880px) {
-  .intro {
-    grid-template-rows: 60vh 40vh auto;
-  }
-  .intro__title {
-    align-self: end;
-  }
-  .grid {
-    padding-top: 12vh;
+@media (prefers-reduced-motion: reduce) {
+  .what-flow__card {
+    will-change: auto;
   }
 }

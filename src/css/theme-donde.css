@@ -1,7 +1,41 @@
 /*
-  Dentro de <section id="donde"> — .gallery y #fullscreenOverlay.
+  <section id="donde"> — bloque #where, galería y overlay fullscreen.
 */
-.gallery {
+#where {
+  width: 100%;
+  max-width: 100vw;
+  min-height: 50vh;
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 6vw, 15vw)
+    clamp(2rem, 6vw, 4rem);
+  font-size: clamp(1rem, 2.8vw, 1.8em);
+  line-height: 1.35;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: var(--morado-claro);
+}
+
+#where p b {
+  font-family: var(--font-family);
+  font-weight: 700;
+}
+
+#where h2 {
+  font-family: var(--font-titles);
+  font-size: clamp(1.75rem, 7vw, 6rem);
+  line-height: 1.05;
+  margin-bottom: clamp(1rem, 3vw, 2.5rem);
+  text-transform: uppercase;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+#where .howAnchor {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 60px;
+}
+
+#donde .gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 3px;
@@ -9,7 +43,7 @@
   margin: 0 auto;
 }
 
-.gallery img {
+#donde .gallery img {
   width: 100%;
   height: auto;
   object-fit: cover;
@@ -17,7 +51,7 @@
   cursor: pointer;
 }
 
-.gallery img::after {
+#donde .gallery img::after {
   content: "";
   position: absolute;
   top: 0;
@@ -29,7 +63,7 @@
   transition: opacity 0.3s ease;
 }
 
-.gallery img:hover::after {
+#donde .gallery img:hover::after {
   opacity: 1;
 }
 
@@ -63,7 +97,7 @@
 }
 
 @media (min-width: 880px) {
-  .gallery {
+  #donde .gallery {
     grid-template-columns: repeat(3, 1fr);
   }
 }

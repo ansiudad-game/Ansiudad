@@ -32,13 +32,17 @@ export class StackMotionEffect {
   }
 
   scroll() {
-    // Let's set the initial rotation for the content element
-    this.contentElement.style.transform = 'rotate3d(1, 0, 0, 25deg) rotate3d(0, 1, 0, -50deg) rotate3d(0, 0, 1, 25deg)';
-    this.contentElement.style.opacity = 0;
+    if (!this.contentElement) return;
+
+    this.contentElement.style.transform =
+      'rotate3d(1, 0, 0, 25deg) rotate3d(0, 1, 0, -50deg) rotate3d(0, 0, 1, 25deg)';
 
     if (this.tl) {
+      this.tl.scrollTrigger?.kill();
       this.tl.kill();
     }
+
+    gsap.set(this.contentElement, { autoAlpha: 0 });
 
     this.tl = gsap.timeline({
       defaults: {
@@ -46,33 +50,35 @@ export class StackMotionEffect {
       },
       scrollTrigger: {
         trigger: this.wrapElement,
-        start: 'top center',
-        end: '+=150%',
+        start: 'top 88%',
+        end: 'bottom 15%',
         scrub: true,
-        onEnter: () => gsap.set(this.contentElement, {opacity: 1}),
-        onEnterBack: () => gsap.set(this.contentElement, {opacity: 1}),
-        onLeave: () => gsap.set(this.contentElement, {opacity: 0}),
-        onLeaveBack: () => gsap.set(this.contentElement, {opacity: 0}),
+        invalidateOnRefresh: true,
       },
     })
-    .fromTo(this.imageElements, {
-      z: (pos) => -2.5 * winsize.width/2 - pos * 0.07 * winsize.width,
-    }, {
-      z: (pos) => 2.5 * winsize.width + (this.imagesTotal - pos - 1) * 0.07 * winsize.width,
-    }, 0)
-    .fromTo(this.imageElements, {
-      rotationZ: 10,
-    }, {
-      rotationX: 20,
-      rotationZ: 280,
-      yPercent: -100,
-      stagger: 0.005,
-    }, 0)
-    /*.fromTo(this.imageElements, {
-      filter: 'brightness(20%)',
-    }, {
-      filter: 'brightness(350%)',
-      stagger: 0.005,
-    }, 0);*/
+      .to(this.contentElement, { autoAlpha: 1, duration: 0.12 }, 0)
+      .fromTo(
+        this.imageElements,
+        {
+          z: (pos) => -2.5 * winsize.width / 2 - pos * 0.07 * winsize.width,
+        },
+        {
+          z: (pos) => 2.5 * winsize.width + (this.imagesTotal - pos - 1) * 0.07 * winsize.width,
+        },
+        0,
+      )
+      .fromTo(
+        this.imageElements,
+        {
+          rotationZ: 10,
+        },
+        {
+          rotationX: 20,
+          rotationZ: 280,
+          yPercent: -100,
+          stagger: 0.005,
+        },
+        0,
+      );
   }
 }

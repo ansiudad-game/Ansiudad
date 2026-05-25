@@ -1,0 +1,339 @@
+﻿/*
+  Fundación del sitio: fuentes + tokens + layout + ruido.
+*/
+/*
+  @font-face — familia "HelveticaNeue".
+*/
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueBlack.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueBold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueLight.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueMedium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueRoman.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueThin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueUltraLight.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueHeavy.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueThinItalic.otf") format("opentype");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueUltraLightItalic.otf") format("opentype");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueLightItalic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueMediumItalic.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueBoldItalic.otf") format("opentype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueHeavyItalic.otf") format("opentype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueBlackItalic.otf") format("opentype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/*
+  Tokens globales: reset mÃ­nimo, fuentes, variables CSS, body.
+  Orden de carga: primero.
+*/
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+html {
+  line-height: 1.15;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+dl dl,
+dl ol,
+dl ul,
+ol dl,
+ol ol,
+ol ul,
+ul dl,
+ul ol,
+ul ul {
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+main {
+  display: block;
+}
+a {
+  background-color: transparent;
+}
+b,
+strong {
+  font-weight: bolder;
+}
+video {
+  display: inline-block;
+}
+img {
+  border-style: none;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+button,
+input,
+select {
+  margin: 0;
+}
+button {
+  overflow: visible;
+  text-transform: none;
+}
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+[hidden] {
+  display: none;
+}
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+* a {
+  cursor: pointer;
+  text-decoration: none;
+}
+* i {
+  font-style: italic;
+}
+* p {
+  font-size: 1em;
+}
+:root {
+  --font-family: "HelveticaNeue", sans-serif;
+  font-family: var(--font-family);
+  font-size: 16px;
+  --font-titles: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --amarillo-claro: #E7F2A5;
+  --amarillo-oscuro: #DBDB7B;
+  --morado-claro: #494EA1;
+  --morado-oscuro: #3E1581;
+  --rosa: #F068B2;
+  --rojo: #D94950;
+  --morado: var(--morado-oscuro);
+  --page-padding: 1rem;
+  --site-bottom-h: 64px;
+  --site-bottom-play-size: clamp(92px, 23vw, 118px);
+  --site-bottom-pad: calc(var(--site-bottom-h) + env(safe-area-inset-bottom, 0px));
+}
+
+html {
+  scroll-padding-bottom: var(--site-bottom-pad);
+}
+
+a {
+  color: var(--morado);
+}
+
+body {
+  margin: 0;
+  color: var(--morado);
+  background-color: var(--amarillo-claro);
+  background-image: url(../img/noise.png);
+  background-size:
+    400px,
+    100% 100vh;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  padding-bottom: var(--site-bottom-pad);
+}
+
+@media (min-width: 880px) {
+  body {
+    --page-padding: 2rem;
+  }
+}
+
+/*
+  <main>, loader, contenedores de tema (.theme-container).
+*/
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  color: #fff;
+  font-size: 2em;
+  z-index: 100;
+}
+
+.hidden {
+  display: none;
+}
+
+main {
+  position: relative;
+  top: 0;
+  /* Por encima de la capa global de ruido (z-index: 1 en este archivo) */
+  z-index: 2;
+}
+
+.theme-container {
+  scroll-margin-top: 72px;
+  scroll-margin-bottom: var(--site-bottom-pad);
+}
+
+.theme-container + .theme-container {
+  border-top: 1px solid rgba(39, 39, 35, 0.12);
+}
+
+/*
+  Grano SVG en toda la vista: overlay mezcla sin dominar el color.
+  Debajo del <main> (z-index: 2) para no cubrir texto ni cartas; por encima del fondo del body.
+*/
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+

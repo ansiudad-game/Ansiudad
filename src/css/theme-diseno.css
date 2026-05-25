@@ -1,0 +1,157 @@
+/*
+  <section id="diseno"> — bloque #how y logos.
+*/
+#how {
+  width: 100%;
+  max-width: 100vw;
+  min-height: 50vh;
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 6vw, 15vw)
+    clamp(2rem, 6vw, 4rem);
+  font-size: clamp(1rem, 2.8vw, 1.8em);
+  line-height: 1.35;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: var(--amarillo-oscuro);
+}
+
+#how p b {
+  font-family: var(--font-family);
+  font-weight: 700;
+}
+
+#how h2 {
+  font-family: var(--font-titles);
+  font-size: clamp(1.75rem, 7vw, 6rem);
+  line-height: 1.05;
+  margin-bottom: clamp(1rem, 3vw, 2.5rem);
+  text-transform: uppercase;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+#how .howAnchor {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 60px;
+}
+
+#diseno .logos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 25px;
+}
+
+#diseno .logo {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+/* ── Flip Cards ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(1rem, 3vw, 1.75rem);
+  margin: clamp(1.5rem, 4vw, 3rem) 0;
+  text-align: left;
+}
+
+.flip-card {
+  perspective: 1000px;
+  min-height: 280px;
+  cursor: pointer;
+  outline: none;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  border-radius: 1rem;
+}
+
+/* Activación por click (JS toggle de clase) */
+.flip-card.flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+/* Frente y reverso comparten base */
+.flip-front,
+.flip-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 1rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* Frente */
+.flip-front {
+  background-color: var(--color-fondo, #fff8e7); /* usa tu token si tienes uno */
+  border: 2px solid currentColor;
+  color: inherit;
+}
+
+/* Reverso */
+.flip-back {
+  background-color: var(--negro, #1a1a1a);   /* ajusta a tu paleta */
+  color: var(--blanco, #f5f0e8);
+  transform: rotateY(180deg);
+  border: 2px solid transparent;
+}
+
+/* Tipografía dentro de las cartas */
+.flip-front h3,
+.flip-back h3 {
+  font-family: var(--font-titles);
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  text-transform: uppercase;
+  line-height: 1.05;
+  margin: 0 0 0.75rem;
+}
+
+.flip-front p,
+.flip-back p {
+  font-family: var(--font-family);
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+  line-height: 1.45;
+  margin: 0 0 0.5rem;
+  flex-grow: 1;
+}
+
+.card-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.card-hint {
+  font-size: 0.75rem;
+  opacity: 0.55;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  display: block;
+}
+
+/* Hover sutil en el frente */
+.flip-card:not(.flipped):hover .flip-inner,
+.flip-card:not(.flipped):focus-visible .flip-inner {
+  transform: rotateY(8deg);
+}
+@media (min-width: 880px) {
+  #diseno .logo {
+    max-width: 300px;
+  }
+}

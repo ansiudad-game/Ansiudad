@@ -1,0 +1,224 @@
+/*
+  <section id="desafio"> — título arriba, fila vertical de cartas, texto → pregunta final.
+*/
+#desafio {
+  width: 100%;
+  max-width: 100vw;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--amarillo-oscuro);
+  overflow: hidden;
+}
+
+#desafio .howAnchor {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 60px;
+}
+
+.desafio-flow {
+  position: relative;
+  width: 100%;
+  max-width: 100vw;
+  background-color: var(--rosa);
+}
+
+.desafio-flow__pin {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(clamp(4.5rem, 16vh, 10rem), auto) minmax(0, 1fr);
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--rosa);
+  box-sizing: border-box;
+}
+
+.desafio-flow__header {
+  position: relative;
+  z-index: 14;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: clamp(4.5rem, 16vh, 10rem);
+  padding: clamp(0.5rem, 2vh, 0.85rem) var(--page-padding) clamp(0.25rem, 1vh, 0.5rem);
+  box-sizing: border-box;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.desafio-flow__title {
+  font-family: var(--font-titles);
+  font-size: clamp(1.75rem, 7vw, 6rem);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.05;
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  color: var(--morado-oscuro);
+  will-change: transform, opacity;
+  max-width: min(100%, 920px);
+}
+
+.desafio-flow__layout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(150px, 300px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  padding: clamp(0.25rem, 1vh, 0.5rem) var(--page-padding)
+    clamp(0.75rem, 2vh, 1.25rem);
+  box-sizing: border-box;
+  z-index: 8;
+}
+
+.desafio-flow__card-slot {
+  position: relative;
+  justify-self: center;
+  align-self: center;
+  width: min(240px, 38vw);
+  height: min(520px, 62vh);
+  perspective: 900px;
+  transform-style: preserve-3d;
+}
+
+#desafio .card {
+  width: 100%;
+  max-width: 220px;
+  min-width: 0;
+  aspect-ratio: 400 / 694;
+  padding: 3px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 10px;
+  align-items: stretch;
+  outline: 1px solid var(--rosa);
+  background: var(--rosa);
+  grid-template-areas: "card-img card-img";
+}
+
+.desafio-flow__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  max-width: 220px;
+  margin: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  will-change: transform, opacity;
+  transform-origin: 50% 50%;
+}
+
+.desafio-flow__card:nth-child(1) {
+  z-index: 1;
+}
+.desafio-flow__card:nth-child(2) {
+  z-index: 2;
+}
+.desafio-flow__card:nth-child(3) {
+  z-index: 3;
+}
+
+#desafio .card__img {
+  grid-area: card-img;
+  background-color: var(--rosa);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+}
+
+.desafio-flow__text-track {
+  position: relative;
+  min-height: clamp(6rem, 24vh, 12rem);
+  align-self: center;
+}
+
+.desafio-flow__text-pane {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  visibility: hidden;
+  opacity: 0;
+  font-size: clamp(1rem, 2.8vw, 1.8em);
+  line-height: 1.35;
+}
+
+.desafio-flow__text-pane.is-active {
+  visibility: visible;
+}
+
+.desafio-flow__text-pane p {
+  margin: 0;
+  color: var(--morado-oscuro);
+}
+
+.desafio-flow__text-pane p b {
+  font-weight: 700;
+}
+
+.desafio-flow__finale {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  opacity: 0;
+  visibility: visible;
+  z-index: 6;
+}
+
+.desafio-flow__finale p {
+  margin: 0;
+  font-size: clamp(1.1rem, 3.2vw, 2em);
+  line-height: 1.3;
+  color: var(--morado-oscuro);
+}
+
+.desafio-flow__finale p b {
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .desafio-flow__pin {
+    grid-template-rows: minmax(clamp(3.5rem, 14vh, 8rem), auto) minmax(0, 1fr);
+  }
+
+  .desafio-flow__layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    align-content: center;
+  }
+
+  .desafio-flow__card-slot {
+    width: min(200px, 52vw);
+    height: min(440px, 52vh);
+    justify-self: center;
+  }
+
+  .desafio-flow__text-track {
+    min-height: clamp(5rem, 20vh, 10rem);
+  }
+
+  .desafio-flow__text-pane,
+  .desafio-flow__finale {
+    text-align: center;
+    justify-content: center;
+  }
+}
