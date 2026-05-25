@@ -102,27 +102,27 @@ Date: 05-26 to 07-26
               </svg>
             </label>
           </div>
-        </div>
-      </div>
 
-      <div id="menu-panel" class="menu__panel" role="region" aria-label="Secciones">
-      <ul class="menu__bottom">
-        <li class="menu__item">
-          <a href="#que-es" class="menu__link">¿Qué es Ansiudad?</a>
-        </li>
-        <li class="menu__item">
-          <a href="#desafio" class="menu__link">¿Cuál es el desafío?</a>
-        </li>
-        <li class="menu__item">
-          <a href="#diseno" class="menu__link">¿Cómo lo diseñamos?</a>
-        </li>
-        <li class="menu__item">
-          <a href="#donde" class="menu__link">¿Dónde se ha jugado?</a>
-        </li>
-        <li class="menu__item">
-          <a href="#contacto" class="menu__link">Contacto</a>
-        </li>
-      </ul>
+          <div id="menu-panel" class="menu__panel" role="region" aria-label="Secciones">
+            <ul class="menu__bottom">
+              <li class="menu__item">
+                <a href="#que-es" class="menu__link">¿Qué es Ansiudad?</a>
+              </li>
+              <li class="menu__item">
+                <a href="#desafio" class="menu__link">¿Cuál es el desafío?</a>
+              </li>
+              <li class="menu__item">
+                <a href="#diseno" class="menu__link">¿Cómo lo diseñamos?</a>
+              </li>
+              <li class="menu__item">
+                <a href="#donde" class="menu__link">¿Dónde se ha jugado?</a>
+              </li>
+              <li class="menu__item">
+                <a href="#contacto" class="menu__link">Contacto</a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </nav>
 
@@ -155,7 +155,7 @@ Date: 05-26 to 07-26
               <svg
                 class="home__welcome-logo-svg"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 241.63 244.87"
+                viewBox="-12 -12 270 270"
                 aria-hidden="true"
                 focusable="false"
               >
@@ -194,7 +194,7 @@ Date: 05-26 to 07-26
       <div id="what" class="intro">
         <div class="intro__title">
           <span>¿Qué es</span>
-          <img src="img/black-logo-ani.gif" alt="Ansiudad Logo" />
+          <img src="brand/animated-logo.gif" alt="Ansiudad Logo" />
           <span>?</span>
         </div>
         <div class="grid">
@@ -938,10 +938,27 @@ Date: 05-26 to 07-26
 
     <aside class="site-bottom" aria-label="Accesos rápidos">
       <div class="site-bottom__inner">
-        <span class="site-bottom__spacer" aria-hidden="true"></span>
-        <div class="site-bottom__actions">
-          <a href="/juego.html" class="site-bottom__cta">¿Quieres jugar?</a>
-        </div>
+        <a href="/juego.html" class="site-bottom__play-btn" aria-label="¿Quieres jugar? Ir al juego">
+          <span class="site-bottom__play-btn__ring">
+            <svg class="site-bottom__play-btn__label" viewBox="0 0 120 120" aria-hidden="true">
+              <defs>
+                <path id="site-bottom-play-arc" d="M 18 76 A 42 42 0 0 1 102 76" />
+              </defs>
+              <text>
+                <textPath href="#site-bottom-play-arc" startOffset="50%" text-anchor="middle">
+                  ¿Quieres jugar?
+                </textPath>
+              </text>
+            </svg>
+            <img
+              class="site-bottom__play-btn__llama"
+              src="brand/pachallama-closeup.gif"
+              alt=""
+              width="128"
+              height="128"
+            />
+          </span>
+        </a>
       </div>
     </aside>
 

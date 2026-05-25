@@ -132,6 +132,7 @@ table {
   --morado: var(--morado-oscuro);
   --page-padding: 1rem;
   --site-bottom-h: 64px;
+  --site-bottom-play-size: clamp(92px, 23vw, 118px);
   --site-bottom-pad: calc(var(--site-bottom-h) + env(safe-area-inset-bottom, 0px));
 }
 

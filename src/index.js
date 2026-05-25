@@ -65,6 +65,24 @@ if (scene && layers.length) animate();
 //Cartas 
 gsap.registerPlugin(ScrollTrigger);
 
+const initHomeSloganReveal = () => {
+  const slogan = document.querySelector('.slogan-container');
+  const home = document.getElementById('home');
+  if (!slogan || !home) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    slogan.classList.add('is-visible');
+    return;
+  }
+
+  ScrollTrigger.create({
+    trigger: home,
+    start: 'top+=60 top',
+    once: true,
+    onEnter: () => slogan.classList.add('is-visible'),
+  });
+};
+
 const init = () => {
   document.querySelectorAll('[data-stack-1]').forEach((stackEl) => {
     new StackMotionEffect1(stackEl);
@@ -94,6 +112,8 @@ const init = () => {
       }
     });
   });
+
+  initHomeSloganReveal();
 };
 
 

@@ -180,17 +180,17 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
   gap: 0.35rem 0.75rem;
   text-align: center;
   color: var(--morado-claro);
-  max-width: min(96vw, 42rem);
+  max-width: min(100vw, 42rem);
   padding-bottom: clamp(2rem, 8vh, 3.5rem);
   transform: translateY(-11vh);
+  overflow: visible;
 }
 
 .page-title {
   font-family: var(--font-titles);
-  font-weight: 900;
+  font-weight: 400;
   font-style: italic;
-  font-size: clamp(1.35rem, 4vw, 3.25rem);
-  line-height: 1.1;
+  font-size: clamp(1.35rem, 4vw, 4.25rem);
   text-transform: uppercase;
   margin: 0;
 }
@@ -204,6 +204,7 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
 }
 
 /* Entrada: izquierda → derecha (texto "Bienvenidxs a") */
@@ -283,57 +284,59 @@ body.bg-loaded .home-logo__part--dad {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  line-height: 0;
+  overflow: visible;
 }
 
 .home__welcome-logo-svg {
   display: block;
-  height: clamp(70px, 50vw, 250px);
+  height: clamp(70px, 70vw, 400px);
   width: auto;
   max-width: min(400px, 88vw);
   color: var(--morado-oscuro);
+  overflow: visible;
 }
+
 .slogan-container {
   position: relative;
   z-index: 10;
-  max-width: min(96vw, 28rem);
-  padding: 0.35rem 0.75rem;
+  max-width: min(96vw, 28rem);;
   text-align: center;
-  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(-0%, 0, 0);
+  will-change: transform, opacity;
 }
 
 .slogan-text {
-  margin: 0;
+  margin: 0 auto;
   font-family: var(--font-titles);
   font-weight: 300;
-  font-style: italic;
-  font-size: clamp(0.85rem, 2.8vw, 1.05rem);
-  line-height: 1.35;
-  color: var(--morado-claro);
-  text-wrap: balance;
+  font-style:normal;
+  font-size: clamp(0.85rem, 2.8vw, 2.05rem);
+  line-height: 1.05;
+  color: var(--morado-oscuro);
+  text-wrap: wrap;
+  text-align: center;
+  filter: drop-shadow(10px 10px 10px color-mix(in srgb, var(--morado-claro) 55%, transparent));
 }
 
 .slogan-text p {
   margin: 0;
 }
 
-body.bg-loaded .slogan-container {
-  animation: home-slide-in-lr 0.85s cubic-bezier(0.22, 1, 0.36, 1) 1.55s both;
+.slogan-container.is-visible {
+  animation: home-slide-in-lr 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .page-title-container::after {
   content: "\00BB";
   position: absolute;
-  left: 50%;
-  top: calc(100% - 0.25rem);
-  width: 1em;
-  margin-left: -0.5em;
-  text-align: center;
-  font-size: clamp(1.75rem, 5vw, 3rem);
-  line-height: 1;
+  text-align:center;
+  font-size: clamp(1.75rem, 5vw, 4rem);
   transform: rotate(90deg);
-  transform-origin: center center;
+  transform-origin: center bottom;
   animation: home-scroll-hint 0.5s linear alternate infinite;
   pointer-events: none;
+  top:170%;
+  color: var(--amarillo-oscuro);
 }
 
 @keyframes home-scroll-hint {
@@ -346,6 +349,11 @@ body.bg-loaded .slogan-container {
   body.bg-loaded .home__welcome-line,
   .home-logo__part {
     animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .slogan-container {
     opacity: 1;
     transform: none;
   }
