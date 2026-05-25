@@ -191,16 +191,65 @@ export function initDesafioParallax() {
 
   ScrollTrigger.refresh();
 }
-document.querySelectorAll('.flip-card').forEach(card => {
-  // Click
-  card.addEventListener('click', () => {
-    card.classList.toggle('flipped');
+
+/* ── Carrusel ── */
+(function () {
+  const thumbs = Array.from(document.querySelectorAll('.thumb'));
+  const mainImg = document.getElementById('carouselMain');
+  const prevBtn = document.querySelector('.carousel-arrow--prev');
+  const nextBtn = document.querySelector('.carousel-arrow--next');
+
+  if (!thumbs.length || !mainImg) return;
+
+  let current = 0;
+
+  function goTo(index) {
+    // Rango circular
+    current = (index + thumbs.length) % thumbs.length;
+
+    // Fade out → cambiar src → fade in
+    mainImg.classList.add('fade');
+    setTimeout(() => {
+      mainImg.src = thumbs[current].dataset.src;
+      mainImg.alt = thumbs[current].querySelector('img').alt;
+      mainImg.classList.remove('fade');
+    }, 250);
+
+    // Actualizar miniatura activa
+    thumbs.forEach(t => t.classList.remove('active'));
+    thumbs[current].classList.add('active');
+
+    // Scroll automático de la miniatura activa al centro
+    thumbs[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  // Click en miniaturas
+  thumbs.forEach((thumb, i) => {
+    thumb.addEventListener('click', () => goTo(i));
   });
-  // Teclado (Enter / Space)
-  card.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      card.classList.toggle('flipped');
-    }
+
+  // Flechas
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  // Teclado
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
   });
-});
+
+  // Click en imagen principal → fullscreen
+  mainImg.style.cursor = 'zoom-in';
+  const overlay = document.getElementById('fullscreenOverlay');
+  const overlayImg = document.getElementById('fullscreenImage');
+
+  if (overlay && overlayImg) {
+    mainImg.addEventListener('click', () => {
+      overlayImg.src = mainImg.src;
+      overlay.classList.add('show');
+    });
+    overlay.addEventListener('click', () => {
+      overlay.classList.remove('show');
+    });
+  }
+})();

@@ -85,9 +85,24 @@ const initHomeSloganReveal = () => {
   });
 };
 
+const initFlipCards = () => {
+  document.querySelectorAll('.flip-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      card.classList.toggle('flipped');
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.classList.toggle('flipped');
+      }
+    });
+  });
+};
+
 const init = () => {
   initWhatParallax();
   initDesafioParallax();
+  initFlipCards();
 
   document.querySelectorAll('[data-stack-1]').forEach((stackEl) => {
     new StackMotionEffect1(stackEl);
@@ -145,3 +160,22 @@ if ( !window.location.pathname.includes('juego') ) {
     });
   });
 }
+
+(function () {
+  const form       = document.getElementById('contactForm');
+  const submitBtn  = document.getElementById('submitBtn');
+  const msgSuccess = document.getElementById('formSuccess');
+
+  if (!form) return;
+
+  submitBtn.addEventListener('click', () => {
+    msgSuccess.classList.add('visible');
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+      form.reset();
+      msgSuccess.classList.remove('visible');
+      submitBtn.disabled = false;
+    }, 4000);
+  });
+})();

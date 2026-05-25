@@ -11,7 +11,8 @@
   line-height: 1.35;
   text-align: center;
   box-sizing: border-box;
-  background-color: var(--amarillo-oscuro);
+  background-color: var(--morado-claro);
+  overflow: visible;
 }
 
 #how p b {
@@ -21,6 +22,9 @@
 
 #how h2 {
   font-family: var(--font-titles);
+  font-weight: 900;
+  font-style: italic;
+ color: var(--amarillo-oscuro);
   font-size: clamp(1.75rem, 7vw, 6rem);
   line-height: 1.05;
   margin-bottom: clamp(1rem, 3vw, 2.5rem);
@@ -54,32 +58,34 @@
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: clamp(1rem, 3vw, 1.75rem);
   margin: clamp(1.5rem, 4vw, 3rem) 0;
+  padding-bottom: clamp(2.5rem, 10vw, 4.5rem);
   text-align: left;
+  overflow: visible;
 }
 
 .flip-card {
   perspective: 1000px;
-  min-height: 280px;
+  min-height: clamp(300px, 42vw, 360px);
   cursor: pointer;
   outline: none;
+  overflow: visible;
 }
 
 .flip-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 280px;
+  min-height: clamp(300px, 42vw, 360px);
   transform-style: preserve-3d;
   transition: transform 0.55s cubic-bezier(0.45, 0.05, 0.55, 0.95);
   border-radius: 1rem;
+  overflow: visible;
 }
 
-/* Activación por click (JS toggle de clase) */
 .flip-card.flipped .flip-inner {
   transform: rotateY(180deg);
 }
 
-/* Frente y reverso comparten base */
 .flip-front,
 .flip-back {
   position: absolute;
@@ -87,65 +93,161 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: 1rem;
-  padding: clamp(1.25rem, 3vw, 2rem);
+  box-sizing: border-box;
+  overflow: visible;
+  display: block;
+}
+
+.flip-front {
+  background-color: var(--morado-oscuro);
+  border: 2px solid var(--amarillo-oscuro);
+  color: var(--amarillo-oscuro);
+}
+
+.flip-back {
+  background-color: var(--rosa);
+  color: var(--morado-oscuro);
+  transform: rotateY(180deg);
+  border: 2px solid transparent;
+  overflow: hidden;
+}
+
+/* Texto contenido dentro de la carta */
+.flip-card__body {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 100%;
+  min-height: inherit;
+  padding: clamp(1.1rem, 2.8vw, 1.65rem);
+  padding-bottom: clamp(5.5rem, 32%, 7rem);
   box-sizing: border-box;
 }
 
-/* Frente */
-.flip-front {
-  background-color: var(--color-fondo, #fff8e7); /* usa tu token si tienes uno */
-  border: 2px solid currentColor;
-  color: inherit;
-}
-
-/* Reverso */
-.flip-back {
-  background-color: var(--negro, #1a1a1a);   /* ajusta a tu paleta */
-  color: var(--blanco, #f5f0e8);
-  transform: rotateY(180deg);
-  border: 2px solid transparent;
-}
-
-/* Tipografía dentro de las cartas */
 .flip-front h3,
 .flip-back h3 {
   font-family: var(--font-titles);
-  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  font-size: clamp(1.05rem, 2.8vw, 1.5rem);
   text-transform: uppercase;
+  font-weight: 600;
+  font-style: italic;
   line-height: 1.05;
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.65rem;
+  flex-shrink: 0;
+}
+
+.flip-front h3 {
+  color: var(--amarillo-oscuro);
+}
+
+.flip-back h3 {
+  color: var(--morado-oscuro);
 }
 
 .flip-front p,
 .flip-back p {
   font-family: var(--font-family);
-  font-size: clamp(0.85rem, 2vw, 1.05rem);
-  line-height: 1.45;
-  margin: 0 0 0.5rem;
-  flex-grow: 1;
+  font-size: clamp(0.82rem, 1.9vw, 1rem);
+  line-height: 1.4;
+  margin: 0 0 0.45rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-wrap: anywhere;
 }
 
+.flip-front p strong,
+.flip-back p strong {
+  font-weight: 700;
+}
+
+/* SVG anclado abajo*/
 .card-icon {
-  font-size: 2rem;
-  line-height: 1;
-  margin-bottom: 0.5rem;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 3;
+  width: min(97%, 350px);
+  margin: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transform: translate(-50%, 48%);
+  pointer-events: none;
+  line-height: 0;
+}
+
+.card-icon img {
+  width: 100%;
+  height: auto;
+  max-height: clamp(110px, 28vw, 220px);
   display: block;
+  object-fit: contain;
+  object-position: bottom center;
 }
 
 .card-hint {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   opacity: 0.55;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-top: auto;
-  padding-top: 0.75rem;
+  padding-top: 0.5rem;
+  flex-shrink: 0;
   display: block;
 }
 
-/* Hover sutil en el frente */
+.flip-back .flip-card__body {
+  padding-bottom: clamp(0.85rem, 2vw, 1.1rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.flip-back p {
+  flex: 0 0 auto;
+}
+
+.flip-card__body--logos {
+  gap: 0.65rem;
+}
+
+.flip-card__copy {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+
+.flip-card__copy p:last-child {
+  margin-bottom: 0;
+}
+
+#diseno .flip-back .logos {
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 0.65rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.35rem, 2vw, 0.75rem);
+  transform: none;
+}
+
+#diseno .flip-back .logo {
+  max-width: clamp(72px, 22vw, 110px);
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+
+/* Reverso con más contenido (Cátedra UNESCO) */
+.flip-card:nth-child(3) .flip-inner {
+  min-height: clamp(340px, 48vw, 400px);
+}
+
 .flip-card:not(.flipped):hover .flip-inner,
 .flip-card:not(.flipped):focus-visible .flip-inner {
   transform: rotateY(8deg);
