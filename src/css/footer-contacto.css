@@ -8,12 +8,22 @@
   position: relative;
   width: 100%;
   max-width: 100vw;
-  min-height: min(100vh, 900px);
+  min-height: auto;
   height: auto;
-  padding: clamp(2rem, 8vw, 4rem) var(--page-padding) calc(2rem + var(--site-bottom-pad));
+  padding: clamp(2rem, 8vw, 4rem) var(--page-padding) 0;
   box-sizing: border-box;
   text-align: center;
   gap: 0;
+  background-color: var(--amarillo-claro);
+  background-image: var(--noise-svg);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  background-blend-mode: overlay;
+}
+
+#contacto {
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 /* Título CONTACTO */
@@ -159,12 +169,14 @@
   margin: clamp(2rem, 6vw, 4rem) 0;
 }
 
-/* Bloque inferior */
+/* Bloque inferior — termina poco después de Instagram */
 .footer__bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.85rem;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  margin-bottom: 0;
 }
 
 .footer__logo {
@@ -215,6 +227,7 @@
   font-weight: 700;
   font-size: clamp(0.9rem, 2vw, 1rem);
   margin-top: 0.25rem;
+  margin-bottom: 0;
   transition: opacity 0.2s;
 }
 

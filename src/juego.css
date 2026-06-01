@@ -39,15 +39,23 @@ main {
 
 #llama-helper {
     position: absolute;
-    bottom: 30px; left: 30px;
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    transform: none;
     display: flex;
-    gap: 20px;
+    gap: 10px;
     align-items: flex-end;
+    max-width: calc(100vw - 24px);
+    max-height: none;
+    box-sizing: border-box;
 }
 
     #llama-helper .left-wrapper {
         position: relative;
-        width: 128px;
+        width: 72px;
+        flex-shrink: 0;
     }
         #llama-helper .left-wrapper:before {
             content: '';
@@ -56,8 +64,8 @@ main {
             margin: auto;
             bottom: 0;
             left: 0; right: 0;
-            width: 125px;
-            height: 125px;
+            width: 68px;
+            height: 68px;
             background-color: rgba(255,255,255, 0.1);
             border-radius: 50%;
             backdrop-filter: blur(20px);
@@ -67,16 +75,18 @@ main {
     #llama-helper img {
         position: relative;
         display: block;
-        width: 128px;
+        width: 72px;
         height: auto;
     }
 
     #llama-helper .right-wrapper {
         pointer-events: auto;
         position: relative;
-        width: 400px;
-        padding: 30px 20px;
-        border-radius: 20px;
+        width: 100%;
+        min-width: 0;
+        flex: 1;
+        padding: 14px;
+        border-radius: 14px;
         background-color: rgba(20,20,20, 0.5);
         backdrop-filter: blur(20px);
         color: #fff;
@@ -84,19 +94,29 @@ main {
     }
 
         #llama-helper .text-globe h2 {
-            margin-bottom: 32px;
+            margin-bottom: 10px;
+            font-size: clamp(0.95rem, 4.2vw, 1.1rem);
+            line-height: 1.2;
+        }
+
+        #llama-helper .text-globe p {
+            font-size: clamp(0.75rem, 3.4vw, 0.88rem);
+            line-height: 1.35;
         }
 
         #llama-helper .text-globe button {
-            margin-top: 16px;
+            margin-top: 10px;
         }
-        
-        #llama-helper .text-globe .isologo {
-            position: absolute;
-            bottom: 30px;
-            right: 20px;
-            width: 30px;
-        }
+
+button#firstStepBtn.regular-btn.submitBtn {
+    background-color: #aa9ffd;
+    padding: 0.55rem 1rem;
+    font-family: "HelveticaNeue", sans-serif;
+    border: none;
+    border-radius: 50px;
+    color: #272723;
+    font-size: 0.82rem;
+}
 
 /* Global UI */
 .regular-btn {
@@ -105,7 +125,7 @@ main {
 }
 
 article#juegoContainer.pageContainer {
-    padding: 190px 0;
+    padding: 80px 0 0;
 }
 /* Slides shared classes */
 .allSlidesContainer {
@@ -138,6 +158,9 @@ article#juegoContainer.pageContainer {
         opacity: 1;
         filter: blur(0px);
         transform: scale(1);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
     .slideContainer.noBlur {
         filter: none !important;
@@ -147,16 +170,51 @@ article#juegoContainer.pageContainer {
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: stretch;
+    justify-content: flex-start;
     flex-direction: column;
+    gap: 16px;
+    padding: 12px 20px 28px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
+
+.horizontalStackWrapper > .goToNextStepBtn {
+    flex-shrink: 0;
+    align-self: center;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
 .leftToRightWrapper {
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    gap: 20px;
+    padding: 12px 20px 28px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#slide3,
+#slide4 {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#slide3 .llama-instructions,
+#slide4 .llama-instructions {
+    height: auto;
+    min-height: 0;
+    align-items: flex-start;
+    padding: 16px 20px 32px;
 }
 
 
@@ -226,8 +284,82 @@ article#juegoContainer.pageContainer {
     }
 
 
+#slide7 .leftToRightWrapper {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    gap: 16px;
+}
+
+#slide7 .cards-container,
+#slide7 .cards-container.fitHeight {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: visible;
+    margin: 0;
+}
+
+#slide7 .cards-container .card-wrapper,
+#slide7 .cards-container .card-wrapper.fitHeight,
+#slide7 .cards-container .card-wrapper.llama-input-cards {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+}
+
 #slide5 .llama-instructions, #slide7 .llama-instructions {
     padding-right: 0;
+}
+
+/* Crear incidente — bloques expandidos en columna, sin scroll interno */
+#slide5 .leftToRightWrapper {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+    gap: 16px;
+}
+
+#slide5 .llama-instructions {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    margin-left: 0;
+    padding-right: 0;
+}
+
+#slide5 .cards-container,
+#slide5 .cards-container.fitHeight {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: visible;
+    margin: 0;
+}
+
+#slide5 .cards-container .card-wrapper,
+#slide5 .cards-container .card-wrapper.fitHeight,
+#slide5 .cards-container .card-wrapper.llama-input-cards {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+}
+
+#slide5 .llama-instructions .text-wrapper button {
+    position: static;
+    margin-top: 16px;
+    margin-bottom: 0;
+    box-shadow: none;
 }
 
 .llama-instructions {
@@ -380,7 +512,7 @@ article#juegoContainer.pageContainer {
         position: relative;
         width: 320px;
         height: 100%;
-        padding: 30px 20px 80px;
+        padding: 24px 20px;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -393,20 +525,12 @@ article#juegoContainer.pageContainer {
     .cards-container .card-wrapper.fitHeight {
         height: 100%;
         max-height: 600px;
-        /* align-items: center; */
     }
 
-        .cards-container .card-footer {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%;
-            padding: 15px 30px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: flex-end;
-            box-sizing: border-box;
-            background-color: rgba(20,20,20, 0.5);
-        }
+    .cards-container .card-wrapper.llama-input-cards {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
 
 div.card-wrapper.llama-input-cards {
     display: flex;
@@ -490,15 +614,6 @@ img#loading-animation {
     color: #ffffff;
 }
 
-button#firstStepBtn.regular-btn.submitBtn {
-    background-color: #aa9ffd;
-    padding: 1rem 2rem;
-    font-family: "HelveticaNeue", sans-serif;
-    border: none;
-    border-radius: 50px;
-    color: #272723;
-}
-
 #loader-container {
     position: relative;
     width: 100%;
@@ -529,9 +644,14 @@ div.theme-input-group {
         width: 100%;
         align-items: center;
         text-align: center;
+        gap: 8px;
+        box-sizing: border-box;
     }
         .range {
-            width: 90%;
+            width: 100%;
+            max-width: 100%;
+            flex: 1;
+            min-width: 0;
         }
         /*********** Baseline, reset styles ***********/
         .range {
@@ -539,10 +659,7 @@ div.theme-input-group {
             appearance: none;
             background: transparent;
             cursor: ew-resize;
-            width: 25rem;
         }
-        
-        /* Removes default focus */
         .range:focus {
             outline: none;
         }
@@ -600,9 +717,10 @@ div.theme-input-group {
             font-size: 2rem;
             padding: 10px 15px;
             border-radius: 10px;
-            align-self: flex-end;
+            flex-shrink: 0;
             margin: 0;
-            width: 10%;
+            width: auto;
+            min-width: 2.5rem;
         }
         input#theme-input {
             position: relative;
@@ -706,11 +824,381 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     100% {transform: translate3d(0, -10px, 0);}
 }
 
-@media (max-height: 880px) {
+/* ── Viewport bajo (altura) ── */
+@media (max-height: 767px) and (max-width: 767px) {
     .allSlidesContainer {
-        overflow-y: scroll;
+        height: calc(100dvh - 72px);
+        max-height: calc(100dvh - 72px);
+        overflow-y: auto;
     }
+
     article#juegoContainer.pageContainer {
-        padding: 100px 0 20px;
+        padding: 72px 0 0;
+    }
+}
+
+/* ── Móvil (hasta tablet): apilado expandido + un solo scroll (slide) ── */
+@media (max-width: 767px) {
+    article#juegoContainer.pageContainer {
+        padding: 72px 0 0;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .allSlidesContainer {
+        height: calc(100dvh - 72px);
+        max-height: calc(100dvh - 72px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .slideContainer {
+        height: auto;
+        min-height: 0;
+    }
+
+    .slideContainer:not(.show) {
+        position: absolute;
+        height: 0;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .slideContainer.show {
+        position: relative;
+        height: auto;
+        min-height: calc(100dvh - 72px);
+        overflow: visible;
+        padding: 0 16px 32px;
+        box-sizing: border-box;
+    }
+
+    .horizontalStackWrapper,
+    .leftToRightWrapper,
+    #slide5 .leftToRightWrapper,
+    #slide7 .leftToRightWrapper {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 16px;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        overflow: visible;
+        padding: 8px 0 24px;
+        box-sizing: border-box;
+    }
+
+    .horizontalStackWrapper .cards-container,
+    .leftToRightWrapper .cards-container,
+    #slide5 .cards-container,
+    #slide7 .cards-container {
+        flex: none;
+        width: 100%;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        margin: 0;
+        padding: 0;
+    }
+
+    .cards-container,
+    .cards-container.fitHeight {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        height: auto;
+        max-height: none;
+    }
+
+    .cards-container .card-wrapper,
+    .cards-container .card-wrapper.fitHeight,
+    .cards-container .card-wrapper.llama-input-cards {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        min-height: 0;
+        overflow: visible;
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .llama-response {
+        height: auto;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .horizontalStackWrapper > .goToNextStepBtn,
+    .llama-instructions .text-wrapper button,
+    #slide3 .llama-instructions .text-wrapper button,
+    #slide4 .llama-instructions .text-wrapper button,
+    #slide5 .llama-instructions .text-wrapper button {
+        position: static;
+        margin-top: 16px;
+        margin-bottom: 0;
+        box-shadow: none;
+        align-self: center;
+    }
+
+    .llama-intro {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 0;
+        width: 100%;
+    }
+
+    .llama-intro .text-wrapper,
+    .llama-instructions .text-wrapper,
+    .llama-wait .text-wrapper {
+        width: 100%;
+        max-width: none;
+        padding: 16px;
+        box-sizing: border-box;
+    }
+
+    .llama-intro .text-wrapper p,
+    .llama-instructions .text-wrapper p,
+    .llama-instructions .text-wrapper h2,
+    .llama-instructions .text-wrapper h3,
+    .llama-wait .text-wrapper p {
+        font-size: clamp(0.78rem, 3.5vw, 0.9rem);
+        line-height: 1.35;
+    }
+
+    #slide3,
+    #slide4 {
+        overflow: visible;
+        align-items: stretch;
+    }
+
+    #slide3 .llama-instructions,
+    #slide4 .llama-instructions {
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        flex: none;
+        overflow: visible;
+        padding: 4px 0 16px;
+    }
+
+    .llama-instructions {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        margin-left: 0;
+        padding: 0;
+        gap: 12px;
+        box-sizing: border-box;
+    }
+
+    #slide5 .llama-instructions,
+    #slide7 .llama-instructions {
+        padding-right: 0;
+        flex-shrink: 0;
+    }
+
+    .llama-instructions .portrait-wrapper,
+    .llama-intro .portrait-wrapper {
+        width: 72px;
+    }
+
+    .llama-instructions .portrait-wrapper img,
+    .llama-intro .portrait-wrapper img {
+        width: 72px;
+    }
+
+    .llama-instructions .text-wrapper button,
+    .regular-btn.goToNextStepBtn,
+    button#another-one,
+    button#back-home {
+        font-size: 0.82rem;
+        padding: 0.55rem 0.9rem;
+        margin-top: 12px;
+    }
+
+    div.guideline-container {
+        height: auto;
+        min-height: 0;
+        padding-bottom: 8px;
+    }
+
+    .guidelines,
+    .card-wrapper.llama-input-cards h2,
+    div.guideline-container h2 {
+        font-size: clamp(0.9rem, 4vw, 1.05rem);
+        line-height: 1.2;
+    }
+
+    p.guideline-description,
+    .card-wrapper.llama-input-cards p {
+        font-size: clamp(0.78rem, 3.5vw, 0.88rem);
+        line-height: 1.35;
+    }
+
+    .input-number {
+        font-size: 1.35rem;
+        padding: 6px 10px;
+    }
+
+    input#theme-input {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+
+    h3#loading-title {
+        font-size: clamp(0.85rem, 3.8vw, 1rem);
+        line-height: 1.3;
+        padding: 12px 16px;
+    }
+
+    img#loading-animation {
+        width: 160px;
+    }
+}
+
+/* ── Móvil grande / landscape ── */
+@media (min-width: 480px) and (max-width: 767px) {
+    #llama-helper {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        max-width: calc(100vw - 32px);
+    }
+}
+
+/* ── Tablet ── */
+@media (min-width: 768px) {
+    article#juegoContainer.pageContainer {
+        padding: 80px 0 0;
+    }
+
+    .slideContainer.show {
+        padding: 0 24px 32px;
+    }
+
+    #llama-helper {
+        top: 50%;
+        bottom: auto;
+        left: clamp(24px, 4vw, 48px);
+        right: auto;
+        transform: translateY(-50%);
+        gap: 20px;
+        align-items: center;
+        max-width: none;
+        max-height: calc(100vh - 96px);
+    }
+
+    #llama-helper .left-wrapper {
+        width: 128px;
+    }
+
+    #llama-helper .left-wrapper:before {
+        width: 125px;
+        height: 125px;
+    }
+
+    #llama-helper img {
+        width: 128px;
+    }
+
+    #llama-helper .right-wrapper {
+        width: min(400px, calc(100vw - 200px));
+        flex: none;
+        padding: 30px 20px;
+        border-radius: 20px;
+    }
+
+    #llama-helper .text-globe h2 {
+        margin-bottom: 32px;
+        font-size: 1.25rem;
+        line-height: 1.15;
+    }
+
+    #llama-helper .text-globe p {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    button#firstStepBtn.regular-btn.submitBtn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+
+    .horizontalStackWrapper > .goToNextStepBtn,
+    .llama-instructions .text-wrapper button {
+        position: static;
+        box-shadow: none;
+        margin-top: 16px;
+        margin-bottom: 0;
+    }
+
+    #slide3 .llama-instructions,
+    #slide4 .llama-instructions {
+        overflow-y: visible;
+        flex-direction: row;
+        align-items: center;
+        padding: 16px 20px 32px;
+    }
+
+    .llama-instructions .text-wrapper,
+    .llama-intro .text-wrapper {
+        width: 400px;
+        max-width: min(400px, 100%);
+    }
+
+    .llama-instructions .text-wrapper p,
+    .llama-instructions .text-wrapper h2,
+    .llama-instructions .text-wrapper h3 {
+        font-size: 1rem;
+    }
+
+    .regular-btn.goToNextStepBtn,
+    button#another-one,
+    button#back-home {
+        font-size: larger;
+        padding: 1rem 2rem;
+    }
+}
+
+/* ── Tablet grande / laptop pequeño ── */
+@media (min-width: 1024px) {
+    #llama-helper .right-wrapper {
+        width: 400px;
+    }
+
+    #llama-helper .text-globe h2 {
+        font-size: 1.35rem;
+    }
+
+    .llama-instructions {
+        min-width: 400px;
+    }
+
+    #slide7 .leftToRightWrapper {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+/* ── Desktop ── */
+@media (min-width: 1280px) {
+    #llama-helper {
+        left: 48px;
+    }
+
+    #llama-helper .text-globe h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ── Desktop grande ── */
+@media (min-width: 1536px) {
+    #llama-helper .right-wrapper {
+        width: 440px;
+        padding: 36px 28px;
     }
 }

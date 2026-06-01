@@ -207,7 +207,7 @@ const layers = [
   { el: document.getElementById('l4'), depth: 0.088 },
 ].filter((x) => x.el);
 
-const mobileParallaxMq = window.matchMedia('(max-width: 900px)');
+const mobileParallaxMq = window.matchMedia('(max-width: 767px)');
 
 const getBase = (el) => {
   const bx = Number(el.dataset.baseX ?? 0);
@@ -429,6 +429,16 @@ const DESAFIO_CARD_STACK = [
   { x: 0, y: 98, rotate: -7 },
 ];
 
+const DESAFIO_CARD_STACK_MOBILE = [
+  { x: 0, y: -58, rotate: -8 },
+  { x: 0, y: 0, rotate: 6 },
+  { x: 0, y: 58, rotate: -7 },
+];
+
+function getDesafioCardStack() {
+  return mobileParallaxMq.matches ? DESAFIO_CARD_STACK_MOBILE : DESAFIO_CARD_STACK;
+}
+
 const DESAFIO_CARD_ENTER_X = -300;
 const DESAFIO_CARD_ENTER_Y = -140;
 const DESAFIO_STEP = 0.46;
@@ -468,7 +478,11 @@ function initDesafioParallax() {
     gsap.set(textPanes, { clearProps: 'all', visibility: 'hidden', opacity: 0 });
     gsap.set(finale, { clearProps: 'all', opacity: 1, visibility: 'visible', xPercent: 0 });
     cards.forEach((card, i) => {
-      setDesafioCardTransform(card, DESAFIO_CARD_STACK[i] ?? DESAFIO_CARD_STACK[0], { alpha: 1 });
+      setDesafioCardTransform(
+        card,
+        getDesafioCardStack()[i] ?? getDesafioCardStack()[0],
+        { alpha: 1 },
+      );
     });
   };
 
@@ -482,7 +496,7 @@ function initDesafioParallax() {
   gsap.set(textPanes, { xPercent: -55, autoAlpha: 0, visibility: 'visible' });
   gsap.set(textPanes[0], { xPercent: 0, autoAlpha: 1 });
   cards.forEach((card, i) => {
-    setDesafioCardTransform(card, DESAFIO_CARD_STACK[i], { alpha: 0, enter: true });
+    setDesafioCardTransform(card, getDesafioCardStack()[i], { alpha: 0, enter: true });
   });
   gsap.set(finale, { autoAlpha: 0, xPercent: -45, visibility: 'visible' });
 
@@ -514,7 +528,7 @@ function initDesafioParallax() {
   );
 
   cards.forEach((card, index) => {
-    const slot = DESAFIO_CARD_STACK[index] ?? { x: 0, y: 0, rotate: 0 };
+    const slot = getDesafioCardStack()[index] ?? { x: 0, y: 0, rotate: 0 };
     const t = index * DESAFIO_STEP;
 
     if (index > 0) {
@@ -608,17 +622,83 @@ function initDesafioParallax() {
 /* =============================================================================
    DISEÑO — flip cards
 ============================================================================= */
+const updateFlipCardScrollBtn = (card) => {
+  const scroll = card.querySelector('.flip-card__scroll');
+  const btn = card.querySelector('.flip-card__scroll-btn');
+  if (!scroll || !btn) return;
+
+  const hasOverflow = scroll.scrollHeight > scroll.clientHeight + 4;
+  const atBottom =
+    scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 4;
+  const showBtn = card.classList.contains('flipped') && hasOverflow;
+
+  btn.hidden = !showBtn;
+  btn.classList.toggle('is-at-bottom', atBottom);
+  btn.setAttribute(
+    'aria-label',
+    atBottom ? 'Subir al inicio' : 'Bajar texto'
+  );
+  card.classList.toggle('flip-card--scrollable', showBtn);
+};
+
+const scheduleFlipCardScrollBtnUpdate = (card) => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => updateFlipCardScrollBtn(card));
+  });
+  window.setTimeout(() => updateFlipCardScrollBtn(card), 580);
+};
+
 const initFlipCards = () => {
   document.querySelectorAll('.flip-card').forEach((card) => {
-    card.addEventListener('click', () => {
+    const scroll = card.querySelector('.flip-card__scroll');
+    const scrollBtn = card.querySelector('.flip-card__scroll-btn');
+
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.flip-card__scroll-btn')) return;
+      if (!e.target.closest('.flip-inner')) return;
+
       card.classList.toggle('flipped');
+      if (scroll) scroll.scrollTop = 0;
+      scheduleFlipCardScrollBtnUpdate(card);
     });
+
     card.addEventListener('keydown', (e) => {
+      if (e.target.closest('.flip-card__scroll-btn')) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         card.classList.toggle('flipped');
+        if (scroll) scroll.scrollTop = 0;
+        scheduleFlipCardScrollBtnUpdate(card);
       }
     });
+
+    if (scrollBtn && scroll) {
+      scrollBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const atBottom =
+          scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 4;
+
+        if (atBottom) {
+          scroll.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          scroll.scrollBy({
+            top: Math.max(scroll.clientHeight * 0.72, 96),
+            behavior: 'smooth',
+          });
+        }
+      });
+
+      scroll.addEventListener(
+        'scroll',
+        () => updateFlipCardScrollBtn(card),
+        { passive: true }
+      );
+    }
+
+    window.addEventListener('resize', () => updateFlipCardScrollBtn(card));
+    updateFlipCardScrollBtn(card);
   });
 };
 
@@ -738,6 +818,31 @@ function initVideoLoader() {
 }
 
 /* =============================================================================
+   PAGE END — quitar espacio fantasma después de Contacto
+============================================================================= */
+function trimPageEndSpace() {
+  const contacto = document.getElementById('contacto');
+  if (!contacto) return;
+
+  const cutLine = contacto.offsetTop + contacto.offsetHeight;
+
+  document.querySelectorAll('.pin-spacer').forEach((spacer) => {
+    if (spacer.offsetTop >= cutLine - 4) {
+      spacer.remove();
+    }
+  });
+
+  let next = contacto.nextElementSibling;
+  while (next) {
+    const toRemove = next;
+    next = next.nextElementSibling;
+    if (toRemove.classList?.contains('pin-spacer')) {
+      toRemove.remove();
+    }
+  }
+}
+
+/* =============================================================================
    INIT
 ============================================================================= */
 const init = () => {
@@ -757,6 +862,8 @@ const init = () => {
   });
 
   initHomeSloganReveal();
+  ScrollTrigger.refresh();
+  trimPageEndSpace();
   ScrollTrigger.refresh();
 };
 

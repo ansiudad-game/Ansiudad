@@ -1,0 +1,88 @@
+/*
+  Breakpoints (mobile-first, min-width)
+  ─────────────────────────────────────
+  < 480px   — móvil
+  480px     — móvil grande / landscape
+  768px     — tablet
+  1024px    — tablet grande / laptop pequeño
+  1280px    — desktop
+  1536px    — desktop grande
+*/
+
+/* ── Móvil grande / landscape ── */
+@media (min-width: 480px) {
+  :root {
+    --page-padding: 1.25rem;
+  }
+
+  .page-title {
+    font-size: clamp(1.5rem, 3.5vw, 4.25rem);
+  }
+}
+
+/* ── Tablet ── */
+@media (min-width: 768px) {
+  :root {
+    --page-padding: 2rem;
+  }
+
+  .menu__link {
+    font-size: clamp(1.05rem, 1.1vw + 0.85rem, 1.55rem);
+  }
+
+  .eventos {
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  #l3 > img {
+    width: 100%;
+    height: 116%;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+}
+
+/* ── Tablet grande / laptop pequeño ── */
+@media (min-width: 1024px) {
+  :root {
+    --page-padding: 2rem;
+  }
+
+  .content {
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card-wrap {
+    grid-template-columns: repeat(2, 300px);
+  }
+
+  #diseno .logo {
+    max-width: 300px;
+  }
+}
+
+/* ── Desktop ── */
+@media (min-width: 1280px) {
+  :root {
+    --page-padding: 2.5rem;
+  }
+
+  .home_text {
+    padding: 0 2rem 8vh;
+  }
+}
+
+/* ── Desktop grande ── */
+@media (min-width: 1536px) {
+  :root {
+    --page-padding: 3rem;
+  }
+
+  .what-flow__layout,
+  .desafio-flow__layout {
+    width: min(1120px, 100%);
+  }
+}

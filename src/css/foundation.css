@@ -256,7 +256,8 @@ table {
 }
 
 html {
-  scroll-padding-bottom: var(--site-bottom-pad);
+  scroll-padding-bottom: 0;
+  overflow-x: clip;
 }
 
 a {
@@ -272,14 +273,8 @@ body {
     400px,
     100% 100vh;
   background-attachment: fixed;
-  overflow-x: hidden;
-  padding-bottom: var(--site-bottom-pad);
-}
-
-@media (min-width: 880px) {
-  body {
-    --page-padding: 2rem;
-  }
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 /*
@@ -310,27 +305,145 @@ main {
   top: 0;
   /* Por encima de la capa global de ruido (z-index: 1 en este archivo) */
   z-index: 2;
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 .theme-container {
+  position: relative;
+  z-index: 2;
   scroll-margin-top: 72px;
-  scroll-margin-bottom: var(--site-bottom-pad);
+  scroll-margin-bottom: 0;
+  max-width: 100vw;
+  overflow-x: clip;
+  /* Evita “bloques” entre secciones cuando hay elementos fuera del bloque interior (ej. .section-sky) */
+  background-color: var(--section-bg, transparent);
+  /* Noise también en el background de la sección */
+  background-image: var(--noise-svg);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  background-blend-mode: overlay;
+}
+
+.section-sky {
+  position: relative;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  max-width: 100vw;
+  aspect-ratio: 6000 / 470.32;
+  max-height: clamp(3.5rem, 14vw, 9.5rem);
+  flex-shrink: 0;
+  pointer-events: none;
+  line-height: 0;
+  isolation: isolate;
+  transform: rotate(0deg);
+  transform-origin: center center;
+  background-color: var(--section-sky-color, var(--morado-claro));
+  -webkit-mask-image: url(/brand/sky.svg);
+  mask-image: url(/brand/sky.svg);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  mask-position: center center;
+}
+
+/* Grano encima del cielo, debajo del contenido de la sección */
+.section-sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+.theme-container > *:not(.section-sky) {
+  position: relative;
+  z-index: 2;
+}
+
+.section-sky--custom {
+  aspect-ratio: 6000 / 470.32;
+  max-height: clamp(3.5rem, 14vw, 9.5rem);
+  background: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.section-sky--custom img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: inherit;
+  object-fit: cover;
+  object-position: center top;
+}
+
+#que-es {
+  --section-bg: var(--amarillo-oscuro);
+  --section-sky-color: var(--azul-claro);
+}
+
+#desafio {
+  --section-bg: var(--amarillo-oscuro);
+  --section-sky-color: var(--amarillo-oscuro);
+}
+
+#diseno {
+  --section-bg:var(--morado-claro);
+  --section-sky-color: var(--rosa);
+}
+
+#donde {
+  --section-bg: var(--amarillo-oscuro);
+  --section-sky-color: var(--morado-claro);
+}
+
+#contacto {
+  --section-bg: var(--amarillo-claro);
+  --section-sky-color: var(--amarillo-oscuro);
+  scroll-margin-bottom: 0;
+}
+
+/* Grano por sección (mismo tratamiento que #home .bg-noise) */
+.bg-noise {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.30;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+#how > *:not(.bg-noise),
+#where > *:not(.bg-noise),
+.wrap > *:not(.bg-noise),
+.footer > *:not(.bg-noise) {
+  position: relative;
+  z-index: 2;
 }
 
 .theme-container + .theme-container {
-  border-top: 1px solid rgba(39, 39, 35, 0.12);
+  border-top: 0;
 }
 
-/*
-  Grano SVG en toda la vista: overlay mezcla sin dominar el color.
-  Debajo del <main> (z-index: 2) para no cubrir texto ni cartas; por encima del fondo del body.
-*/
 html::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  opacity: 0.30;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;

@@ -5,6 +5,10 @@
   width: 100%;
   max-width: 100vw;
   background-color: var(--amarillo-oscuro);
+  background-image: var(--noise-svg);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  background-blend-mode: overlay;
   padding: 0;
   box-sizing: border-box;
 }
@@ -15,6 +19,10 @@
   width: 100%;
   max-width: 100vw;
   background-color: var(--amarillo-oscuro);
+  background-image: var(--noise-svg);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  background-blend-mode: overlay;
 }
 
 .what-flow__pin {
@@ -22,10 +30,15 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 100vw;
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
   background-color: var(--amarillo-oscuro);
+  background-image: var(--noise-svg);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  background-blend-mode: overlay;
 }
 
 .what-flow__header {
@@ -69,6 +82,8 @@
 }
 
 .what-flow__layout {
+  position: relative;
+  z-index: 2;
   flex: 1 1 auto;
   min-height: 0;
   display: grid;
@@ -174,7 +189,7 @@
   overflow: hidden;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .what-flow__header {
     padding-top: 0.4rem;
   }

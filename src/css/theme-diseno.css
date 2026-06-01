@@ -2,6 +2,7 @@
   <section id="diseno"> — bloque #how y logos.
 */
 #how {
+  position: relative;
   width: 100%;
   max-width: 100vw;
   min-height: 50vh;
@@ -12,6 +13,10 @@
   text-align: center;
   box-sizing: border-box;
   background-color: var(--morado-claro);
+  background-image: var(--noise-svg);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  background-blend-mode: overlay;
   overflow: visible;
 }
 
@@ -34,9 +39,9 @@
 }
 
 #how .howAnchor {
-  width: 50px;
-  height: 50px;
-  margin: 0 auto 60px;
+  width: 0;
+  height: 0;
+  margin: 0;
 }
 
 #diseno .logos {
@@ -64,11 +69,16 @@
 }
 
 .flip-card {
+  position: relative;
   perspective: 1000px;
   min-height: clamp(300px, 42vw, 360px);
   cursor: pointer;
   outline: none;
   overflow: visible;
+}
+
+.flip-card--scrollable {
+  margin-bottom: 2.75rem;
 }
 
 .flip-inner {
@@ -102,14 +112,82 @@
   background-color: var(--morado-oscuro);
   border: 2px solid var(--amarillo-oscuro);
   color: var(--amarillo-oscuro);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
 }
 
 .flip-back {
   background-color: var(--rosa);
   color: var(--morado-oscuro);
   transform: rotateY(180deg);
-  border: 2px solid transparent;
+  border: 2px solid var(--morado-oscuro);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+}
+
+.flip-card__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.flip-card__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Botón fuera de la carta; solo visible con flip-back */
+.flip-card__scroll-btn {
+  position: absolute;
+  top: calc(100% + 0.55rem);
+  left: 50%;
+  z-index: 12;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  margin: 0;
+  border: 1.5px solid color-mix(in srgb, var(--morado-oscuro) 45%, transparent);
+  border-radius: 999px;
+  background: var(--rosa);
+  color: var(--morado-oscuro);
+  cursor: pointer;
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.flip-card.flipped .flip-card__scroll-btn:not([hidden]) {
+  display: flex;
+  pointer-events: auto;
+}
+
+.flip-card__scroll-btn:hover {
+  background: color-mix(in srgb, var(--rosa) 75%, var(--morado-oscuro));
+  transform: translateX(-50%) translateY(1px);
+}
+
+.flip-card__scroll-btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  transition: transform 0.3s ease;
+}
+
+.flip-card__scroll-btn.is-at-bottom svg {
+  transform: rotate(180deg);
+}
+
+.flip-card__scroll-btn[hidden] {
+  display: none !important;
+  pointer-events: none;
 }
 
 /* Texto contenido dentro de la carta */
@@ -172,7 +250,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  transform: translate(-50%, 48%);
+  transform: translate(-50%, 57%);
   pointer-events: none;
   line-height: 0;
 }
@@ -184,6 +262,7 @@
   display: block;
   object-fit: contain;
   object-position: bottom center;
+  filter: drop-shadow(4px 8px 8px rgba(0, 0, 0, 0.28));
 }
 
 .card-hint {
@@ -198,11 +277,10 @@
 }
 
 .flip-back .flip-card__body {
+  height: auto;
+  min-height: 0;
   padding-bottom: clamp(0.85rem, 2vw, 1.1rem);
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  overflow: visible;
 }
 
 .flip-back p {
@@ -211,6 +289,55 @@
 
 .flip-card__body--logos {
   gap: 0.65rem;
+}
+
+.flip-card__body--team {
+  gap: 0.65rem;
+}
+
+.flip-card__member {
+  display: grid;
+  grid-template-columns: minmax(72px, 32%) minmax(0, 1fr);
+  gap: clamp(0.5rem, 2vw, 0.75rem);
+  align-items: start;
+}
+
+.flip-card__member p {
+  margin: 0;
+}
+
+.flip-card__photo {
+  margin: 0;
+  text-align: center;
+}
+
+.flip-card__photo-placeholder {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1.5px dashed color-mix(in srgb, var(--morado-oscuro) 30%, transparent);
+  background: color-mix(in srgb, var(--morado-oscuro) 6%, var(--rosa));
+}
+
+.flip-card__photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.flip-card__photo:has(img) .flip-card__photo-placeholder {
+  display: none;
+}
+
+.flip-card__photo figcaption {
+  margin-top: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.65;
 }
 
 .flip-card__copy {
@@ -243,7 +370,8 @@
   margin: 0;
 }
 
-/* Reverso con más contenido (Cátedra UNESCO) */
+/* Reverso con más contenido (Gabriel & Andrea, Cátedra UNESCO) */
+.flip-card:nth-child(1) .flip-inner,
 .flip-card:nth-child(3) .flip-inner {
   min-height: clamp(340px, 48vw, 400px);
 }
@@ -251,9 +379,4 @@
 .flip-card:not(.flipped):hover .flip-inner,
 .flip-card:not(.flipped):focus-visible .flip-inner {
   transform: rotateY(8deg);
-}
-@media (min-width: 880px) {
-  #diseno .logo {
-    max-width: 300px;
-  }
 }

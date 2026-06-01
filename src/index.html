@@ -52,6 +52,7 @@ Date: 05-26 to 07-26
     <link rel="shortcut icon" href="/img/fav/favicon.ico" />
     <!-- Estilos por bloque de página (orden = cascada) -->
     <link rel="stylesheet" type="text/css" href="css/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="css/responsive.css" />
     <link rel="stylesheet" type="text/css" href="css/home.css" />
     <link rel="stylesheet" type="text/css" href="css/theme-que-es.css" />
     <link rel="stylesheet" type="text/css" href="css/theme-desafio.css" />
@@ -189,9 +190,11 @@ Date: 05-26 to 07-26
     </section>
 <!-- SECCION 2 QUE ES-->
       <section id="que-es" class="theme-container">
+        <div class="section-sky" aria-hidden="true"></div>
       <div id="what" class="intro">
         <div class="what-flow" id="whatFlow" aria-label="Qué es Ansiudad">
           <div class="what-flow__pin">
+            <div class="bg-noise" aria-hidden="true"></div>
             <header class="what-flow__header">
               <div class="intro__title">
                 <span>¿Qué es</span>
@@ -214,7 +217,7 @@ Date: 05-26 to 07-26
               </div>
               <div class="what-flow__text-pane">
                 <p>
-                  <b>Nuestro Objetivo</b> Al combinar creatividad, trabajo en equipo y empatía, detona conversaciones que impulsan el pensamiento creativo e inclusivo.
+                  <b>Nuestro Objetivo</b> </br> Al combinar creatividad, trabajo en equipo y empatía, detona conversaciones que impulsan el pensamiento creativo e inclusivo.
                 </p>
               </div>
             </div>
@@ -245,6 +248,7 @@ Date: 05-26 to 07-26
       </div>
       </section>
       <div class="wrap">
+        <div class="bg-noise" aria-hidden="true"></div>
         <div data-stack-1 class="wrap__inner">
           <div class="content content--1">
             <div class="card">
@@ -432,12 +436,13 @@ Date: 05-26 to 07-26
           </div>
         </div>
       </div>
-      </section>
 <!--DESAFIO-->
       <section id="desafio" class="theme-container">
         <div class="howAnchor"></div>
         <div class="desafio-flow" id="desafioFlow" aria-label="¿Cuál es el desafío?">
+          <div class="section-sky" aria-hidden="true"></div>
           <div class="desafio-flow__pin">
+            <div class="bg-noise" aria-hidden="true"></div>
             <header class="desafio-flow__header">
               <h2 class="desafio-flow__title">¿Cuál es el desafío?</h2>
             </header>
@@ -492,7 +497,9 @@ Date: 05-26 to 07-26
       </section>
 <!--COMO LO DISEÑAMOS-->
 <section id="diseno" class="theme-container">
+  <div class="section-sky" aria-hidden="true"></div>
   <section id="how">
+    <div class="bg-noise" aria-hidden="true"></div>
     <div class="howAnchor"></div>
     <h2>¿Cómo lo diseñamos?</h2>
     <div class="cards-grid">
@@ -510,13 +517,34 @@ Date: 05-26 to 07-26
             </span>
           </div>
           <div class="flip-back">
-            <div class="flip-card__body">
-              <h3>Gabriel &amp; Andrea</h3>
-              <p><strong>Gabriel Sánchez</strong> — Docente, diseñador y maestro en Estudios de Diseño. Apasionado por la intersección entre educación, innovación social y futuros posibles.</p>
-              <p><strong>Andrea Norzagaray</strong> — Docente, codiseñadora y maestra en Estudios de Diseño. Su práctica une el diseño participativo con la sostenibilidad y la justicia social.</p>
+            <div class="flip-card__scroll">
+              <div class="flip-card__body flip-card__body--team">
+                <h3>Gabriel &amp; Andrea</h3>
+                <div class="flip-card__member">
+                  <figure class="flip-card__photo">
+                    <!-- Sustituir placeholder: <img src="img/gabriel.jpg" alt="Gabriel Sánchez" /> -->
+                    <div class="flip-card__photo-placeholder" aria-hidden="true"></div>
+                    <figcaption>Gabriel</figcaption>
+                  </figure>
+                  <p><strong>Gabriel Sánchez</strong> — Docente, diseñador y maestro en Estudios de Diseño. Apasionado por la intersección entre educación, innovación social y futuros posibles.</p>
+                </div>
+                <div class="flip-card__member">
+                  <figure class="flip-card__photo">
+                    <!-- Sustituir placeholder: <img src="img/andrea.jpg" alt="Andrea Norzagaray" /> -->
+                    <div class="flip-card__photo-placeholder" aria-hidden="true"></div>
+                    <figcaption>Andrea</figcaption>
+                  </figure>
+                  <p><strong>Andrea Norzagaray</strong> — Docente, codiseñadora y maestra en Estudios de Diseño. Su práctica une el diseño participativo con la sostenibilidad y la justicia social.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <button type="button" class="flip-card__scroll-btn" aria-label="Bajar texto" hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
 
       <!-- CARTA 2: El reto -->
@@ -533,13 +561,20 @@ Date: 05-26 to 07-26
             </span>
           </div>
           <div class="flip-back">
-            <div class="flip-card__body">
-              <h3>Ecoansiedad</h3>
-              <p>Al impartir clases de <strong>Innovación Social y Sostenibilidad</strong> en CENTRO, identificamos que el miedo al colapso climático y social paralizaba la imaginación creativa de nuestrxs estudiantes.</p>
-              <p>Este reto nos llevó a preguntarnos: ¿cómo diseñar herramientas que transformen la ansiedad en acción creativa?</p>
+            <div class="flip-card__scroll">
+              <div class="flip-card__body">
+                <h3>Ecoansiedad</h3>
+                <p>Al impartir clases de <strong>Innovación Social y Sostenibilidad</strong> en CENTRO, identificamos que el miedo al colapso climático y social paralizaba la imaginación creativa de nuestrxs estudiantes.</p>
+                <p>Este reto nos llevó a preguntarnos: ¿cómo diseñar herramientas que transformen la ansiedad en acción creativa?</p>
+              </div>
             </div>
           </div>
         </div>
+        <button type="button" class="flip-card__scroll-btn" aria-label="Bajar texto" hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
 
       <!-- CARTA 3: El proyecto -->
@@ -556,19 +591,26 @@ Date: 05-26 to 07-26
             </span>
           </div>
           <div class="flip-back">
-            <div class="flip-card__body flip-card__body--logos">
-              <div class="flip-card__copy">
-                <h3>Cátedra UNESCO</h3>
-                <p>Desarrollado en la <strong>Cátedra UNESCO: Métodos de Diseño para el Acceso Democrático a la Imaginación del Futuro</strong>, bajo la dirección de Karla Paniagua y Jorge Camacho.</p>
-                <p>En colaboración con <strong>Mishka de Caro</strong> y con el apoyo del <strong>Hub de Diseño Social de CENTRO</strong>, coordinado por Paulina Cornejo.</p>
-              </div>
-              <div class="logos">
-                <img src="/img/unesco.png" alt="Logo UNESCO" class="logo" />
-                <img src="img/centro-hub.png" alt="Logo Centro Hub" class="logo" />
+            <div class="flip-card__scroll">
+              <div class="flip-card__body flip-card__body--logos">
+                <div class="flip-card__copy">
+                  <h3>Cátedra UNESCO</h3>
+                  <p>Desarrollado en la <strong>Cátedra UNESCO: Métodos de Diseño para el Acceso Democrático a la Imaginación del Futuro</strong>, bajo la dirección de Karla Paniagua y Jorge Camacho.</p>
+                  <p>En colaboración con <strong>Mishka de Caro</strong> y con el apoyo del <strong>Hub de Diseño Social de CENTRO</strong>, coordinado por Paulina Cornejo.</p>
+                </div>
+                <div class="logos">
+                  <img src="/img/unesco.png" alt="Logo UNESCO" class="logo" />
+                  <img src="img/centro-hub.png" alt="Logo Centro Hub" class="logo" />
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <button type="button" class="flip-card__scroll-btn" aria-label="Bajar texto" hidden>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
 
     </div><!-- /cards-grid -->
@@ -578,6 +620,7 @@ Date: 05-26 to 07-26
 </section>
 
       <div class="wrap">
+        <div class="bg-noise" aria-hidden="true"></div>
         <div data-stack-2 class="wrap__inner">
           <div class="content content--2">
             <div class="card">
@@ -751,10 +794,11 @@ Date: 05-26 to 07-26
           </div>
         </div>
       </div>
-      </section>
 <!-- SECCION 4 DONDE SE HA JUGADO -->
 <section id="donde" class="theme-container">
+  <div class="section-sky" aria-hidden="true"></div>
   <section id="where">
+    <div class="bg-noise" aria-hidden="true"></div>
     <div class="howAnchor"></div>
     <h2>¿Dónde se ha jugado?</h2>
 
@@ -829,6 +873,7 @@ Date: 05-26 to 07-26
 </section>
 
       <div class="wrap">
+        <div class="bg-noise" aria-hidden="true"></div>
         <div data-stack-3 class="wrap__inner">
           <div class="content content--3">
             <div class="card">
@@ -1016,10 +1061,11 @@ Date: 05-26 to 07-26
           </div>
         </div>
       </div>
-      </section>
 <!--CONTACTO-->
 <section id="contacto" class="theme-container">
+  <div class="section-sky" aria-hidden="true"></div>
   <section id="credits" class="footer">
+    <div class="bg-noise" aria-hidden="true"></div>
 
     <!-- TÍTULO PRINCIPAL -->
     <h2 class="footer__title">Contacto</h2>
@@ -1105,6 +1151,7 @@ Date: 05-26 to 07-26
         <a href="mailto:ansiudad@gmail.com">ansiudad@gmail.com</a>
         <a href="mailto:anorzagaray@centro.edu.mx">anorzagaray@centro.edu.mx</a>
       </div>
+      <a href="https://www.instagram.com/ansiudad/" class="footer__ig" target="_blank" rel="noopener noreferrer">
         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 50 50" aria-hidden="true">
           <path d="M 16 3 C 8.8324839 3 3 8.8324839 3 16 L 3 34 C 3 41.167516 8.8324839 47 16 47 L 34 47 C 41.167516 47 47 41.167516 47 34 L 47 16 C 47 8.8324839 41.167516 3 34 3 L 16 3 z M 16 5 L 34 5 C 40.086484 5 45 9.9135161 45 16 L 45 34 C 45 40.086484 40.086484 45 34 45 L 16 45 C 9.9135161 45 5 40.086484 5 34 L 5 16 C 5 9.9135161 9.9135161 5 16 5 z M 37 11 A 2 2 0 0 0 35 13 A 2 2 0 0 0 37 15 A 2 2 0 0 0 39 13 A 2 2 0 0 0 37 11 z M 25 14 C 18.936712 14 14 18.936712 14 25 C 14 31.063288 18.936712 36 25 36 C 31.063288 36 36 31.063288 36 25 C 36 18.936712 31.063288 14 25 14 z M 25 16 C 29.982407 16 34 20.017593 34 25 C 34 29.982407 29.982407 34 25 34 C 20.017593 34 16 29.982407 16 25 C 16 20.017593 20.017593 16 25 16 z"/>
         </svg>
@@ -1115,6 +1162,8 @@ Date: 05-26 to 07-26
 
   </section>
 </section>
+
+    </main>
 
     <aside class="site-bottom" aria-label="Accesos rápidos">
       <div class="site-bottom__inner">
