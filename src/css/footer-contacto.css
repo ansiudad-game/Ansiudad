@@ -15,10 +15,6 @@
   text-align: center;
   gap: 0;
   background-color: var(--amarillo-claro);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
 }
 
 #contacto {

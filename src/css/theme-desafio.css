@@ -6,19 +6,8 @@
   max-width: 100vw;
   padding: 0;
   box-sizing: border-box;
-  background-color: var(--rosa);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
   overflow-x: hidden;
   overflow-y: visible;
-}
-
-#desafio .desafio-flow > .section-sky {
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
 }
 
 #desafio .howAnchor {
@@ -31,27 +20,18 @@
   position: relative;
   width: 100%;
   max-width: 100vw;
-  background-color: var(--rosa);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
+  background-color: var(--section-bg);
 }
 
 .desafio-flow__pin {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-rows: minmax(clamp(4.5rem, 16vh, 10rem), auto) minmax(0, 1fr);
+  grid-template-rows: minmax(clamp(5rem, 18vh, 11rem), auto) minmax(0, 1fr);
   width: 100%;
   height: 100vh;
   height: 100dvh;
-  overflow: hidden;
-  background-color: var(--rosa);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
+  overflow: visible;
   box-sizing: border-box;
 }
 
@@ -60,9 +40,9 @@
   z-index: 14;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  min-height: clamp(4.5rem, 16vh, 10rem);
-  padding: clamp(0.5rem, 2vh, 0.85rem) var(--page-padding) clamp(0.25rem, 1vh, 0.5rem);
+  align-items: flex-end;
+  min-height: clamp(5rem, 18vh, 11rem);
+  padding: clamp(0.5rem, 2vh, 1rem) var(--page-padding) clamp(0.25rem, 1vh, 0.5rem);
   box-sizing: border-box;
   pointer-events: none;
   overflow: visible;
@@ -161,6 +141,7 @@
   position: relative;
   min-height: clamp(6rem, 24vh, 12rem);
   align-self: center;
+  transform: translateY(calc(-1 * var(--flow-content-lift)));
 }
 
 .desafio-flow__text-pane {
@@ -243,6 +224,7 @@
     min-height: clamp(4.25rem, 15vh, 7.5rem);
     margin-top: clamp(0.35rem, 1.5vh, 0.75rem);
     align-self: start;
+    transform: translateY(calc(-1 * var(--flow-content-lift)));
   }
 
   .desafio-flow__text-pane {

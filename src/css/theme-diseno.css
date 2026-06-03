@@ -6,18 +6,13 @@
   width: 100%;
   max-width: 100vw;
   min-height: 50vh;
-  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 6vw, 15vw)
-    clamp(2rem, 6vw, 4rem);
+  padding: 0 clamp(1rem, 6vw, 15vw) clamp(2rem, 6vw, 4rem);
   font-size: clamp(1rem, 2.8vw, 1.8em);
   line-height: 1.35;
   text-align: center;
   box-sizing: border-box;
-  background-color: var(--morado-claro);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
   overflow: visible;
+  background-color: var(--section-bg);
 }
 
 #how p b {
@@ -36,6 +31,11 @@
   text-transform: uppercase;
   hyphens: auto;
   overflow-wrap: anywhere;
+  will-change: transform, opacity;
+}
+
+#how .cards-grid .flip-card {
+  will-change: transform, opacity;
 }
 
 #how .howAnchor {

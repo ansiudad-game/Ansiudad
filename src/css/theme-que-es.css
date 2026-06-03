@@ -5,10 +5,6 @@
   width: 100%;
   max-width: 100vw;
   background-color: var(--amarillo-oscuro);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
   padding: 0;
   box-sizing: border-box;
 }
@@ -19,32 +15,28 @@
   width: 100%;
   max-width: 100vw;
   background-color: var(--amarillo-oscuro);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
 }
 
 .what-flow__pin {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: var(--flow-header-zone) minmax(0, 1fr);
   width: 100%;
   max-width: 100vw;
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background-color: var(--amarillo-oscuro);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
+  box-sizing: border-box;
 }
 
 .what-flow__header {
-  flex-shrink: 0;
   z-index: 12;
-  padding: clamp(0.5rem, 2vh, 0.85rem) var(--page-padding) 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: var(--flow-header-zone);
+  padding: clamp(0.35rem, 1.5vh, 0.75rem) var(--page-padding)
+    clamp(0.2rem, 0.8vh, 0.45rem);
   box-sizing: border-box;
 }
 
@@ -84,17 +76,21 @@
 .what-flow__layout {
   position: relative;
   z-index: 2;
-  flex: 1 1 auto;
+  grid-row: 2;
+  align-self: center;
+  justify-self: center;
   min-height: 0;
+  max-height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(150px, 300px);
   align-items: center;
   gap: clamp(1rem, 3vw, 2rem);
   width: min(1040px, 100%);
   margin: 0 auto;
-  padding: clamp(0.35rem, 1.5vh, 0.75rem) var(--page-padding)
-    clamp(0.75rem, 2vh, 1.25rem);
+  padding: clamp(0.25rem, 1vh, 0.5rem) var(--page-padding)
+    var(--flow-content-pad-bottom);
   box-sizing: border-box;
+  transform: translateY(calc(-1 * var(--flow-content-lift)));
 }
 
 .what-flow__text-track {
@@ -190,15 +186,16 @@
 }
 
 @media (max-width: 767px) {
-  .what-flow__header {
-    padding-top: 0.4rem;
+  .what-flow__pin {
+    --flow-header-zone: clamp(4.5rem, 16vh, 9rem);
+    --flow-content-lift: clamp(1.5rem, 5vh, 3rem);
   }
 
   .what-flow__layout {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     align-content: center;
-    padding-top: 0.25rem;
+    transform: translateY(calc(-1 * var(--flow-content-lift)));
   }
 
   .what-flow__text-track {

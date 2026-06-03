@@ -248,8 +248,18 @@ table {
   --morado-oscuro: #3E1581;
   --rosa: #F068B2;
   --rojo: #D94950;
+  --noise-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  --noise-size: 200px 200px;
+  --noise-opacity: 0.3;
+  --noise-blend: overlay;
+  --section-wave-height: clamp(3.5rem, 14vw, 9.5rem);
+  --section-wave-mask: url(/brand/sky.svg);
   --morado: var(--morado-oscuro);
   --page-padding: 1rem;
+  /* Parallax ¿Qué es? / Desafío: zona del título + elevación del bloque texto+cartas */
+  --flow-header-zone: clamp(5.5rem, 17vh, 10.5rem);
+  --flow-content-lift: clamp(3rem, 10vh, 6.5rem);
+  --flow-content-pad-bottom: clamp(1rem, 4vh, 2.5rem);
   --site-bottom-h: 64px;
   --site-bottom-play-size: clamp(92px, 23vw, 118px);
   --site-bottom-pad: calc(var(--site-bottom-h) + env(safe-area-inset-bottom, 0px));
@@ -266,7 +276,7 @@ a {
 
 body {
   margin: 0;
-  color: var(--morado);
+  color: var(--morado-oscuro);
   background-color: var(--amarillo-claro);
   background-image: url(../img/noise.png);
   background-size:
@@ -311,124 +321,106 @@ main {
 
 .theme-container {
   position: relative;
-  z-index: 2;
+  z-index: -10;
   scroll-margin-top: 72px;
   scroll-margin-bottom: 0;
   max-width: 100vw;
   overflow-x: clip;
-  /* Evita “bloques” entre secciones cuando hay elementos fuera del bloque interior (ej. .section-sky) */
-  background-color: var(--section-bg, transparent);
-  /* Noise también en el background de la sección */
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
+  background: transparent;
 }
 
-.section-sky {
-  position: relative;
-  z-index: -10;
-  display: block;
-  width: 100%;
-  max-width: 100vw;
-  aspect-ratio: 6000 / 470.32;
-  max-height: clamp(3.5rem, 14vw, 9.5rem);
-  flex-shrink: 0;
-  pointer-events: none;
-  line-height: 0;
-  isolation: isolate;
-  transform: rotate(0deg);
-  transform-origin: center center;
-  background-color: var(--section-sky-color, var(--morado-claro));
-  -webkit-mask-image: url(/brand/sky.svg);
-  mask-image: url(/brand/sky.svg);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center center;
-  mask-position: center center;
-}
-
-/* Grano encima del cielo, debajo del contenido de la sección */
-.section-sky::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.35;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 200px 200px;
-}
-
-.theme-container > *:not(.section-sky) {
+.theme-container > * {
   position: relative;
   z-index: 2;
 }
 
-.section-sky--custom {
-  aspect-ratio: 6000 / 470.32;
-  max-height: clamp(3.5rem, 14vw, 9.5rem);
-  background: none;
-  -webkit-mask-image: none;
-  mask-image: none;
-}
-
-.section-sky--custom img {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: inherit;
-  object-fit: cover;
-  object-position: center top;
-}
-
 #que-es {
   --section-bg: var(--amarillo-oscuro);
-  --section-sky-color: var(--azul-claro);
+  --section-wave-bg: var(--morado-claro);
 }
 
 #desafio {
-  --section-bg: var(--amarillo-oscuro);
-  --section-sky-color: var(--amarillo-oscuro);
+  --section-bg: var(--rosa);
+  --section-wave-bg: var(--amarillo-oscuro);
 }
 
 #diseno {
-  --section-bg:var(--morado-claro);
-  --section-sky-color: var(--rosa);
+  --section-bg: var(--morado-claro);
+  --section-wave-bg: var(--rosa);
 }
 
 #donde {
   --section-bg: var(--amarillo-oscuro);
-  --section-sky-color: var(--morado-claro);
+  --section-wave-bg: var(--morado-claro);
+}
+
+#que-es,
+#desafio,
+#diseno,
+#donde,
+.what-flow,
+.desafio-flow,
+#how,
+#where {
+  margin-top: 0;
+  padding-top: 0;
 }
 
 #contacto {
   --section-bg: var(--amarillo-claro);
-  --section-sky-color: var(--amarillo-oscuro);
   scroll-margin-bottom: 0;
 }
 
-/* Grano por sección (mismo tratamiento que #home .bg-noise) */
+/*
+  Grano compartido: .wrap (cartas 3D), secciones de tema y #home.
+  Color sólido en el contenedor + capa .bg-noise (sin background-image en el bloque).
+*/
 .bg-noise {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.30;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: var(--noise-opacity);
+  mix-blend-mode: var(--noise-blend);
+  background-image: var(--noise-svg);
   background-repeat: repeat;
-  background-size: 200px 200px;
+  background-size: var(--noise-size);
 }
 
-#how > *:not(.bg-noise),
-#where > *:not(.bg-noise),
-.wrap > *:not(.bg-noise),
-.footer > *:not(.bg-noise) {
+/* Onda sky.svg: primer bloque del section, pegada al margin-top (flujo, sin absolute) */
+.section-top-wave {
+  display: block;
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100vw;
+  height: var(--section-wave-height);
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  pointer-events: none;
+  line-height: 0;
+  vertical-align: top;
+  box-sizing: border-box;
+  background-color: var(--section-wave-bg, var(--section-bg, var(--morado-claro)));
+  -webkit-mask-image: var(--section-wave-mask);
+  mask-image: var(--section-wave-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center top;
+  mask-position: center top;
+}
+
+.wrap > *:not(.bg-noise):not(.section-top-wave),
+#what > *:not(.bg-noise):not(.section-top-wave),
+.what-flow > *:not(.bg-noise):not(.section-top-wave),
+.desafio-flow > *:not(.bg-noise):not(.section-top-wave),
+#how > *:not(.bg-noise):not(.section-top-wave),
+#where > *:not(.bg-noise):not(.section-top-wave),
+.footer > *:not(.bg-noise):not(.section-top-wave) {
   position: relative;
   z-index: 2;
 }
@@ -443,10 +435,10 @@ html::after {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.30;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: var(--noise-opacity);
+  mix-blend-mode: var(--noise-blend);
+  background-image: var(--noise-svg);
   background-repeat: repeat;
-  background-size: 200px 200px;
+  background-size: var(--noise-size);
 }
 

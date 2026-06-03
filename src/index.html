@@ -190,11 +190,11 @@ Date: 05-26 to 07-26
     </section>
 <!-- SECCION 2 QUE ES-->
       <section id="que-es" class="theme-container">
-        <div class="section-sky" aria-hidden="true"></div>
       <div id="what" class="intro">
         <div class="what-flow" id="whatFlow" aria-label="Qué es Ansiudad">
+          <div class="section-top-wave" aria-hidden="true"></div>
+          <div class="bg-noise" aria-hidden="true"></div>
           <div class="what-flow__pin">
-            <div class="bg-noise" aria-hidden="true"></div>
             <header class="what-flow__header">
               <div class="intro__title">
                 <span>¿Qué es</span>
@@ -440,9 +440,9 @@ Date: 05-26 to 07-26
       <section id="desafio" class="theme-container">
         <div class="howAnchor"></div>
         <div class="desafio-flow" id="desafioFlow" aria-label="¿Cuál es el desafío?">
-          <div class="section-sky" aria-hidden="true"></div>
+          <div class="section-top-wave" aria-hidden="true"></div>
+          <div class="bg-noise" aria-hidden="true"></div>
           <div class="desafio-flow__pin">
-            <div class="bg-noise" aria-hidden="true"></div>
             <header class="desafio-flow__header">
               <h2 class="desafio-flow__title">¿Cuál es el desafío?</h2>
             </header>
@@ -497,8 +497,8 @@ Date: 05-26 to 07-26
       </section>
 <!--COMO LO DISEÑAMOS-->
 <section id="diseno" class="theme-container">
-  <div class="section-sky" aria-hidden="true"></div>
   <section id="how">
+    <div class="section-top-wave" aria-hidden="true"></div>
     <div class="bg-noise" aria-hidden="true"></div>
     <div class="howAnchor"></div>
     <h2>¿Cómo lo diseñamos?</h2>
@@ -796,11 +796,27 @@ Date: 05-26 to 07-26
       </div>
 <!-- SECCION 4 DONDE SE HA JUGADO -->
 <section id="donde" class="theme-container">
-  <div class="section-sky" aria-hidden="true"></div>
   <section id="where">
+    <div class="section-top-wave" aria-hidden="true"></div>
     <div class="bg-noise" aria-hidden="true"></div>
     <div class="howAnchor"></div>
-    <h2>¿Dónde se ha jugado?</h2>
+
+    <div class="where-hero">
+      <div class="where-hero__media" aria-hidden="true">
+        <video
+          id="mainVideo"
+          src="vid/ansiudad.mp4"
+          playsinline
+          preload="metadata"
+          poster="img/gallery/img-1.jpg"
+          autoplay
+          muted
+          loop
+        ></video>
+        <div class="where-hero__scrim"></div>
+      </div>
+      <h2 class="where-hero__title">¿Dónde se ha jugado?</h2>
+    </div>
 
     <!-- Eventos -->
     <div class="eventos">
@@ -814,18 +830,6 @@ Date: 05-26 to 07-26
         <p><b>Finalistas del Hackathon: Construyendo el Futuro organizado por Meta.</b><br />
         Reconocido como propuesta que impulsa la innovación social y empresarial usando Llama 3.1.</p>
       </div>
-    </div>
-
-    <!-- Video principal -->
-    <div class="media-block">
-      <video
-        id="mainVideo"
-        src="vid/ansiudad.mp4"
-        controls
-        playsinline
-        preload="metadata"
-        poster="img/gallery/img-1.jpg"
-      ></video>
     </div>
 
     <!-- Carrusel -->
@@ -1063,73 +1067,11 @@ Date: 05-26 to 07-26
       </div>
 <!--CONTACTO-->
 <section id="contacto" class="theme-container">
-  <div class="section-sky" aria-hidden="true"></div>
   <section id="credits" class="footer">
     <div class="bg-noise" aria-hidden="true"></div>
 
     <!-- TÍTULO PRINCIPAL -->
     <h2 class="footer__title">Contacto</h2>
-
-    <!-- FORMULARIO -->
-    <div class="footer__form-wrap">
-      <h3 class="footer__form-title">¡Organiza una experiencia!</h3>
-      <p class="footer__form-sub">¿Quieres llevar Ansiudad a tu organización, escuela o evento? Escríbenos.</p>
-
-      <form id="contactForm" class="footer__form" novalidate>
-
-        <div class="form-field">
-          <label for="from_name">Nombre</label>
-          <input
-            type="text"
-            id="from_name"
-            name="from_name"
-            placeholder="Tu nombre completo"
-            autocomplete="name"
-          />
-        </div>
-
-        <div class="form-field">
-          <label for="from_email">Correo electrónico</label>
-          <input
-            type="email"
-            id="from_email"
-            name="from_email"
-            placeholder="tu@correo.com"
-            autocomplete="email"
-          />
-        </div>
-
-        <div class="form-field">
-          <label for="message">Mensaje</label>
-          <textarea
-            id="message"
-            name="message"
-            rows="5"
-            placeholder="Cuéntanos sobre tu evento, organización o idea…"
-          ></textarea>
-        </div>
-
-        <button type="button" class="form-btn" id="submitBtn">
-          <span class="form-btn__text">Enviar mensaje</span>
-          <span class="form-btn__loading" aria-hidden="true">Enviando…</span>
-        </button>
-
-        <p class="form-status form-status--ok" id="formSuccess" aria-live="polite">
-          ¡Gracias! En cuanto configuremos el sistema de envío, recibiremos tu mensaje.
-        </p>
-        <p class="form-status form-status--err" id="formError" aria-live="polite">
-          Algo salió mal. Escríbenos directo a ansiudad@gmail.com
-        </p>
-
-      </form>
-
-      <!-- Quitar cuando EmailJS esté conectado -->
-      <p class="form-todo">
-        ⚠️ <strong>TODO:</strong> Reemplazar JS placeholder con EmailJS.
-        Necesitas: <code>PUBLIC_KEY</code>, <code>SERVICE_ID</code>, <code>TEMPLATE_ID</code>.
-      </p>
-
-    </div>
 
     <!-- DIVISOR -->
     <hr class="footer__divider" />

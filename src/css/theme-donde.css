@@ -6,16 +6,12 @@
   width: 100%;
   max-width: 100vw;
   min-height: 50vh;
-  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 6vw, 15vw) clamp(2rem, 6vw, 4rem);
+  padding: 0 clamp(1rem, 6vw, 15vw) clamp(2rem, 6vw, 4rem);
   font-size: clamp(1rem, 2.8vw, 1.8em);
   line-height: 1.35;
   text-align: center;
   box-sizing: border-box;
   background-color: var(--amarillo-oscuro);
-  background-image: var(--noise-svg);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  background-blend-mode: overlay;
 }
 
 #where p b {
@@ -23,17 +19,67 @@
   font-weight: 700;
 }
 
-#where h2 {
+#where h2,
+.where-hero__title {
   font-family: var(--font-titles);
   font-size: clamp(1.75rem, 7vw, 6rem);
   font-weight: 900;
   font-style: italic;
-  color: var(--morado-oscuro);
   line-height: 1.05;
-  margin-bottom: clamp(1rem, 3vw, 2.5rem);
   text-transform: uppercase;
   hyphens: auto;
   overflow-wrap: anywhere;
+}
+
+/* Hero: video de fondo + título */
+.where-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: clamp(14rem, 42vw, 26rem);
+  margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background-color: var(--morado-oscuro);
+}
+
+.where-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.where-hero__media video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.where-hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 20, 58, 0.35) 0%,
+    rgba(45, 20, 58, 0.55) 45%,
+    rgba(45, 20, 58, 0.72) 100%
+  );
+  pointer-events: none;
+}
+
+.where-hero__title {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  padding: clamp(2.5rem, 10vw, 5rem) clamp(1rem, 4vw, 2rem);
+  color: var(--amarillo-claro);
+  text-align: center;
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45);
 }
 
 #where .howAnchor {
@@ -71,21 +117,14 @@
   font-size: clamp(0.85rem, 2vw, 1.05rem);
 }
 
-/* Video */
-.media-block {
-  width: 100%;
-  margin-bottom: clamp(1rem, 3vw, 2rem);
-  border-radius: 0.75rem;
-  overflow: hidden;
-  background: var(--morado-oscuro);
-  aspect-ratio: 16 / 9;
-}
+@media (prefers-reduced-motion: reduce) {
+  .where-hero__media video {
+    display: none;
+  }
 
-.media-block video {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
+  .where-hero__scrim {
+    background: rgba(45, 20, 58, 0.82);
+  }
 }
 
 /* Carrusel */
