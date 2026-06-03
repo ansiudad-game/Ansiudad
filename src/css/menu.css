@@ -328,6 +328,72 @@
   }
 }
 
+@media (max-width: 767px) {
+  .menu {
+    --menu-bottom-inset: calc(
+      8px + env(safe-area-inset-bottom, 0px) + clamp(72px, 17vw, 86px) + 16px
+    );
+  }
+
+  .menu__top {
+    min-height: 68px;
+    align-items: center;
+    padding-bottom: max(10px, env(safe-area-inset-top, 0px));
+    overflow: visible;
+  }
+
+  .menu__logo-image {
+    max-width: min(200px, calc(100vw - 58px - 56px));
+  }
+
+  .menu__toggle-host:not(.menu__toggle-host--expanded) {
+    flex: 0 0 58px;
+    width: 58px;
+    min-width: 58px;
+    max-width: 58px;
+    height: auto;
+    min-height: 56px;
+    align-self: center;
+    flex-shrink: 0;
+  }
+
+  /* Panel fuera del flujo colapsado: no empuja ni recorta el botón hamburguesa */
+  .menu__toggle-host:not(.menu__toggle-host--expanded) .menu__panel {
+    position: absolute;
+    inset: auto;
+    width: 0;
+    height: 0;
+    min-height: 0;
+    flex: 0 0 0;
+    overflow: hidden;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .menu__toggle-host:not(.menu__toggle-host--expanded) .menu__toggle {
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+
+  .menu__toggle label {
+    width: 56px;
+    height: 56px;
+    overflow: visible;
+  }
+
+  .menu__toggle svg {
+    transform: scale(1.5);
+  }
+
+  .menu__toggle svg:hover {
+    transform: scale(1.42);
+  }
+
+  .menu__toggle-line {
+    stroke-width: 3.5;
+  }
+}
+
 /* ── Tablet ── */
 @media (min-width: 768px) {
   .menu__top {

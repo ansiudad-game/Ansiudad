@@ -820,17 +820,38 @@ function initVideoLoader() {
 /* =============================================================================
    PAGE END — quitar espacio fantasma después de Contacto
 ============================================================================= */
+function getPageY(el) {
+  const rect = el.getBoundingClientRect();
+  return {
+    top: rect.top + window.scrollY,
+    bottom: rect.bottom + window.scrollY,
+  };
+}
+
 function trimPageEndSpace() {
   const contacto = document.getElementById('contacto');
-  if (!contacto) return;
+  const pageEnd = document.querySelector('.footer__bottom') || contacto;
+  if (!pageEnd) return;
 
-  const cutLine = contacto.offsetTop + contacto.offsetHeight;
+  const { bottom: endLine } = getPageY(pageEnd);
 
   document.querySelectorAll('.pin-spacer').forEach((spacer) => {
-    if (spacer.offsetTop >= cutLine - 4) {
+    const { top: spacerTop, bottom: spacerBottom } = getPageY(spacer);
+
+    if (spacerTop >= endLine - 4) {
       spacer.remove();
+      return;
+    }
+
+    if (spacerBottom > endLine + 4) {
+      const clipped = Math.max(0, Math.ceil(endLine - spacerTop));
+      spacer.style.setProperty('height', `${clipped}px`, 'important');
+      spacer.style.setProperty('min-height', `${clipped}px`, 'important');
+      spacer.style.setProperty('max-height', `${clipped}px`, 'important');
     }
   });
+
+  if (!contacto) return;
 
   let next = contacto.nextElementSibling;
   while (next) {
@@ -864,7 +885,7 @@ const init = () => {
   initHomeSloganReveal();
   ScrollTrigger.refresh();
   trimPageEndSpace();
-  ScrollTrigger.refresh();
+  requestAnimationFrame(trimPageEndSpace);
 };
 
 preloadImages('.card__img').then(() => {

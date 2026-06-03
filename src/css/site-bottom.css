@@ -105,3 +105,13 @@
     transform: none;
   }
 }
+
+@media (max-width: 767px) {
+  .site-bottom__play-btn__ring {
+    width: clamp(72px, 17vw, 86px);
+  }
+
+  .site-bottom__play-btn__label text {
+    font-size: 13px;
+  }
+}

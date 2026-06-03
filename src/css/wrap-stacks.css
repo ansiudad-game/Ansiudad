@@ -44,7 +44,7 @@
   pointer-events: auto;
 }
 
-/* Último muro de cartas: recortar overflow 3D para no alargar el scroll tras Contacto */
+/* Último muro: evita scroll fantasma tras Contacto (igual que antes) */
 .wrap:has([data-stack-3]) {
   overflow: hidden;
   contain: paint;
@@ -52,6 +52,22 @@
 
 .wrap:has([data-stack-3]) .wrap__inner {
   overflow: hidden;
+}
+
+/*
+  Solo pantallas muy anchas: el eje Z (proporcional al viewport) alargaba el documento.
+  No aplica en laptop/tablet — ahí la animación sigue con overflow visible.
+*/
+@media (min-width: 2000px) {
+  .wrap:not(:has([data-stack-3])) {
+    overflow: clip;
+    contain: paint;
+  }
+
+  .wrap:not(:has([data-stack-3])) .wrap__inner,
+  .wrap:not(:has([data-stack-3])) .content {
+    overflow: hidden;
+  }
 }
 
 /* Animación de cartas después de "Cómo lo diseñamos" (stack 2) */
