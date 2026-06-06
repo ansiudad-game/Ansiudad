@@ -95,34 +95,49 @@
 
 .what-flow__text-track {
   position: relative;
-  min-height: clamp(6rem, 22vh, 11rem);
+  z-index: 10;
+  justify-self: stretch;
   align-self: center;
+  width: 100%;
+  height: min(320px, 42vh);
+  min-height: min(280px, 36vh);
+  perspective: 900px;
+  transform-style: preserve-3d;
+  overflow: visible;
 }
 
-.what-flow__text-pane {
+.what-flow__text-card {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 100%;
+  min-height: clamp(5.5rem, 18vh, 9.5rem);
+  margin: 0;
+  padding: clamp(0.85rem, 2.2vw, 1.15rem) clamp(1rem, 2.5vw, 1.25rem);
   display: flex;
   align-items: center;
-  padding: 0;
-  margin: 0;
   text-align: left;
-  visibility: hidden;
-  opacity: 0;
-}
-
-.what-flow__text-pane.is-active {
-  visibility: visible;
-}
-
-.what-flow__text-pane {
   font-size: clamp(1rem, 2.8vw, 1.8em);
+  border-radius: 16px;
+  outline:none;
+  backdrop-filter: blur(24px);
+  background: color-mix(in srgb, var(--morado-oscuro) 80%, transparent);
+  box-shadow: 4px 12px 6px rgba(0, 0, 0, 0.28);
+  box-sizing: border-box;
+  transform-origin: 50% 0;
+  will-change: transform, opacity;
 }
+
+.what-flow__text-card:nth-child(1) { z-index: 13; }
+.what-flow__text-card:nth-child(2) { z-index: 12; }
+.what-flow__text-card:nth-child(3) { z-index: 11; }
 
 .what-flow__text-pane p {
   margin: 0;
   line-height: 1.35;
-  color: var(--morado-oscuro);
+  color: var(--amarillo-claro);
+  font-weight: 300;
 }
 
 .what-flow__text-pane p b {
@@ -131,6 +146,7 @@
 
 .what-flow__stack {
   position: relative;
+  z-index: 1;
   justify-self: center;
   width: min(260px, 40vw);
   height: min(360px, 46vh);
@@ -162,7 +178,7 @@
   margin: 0;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
   will-change: transform, opacity;
-  transform-origin: 50% 50%;
+  transform-origin: 50% 88%;
 }
 
 .what-flow__card:nth-child(1) { z-index: 1; }
@@ -188,33 +204,46 @@
 @media (max-width: 767px) {
   .what-flow__pin {
     --flow-header-zone: clamp(4.5rem, 16vh, 9rem);
-    --flow-content-lift: clamp(1.5rem, 5vh, 3rem);
+    --flow-content-lift: clamp(1.25rem, 4vh, 2.5rem);
   }
 
   .what-flow__layout {
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    align-content: center;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: start;
+    justify-items: center;
+    gap: clamp(0.65rem, 2vh, 1rem);
     transform: translateY(calc(-1 * var(--flow-content-lift)));
   }
 
-  .what-flow__text-track {
-    min-height: clamp(5rem, 18vh, 8rem);
+  .what-flow__stack {
+    grid-row: 1;
+    order: 1;
+    width: min(200px, 58vw);
+    height: min(240px, 32vh);
+    flex-shrink: 0;
   }
 
-  .what-flow__text-pane {
+  .what-flow__text-track {
+    grid-row: 2;
+    order: 2;
+    z-index: 10;
+    align-self: start;
+    width: 100%;
+    height: min(240px, 34vh);
+    min-height: min(210px, 28vh);
+  }
+
+  .what-flow__text-card {
+    min-height: clamp(4.75rem, 14vh, 7rem);
     text-align: center;
     justify-content: center;
-  }
-
-  .what-flow__stack {
-    width: min(200px, 54vw);
-    height: min(280px, 38vh);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .what-flow__card {
+  .what-flow__card,
+  .what-flow__text-card {
     will-change: auto;
   }
 }
