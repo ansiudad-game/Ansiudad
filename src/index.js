@@ -248,23 +248,134 @@ if (scene && layers.length) animateBackground();
 gsap.registerPlugin(ScrollTrigger);
 
 /* =============================================================================
-   HOME — slogan reveal
+   HOME — slogan line → scroll reveal + typewriter
 ============================================================================= */
+const HOME_SLOGAN_CHAR_DURATION = 0.034;
+
+function measureSloganContainerHeight(container, textEl, fullText) {
+  container.classList.add('is-revealed', 'is-measuring');
+  textEl.textContent = fullText;
+  const height = container.offsetHeight;
+  container.classList.remove('is-revealed', 'is-measuring');
+  textEl.textContent = '';
+  return height;
+}
+
+function typewriteSlogan(textEl, fullText, { delay = 0 } = {}) {
+  textEl.textContent = '';
+  textEl.setAttribute('aria-label', fullText);
+
+  const proxy = { count: 0 };
+  return gsap.to(proxy, {
+    count: fullText.length,
+    duration: fullText.length * HOME_SLOGAN_CHAR_DURATION,
+    delay,
+    ease: 'none',
+    onUpdate: () => {
+      textEl.textContent = fullText.slice(0, Math.round(proxy.count));
+    },
+    onComplete: () => {
+      textEl.textContent = fullText;
+      textEl.removeAttribute('aria-label');
+    },
+  });
+}
+
+function revealHomeSlogan(container, textEl, scrollHint) {
+  const fullText = (textEl.dataset.slogan || textEl.textContent).trim();
+  if (container.classList.contains('is-revealed')) return;
+
+  const targetHeight = measureSloganContainerHeight(container, textEl, fullText);
+  container.classList.add('is-revealed');
+  textEl.textContent = '';
+
+  gsap.killTweensOf(container);
+
+  gsap.fromTo(
+    container,
+    {
+      height: 2,
+      y: 32,
+      scaleX: 1,
+    },
+    {
+      height: targetHeight,
+      y: 0,
+      duration: 0.9,
+      ease: 'power2.out',
+      onComplete: () => {
+        gsap.set(container, { clearProps: 'height,y,transform' });
+      },
+    },
+  );
+
+  typewriteSlogan(textEl, fullText, { delay: 0.18 });
+
+  if (scrollHint) {
+    gsap.to(scrollHint, {
+      autoAlpha: 0,
+      y: 8,
+      duration: 0.35,
+      ease: 'power2.in',
+      onComplete: () => {
+        scrollHint.classList.add('is-hidden');
+        scrollHint.hidden = true;
+      },
+    });
+  }
+}
+
 const initHomeSloganReveal = () => {
-  const slogan = document.querySelector('.slogan-container');
   const home = document.getElementById('home');
-  if (!slogan || !home) return;
+  const container = document.getElementById('sloganContainer');
+  const textEl = document.querySelector('.slogan-text__content');
+  const scrollHint = document.querySelector('.home__scroll-hint');
+  if (!home || !container || !textEl) return;
+
+  const fullText = (textEl.dataset.slogan || textEl.textContent).trim();
+  textEl.dataset.slogan = fullText;
+
+  let revealed = false;
+  const runRevealOnce = () => {
+    if (revealed || container.classList.contains('is-revealed')) return;
+    revealed = true;
+    revealHomeSlogan(container, textEl, scrollHint);
+  };
 
   if (prefersReducedMotion.matches) {
-    slogan.classList.add('is-visible');
+    container.classList.add('is-revealed');
+    textEl.textContent = fullText;
+    if (scrollHint) scrollHint.hidden = true;
     return;
   }
 
+  textEl.textContent = '';
+  container.classList.add('is-line-ready');
+
   ScrollTrigger.create({
     trigger: home,
-    start: 'top+=60 top',
+    start: 'top+=72 top',
     once: true,
-    onEnter: () => slogan.classList.add('is-visible'),
+    invalidateOnRefresh: true,
+    onEnter: runRevealOnce,
+  });
+
+  const onScroll = () => {
+    if (window.scrollY >= 56) {
+      runRevealOnce();
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  scrollHint?.addEventListener('click', () => {
+    runRevealOnce();
+    const next = document.getElementById('que-es');
+    if (next) {
+      next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' });
+    }
   });
 };
 
@@ -1065,6 +1176,7 @@ const init = () => {
   });
 
   initHomeSloganReveal();
+
   ScrollTrigger.refresh();
   trimPageEndSpace();
   requestAnimationFrame(trimPageEndSpace);

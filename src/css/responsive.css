@@ -70,8 +70,12 @@
     --page-padding: 2.5rem;
   }
 
-  .home_text {
-    padding: 0 2rem 8vh;
+  .home__hero {
+    width: min(100%, 48rem);
+  }
+
+  .home__slogan-block {
+    width: min(92vw, 42rem);
   }
 }
 

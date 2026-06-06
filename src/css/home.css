@@ -130,19 +130,37 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
   100% { opacity: 1; transform: translateY(0px); }
 }
 
-/* Texto + logo: un poco por encima del centro vertical */
+/* Texto + logo centrados; slogan anclado abajo */
 .home_text {
   position: absolute;
   inset: 0;
   z-index: 10;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.75rem, 3vh, 2rem) clamp(1rem, 4vw, 2.5rem)
+    calc(var(--site-bottom-pad, 64px) + clamp(0.25rem, 1vh, 0.5rem));
+  box-sizing: border-box;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.home__hero {
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.5rem, 2vh, 1rem);
-  padding: 0 1rem 0vh;
-  box-sizing: border-box;
+  width: min(100%, 46rem);
+  max-height: calc(100dvh - var(--site-bottom-pad, 64px) - clamp(5rem, 14vh, 9rem));
+  overflow: visible;
   pointer-events: none;
+  /* Compensa sacar el slogan del flex: mantiene bienvenida + logo en su sitio */
+  transform: translateY(clamp(1.75rem, 5vh, 3.25rem));
+}
+
+.home__hero .page-title-container,
+.home__hero a {
+  pointer-events: auto;
 }
 
 .home_text .page-title-container,
@@ -159,9 +177,10 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
   gap: 0.35rem 0.75rem;
   text-align: center;
   color: var(--morado-claro);
-  max-width: min(100vw, 42rem);
-  padding-bottom: clamp(2rem, 8vh, 3.5rem);
-  transform: translateY(-11vh);
+  width: 100%;
+  max-width: min(100%, 42rem);
+  padding: 0;
+  transform: none;
   overflow: visible;
 }
 
@@ -169,7 +188,7 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
   font-family: var(--font-titles);
   font-weight: 400;
   font-style: italic;
-  font-size: clamp(1.35rem, 4vw, 4.25rem);
+  font-size: clamp(1.25rem, 2.6vw, 3.25rem);
   text-transform: uppercase;
   margin: 0;
 }
@@ -268,59 +287,176 @@ body.bg-loaded .home-logo__part--dad {
 
 .home__welcome-logo-svg {
   display: block;
-  height: clamp(70px, 70vw, 400px);
   width: auto;
-  max-width: min(400px, 88vw);
+  height: clamp(96px, min(32vw, 42vh), 380px);
+  max-width: min(94vw, 460px);
+  max-height: 42vh;
   color: var(--morado-oscuro);
   overflow: visible;
+}
+
+.home__slogan-block {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--site-bottom-pad, 64px) + clamp(0.25rem, 1vh, 0.65rem));
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.45rem, 1.2vh, 0.75rem);
+  width: min(94vw, 40rem);
+  max-width: calc(100% - 2rem);
+  margin-inline: auto;
+  pointer-events: none;
+}
+
+.home__slogan-block .slogan-container,
+.home__scroll-hint {
+  pointer-events: auto;
 }
 
 .slogan-container {
   position: relative;
   z-index: 10;
-  max-width: min(96vw, 28rem);;
-  text-align: center;
+  width: 100%;
+  height: 2px;
+  padding: 0;
+  overflow: hidden;
   opacity: 0;
-  transform: translate3d(-0%, 0, 0);
-  will-change: transform, opacity;
+  border-radius: 999px;
+  background-color: var(--amarillo-oscuro);
+  box-shadow: none;
+  backdrop-filter: none;
+  transform: scaleX(0);
+  transform-origin: center center;
+  will-change: transform, opacity, height;
+}
+
+body.bg-loaded .slogan-container.is-line-ready:not(.is-revealed) {
+  animation: home-slogan-line-in 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+@keyframes home-slogan-line-in {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.slogan-container.is-revealed {
+  height: auto;
+  padding: clamp(12px, 2vh, 18px) clamp(16px, 3.5vw, 26px);
+  border-radius: 12px;
+  background-color: rgba(247, 241, 239, 0.122);
+  backdrop-filter: blur(4px);
+  box-shadow: inset 0px -6px 12px rgba(32, 1, 76, 0.28); 
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.slogan-container.is-measuring {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  height: auto;
+  padding: clamp(12px, 2vh, 18px) clamp(16px, 3.5vw, 26px);
+  border-radius: 24px;
+  width: min(94vw, 40rem);
+}
+
+.slogan-container:not(.is-revealed) .slogan-text {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .slogan-text {
   margin: 0 auto;
   font-family: var(--font-titles);
-  font-weight: 300;
-  font-style:normal;
-  font-size: clamp(0.85rem, 2.8vw, 2.05rem);
-  line-height: 1.05;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(0.8rem, 2.2vw, 1.75rem);
+  line-height: 1.15;
   color: var(--morado-oscuro);
-  text-wrap: wrap;
+  text-wrap: balance;
   text-align: center;
+  max-width: 100%;
   filter: drop-shadow(10px 10px 10px color-mix(in srgb, var(--morado-claro) 55%, transparent));
+}
+
+.slogan-container.is-revealed .slogan-text {
+  opacity: 1;
+  transition: opacity 0.2s ease 0.12s;
 }
 
 .slogan-text p {
   margin: 0;
 }
 
-.slogan-container.is-visible {
-  animation: home-slide-in-lr 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-.page-title-container::after {
-  content: "\00BB";
-  position: absolute;
-  text-align:center;
-  font-size: clamp(1.75rem, 5vw, 4rem);
-  transform: rotate(90deg);
-  transform-origin: center bottom;
-  animation: home-scroll-hint 0.5s linear alternate infinite;
-  pointer-events: none;
-  top:170%;
+.home__scroll-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0.25rem;
+  border: 0;
+  background: none;
   color: var(--amarillo-oscuro);
+  cursor: pointer;
+  opacity: 0;
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--morado-oscuro) 35%, transparent));
 }
 
-@keyframes home-scroll-hint {
+.home__scroll-hint svg {
+  display: block;
+  width: clamp(1.65rem, 4.5vw, 2.75rem);
+  height: auto;
+}
+
+body.bg-loaded .home__scroll-hint:not(.is-hidden) {
+  animation:
+    home-scroll-hint-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.65s both,
+    home-scroll-hint-bob 0.55s ease-in-out 1.35s infinite alternate;
+}
+
+.home__scroll-hint.is-hidden {
+  pointer-events: none;
+}
+
+@keyframes home-scroll-hint-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
   to {
-    transform: rotate(90deg) translateY(10px);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes home-scroll-hint-bob {
+  to {
+    transform: translateY(10px);
+  }
+}
+
+@media (max-height: 820px), (max-width: 1279px) and (min-width: 768px) {
+  .home__welcome-logo-svg {
+    height: clamp(80px, min(26vw, 36vh), 300px);
+    max-height: 36vh;
+    max-width: min(90vw, 400px);
+  }
+
+  .page-title {
+    font-size: clamp(1.15rem, 2.2vw, 2.65rem);
+  }
+
+  .home__slogan-block {
+    width: min(92vw, 36rem);
   }
 }
 
@@ -332,17 +468,70 @@ body.bg-loaded .home-logo__part--dad {
     transform: none;
   }
 
-  .slogan-container {
-    opacity: 1;
+  .home__hero {
     transform: none;
   }
 
-  .page-title-container::after {
+  .slogan-container {
+    opacity: 1;
+    transform: scaleX(1);
+    height: auto;
+    padding: clamp(12px, 2vh, 18px) clamp(16px, 3.5vw, 26px);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .slogan-container .slogan-text {
+    opacity: 1;
+  }
+
+  .home__scroll-hint {
     animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
 
 @media (max-width: 767px) {
+  .home__hero {
+    max-height: calc(100dvh - var(--site-bottom-pad, 64px) - clamp(5.5rem, 16vh, 9.5rem));
+    transform: translateY(clamp(0.5rem, 2vh, 1.25rem));
+  }
+
+  .page-title-container {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: clamp(0.2rem, 0.9vh, 0.5rem);
+  }
+
+  .page-title--left,
+  .page-title--right {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .page-title--right {
+    display: flex;
+    justify-content: center;
+  }
+
+  .page-title {
+    font-size: clamp(1.05rem, 4.2vw, 1.5rem);
+    line-height: 1.1;
+  }
+
+  .home__welcome-logo {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home__welcome-logo-svg {
+    height: clamp(148px, min(68vw, 54vh), 360px);
+    max-width: min(96vw, 420px);
+    max-height: 54vh;
+  }
+
   #l3 {
     justify-content: flex-end;
     align-items: center bottom;
