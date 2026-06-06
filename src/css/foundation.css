@@ -250,10 +250,27 @@ table {
   --rojo: #D94950;
   --noise-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   --noise-size: 200px 200px;
-  --noise-opacity: 0.3;
+  --noise-opacity: 0.15;
   --noise-blend: overlay;
-  --section-wave-height: clamp(3.5rem, 14vw, 9.5rem);
-  --section-wave-mask: url(/brand/sky.svg);
+  --section-wave-height: 100px;
+  /* Mismo polígono que el SVG inline (viewBox 0 0 6000 470.32, preserveAspectRatio none) */
+  --section-wave-clip: polygon(
+    0% 0%,
+    0% 29.595%,
+    13.951% 100%,
+    13.596% 29.595%,
+    21.599% 29.595%,
+    39.416% 100%,
+    45.22% 29.595%,
+    46.549% 29.595%,
+    47.119% 100%,
+    58.995% 29.595%,
+    70.113% 29.595%,
+    93.222% 94.864%,
+    100% 29.595%,
+    100% 0%
+  );
+  --section-wave-opacity: 1.1;
   --morado: var(--morado-oscuro);
   --page-padding: 1rem;
   /* Parallax ¿Qué es? / Desafío: zona del título + elevación del bloque texto+cartas */
@@ -284,7 +301,7 @@ body {
     100% 100vh;
   background-attachment: fixed;
   overflow-x: clip;
-  max-width: 100vw;
+  max-width: none;
 }
 
 /*
@@ -315,8 +332,9 @@ main {
   top: 0;
   /* Por encima de la capa global de ruido (z-index: 1 en este archivo) */
   z-index: 2;
+  width: 100%;
+  max-width: none;
   overflow-x: clip;
-  max-width: 100vw;
 }
 
 .theme-container {
@@ -324,8 +342,9 @@ main {
   z-index: -10;
   scroll-margin-top: 72px;
   scroll-margin-bottom: 0;
-  max-width: 100vw;
-  overflow-x: clip;
+  width: 100%;
+  max-width: none;
+  overflow: visible;
   background: transparent;
 }
 
@@ -354,27 +373,21 @@ main {
   --section-wave-bg: var(--morado-claro);
 }
 
+#contacto {
+  --section-bg: var(--amarillo-claro);
+  --section-wave-bg: var(--amarillo-oscuro);
+  scroll-margin-bottom: 0;
+}
+
 #que-es,
 #desafio,
 #diseno,
 #donde,
-.what-flow,
-.desafio-flow,
-#how,
-#where {
+#contacto {
   margin-top: 0;
   padding-top: 0;
 }
 
-#contacto {
-  --section-bg: var(--amarillo-claro);
-  scroll-margin-bottom: 0;
-}
-
-/*
-  Grano compartido: .wrap (cartas 3D), secciones de tema y #home.
-  Color sólido en el contenedor + capa .bg-noise (sin background-image en el bloque).
-*/
 .bg-noise {
   position: absolute;
   inset: 0;
@@ -387,44 +400,75 @@ main {
   background-size: var(--noise-size);
 }
 
-/* Onda sky.svg: primer bloque del section, pegada al margin-top (flujo, sin absolute) */
+/* Onda sky.svg: contenedores unificados (#what, #desafioFlow, #how, #where, .footer) */
+#what,
+#desafioFlow,
+#how,
+#where,
+.footer {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  padding-top: var(--section-wave-height);
+  box-sizing: border-box;
+  overflow: visible;
+}
+
 .section-top-wave {
   display: block;
-  position: relative;
-  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
   width: 100%;
-  min-width: 100%;
-  max-width: 100vw;
   height: var(--section-wave-height);
   margin: 0;
   padding: 0;
-  flex-shrink: 0;
-  pointer-events: none;
   line-height: 0;
-  vertical-align: top;
-  box-sizing: border-box;
-  background-color: var(--section-wave-bg, var(--section-bg, var(--morado-claro)));
-  -webkit-mask-image: var(--section-wave-mask);
-  mask-image: var(--section-wave-mask);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center top;
-  mask-position: center top;
+  pointer-events: none;
+  overflow: visible;
+  color: var(--section-wave-bg, var(--section-bg));
+  opacity: var(--section-wave-opacity);
+  background: transparent;
+}
+
+.section-top-wave__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.section-top-wave::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  mix-blend-mode: var(--noise-blend);
+  background-image: var(--noise-svg);
+  background-repeat: repeat;
+  background-size: var(--noise-size);
+  -webkit-clip-path: var(--section-wave-clip);
+  clip-path: var(--section-wave-clip);
 }
 
 .wrap > *:not(.bg-noise):not(.section-top-wave),
+.theme-container > *:not(.bg-noise):not(.section-top-wave),
 #what > *:not(.bg-noise):not(.section-top-wave),
+#desafioFlow > *:not(.bg-noise):not(.section-top-wave),
 .what-flow > *:not(.bg-noise):not(.section-top-wave),
-.desafio-flow > *:not(.bg-noise):not(.section-top-wave),
+.home-slogan > *:not(.bg-noise):not(.section-top-wave),
 #how > *:not(.bg-noise):not(.section-top-wave),
 #where > *:not(.bg-noise):not(.section-top-wave),
 .footer > *:not(.bg-noise):not(.section-top-wave) {
   position: relative;
   z-index: 2;
 }
-
 .theme-container + .theme-container {
   border-top: 0;
 }
@@ -442,3 +486,9 @@ html::after {
   background-size: var(--noise-size);
 }
 
+@media (max-width: 768px) {
+  .section-top-wave {
+    top: 0;
+    margin-top: 0;
+  }
+}

@@ -4,8 +4,11 @@
 #what.intro {
   width: 100%;
   max-width: 100vw;
-  background-color: var(--amarillo-oscuro);
-  padding: 0;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  background-color: var(--section-bg);
   box-sizing: border-box;
 }
 
@@ -14,7 +17,6 @@
   position: relative;
   width: 100%;
   max-width: 100vw;
-  background-color: var(--amarillo-oscuro);
 }
 
 .what-flow__pin {
@@ -31,6 +33,7 @@
 
 .what-flow__header {
   z-index: 12;
+  margin-top: calc(-1 * var(--section-wave-height));
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -47,7 +50,7 @@
   text-transform: uppercase;
   font-size: clamp(1.75rem, 9vw, 7rem);
   position: relative;
-  margin: 0;
+  margin: -60px;
   text-align: center;
   display: flex;
   flex-wrap: wrap;
@@ -87,10 +90,10 @@
   gap: clamp(1rem, 3vw, 2rem);
   width: min(1040px, 100%);
   margin: 0 auto;
-  padding: clamp(0.25rem, 1vh, 0.5rem) var(--page-padding)
+  padding: clamp(9.15rem, 5.5vh, 9.75rem) var(--page-padding)
     var(--flow-content-pad-bottom);
   box-sizing: border-box;
-  transform: translateY(calc(-1 * var(--flow-content-lift)));
+  transform: translateY(calc(-1 * min(var(--flow-content-lift), 3.5rem)));
 }
 
 .what-flow__text-track {
@@ -99,8 +102,8 @@
   justify-self: stretch;
   align-self: center;
   width: 100%;
-  height: min(320px, 42vh);
-  min-height: min(280px, 36vh);
+  height: min(360px, 44vh);
+  min-height: min(300px, 38vh);
   perspective: 900px;
   transform-style: preserve-3d;
   overflow: visible;
@@ -122,16 +125,32 @@
   border-radius: 16px;
   outline:none;
   backdrop-filter: blur(24px);
-  background: color-mix(in srgb, var(--morado-oscuro) 80%, transparent);
+  background: color-mix(in srgb, var(--morado-oscuro) 60%, transparent);
   box-shadow: 4px 12px 6px rgba(0, 0, 0, 0.28);
   box-sizing: border-box;
   transform-origin: 50% 0;
   will-change: transform, opacity;
 }
 
-.what-flow__text-card:nth-child(1) { z-index: 13; }
-.what-flow__text-card:nth-child(2) { z-index: 12; }
-.what-flow__text-card:nth-child(3) { z-index: 11; }
+.what-flow__text-pane:not(.is-active) {
+  filter: blur(1px);
+}
+
+.what-flow__text-pane:last-child {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.what-flow__text-pane:last-child.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.what-flow__text-pane.is-active {
+  filter: none;
+}
 
 .what-flow__text-pane p {
   margin: 0;
@@ -230,8 +249,8 @@
     z-index: 10;
     align-self: start;
     width: 100%;
-    height: min(240px, 34vh);
-    min-height: min(210px, 28vh);
+    height: min(280px, 38vh);
+    min-height: min(250px, 32vh);
   }
 
   .what-flow__text-card {

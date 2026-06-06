@@ -9,6 +9,13 @@
   1536px    — desktop grande
 */
 
+/* ── Móvil / tablet pequeña: altura de onda proporcional al viewBox (6000 × 470.32) ── */
+@media (max-width: 767px) {
+  :root {
+    --section-wave-height: calc(100vw * 470.32 / 6000);
+  }
+}
+
 /* ── Móvil grande / landscape ── */
 @media (min-width: 480px) {
   :root {
@@ -74,7 +81,7 @@
     width: min(100%, 48rem);
   }
 
-  .home__slogan-block {
+  .home-slogan__inner {
     width: min(92vw, 42rem);
   }
 }

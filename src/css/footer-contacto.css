@@ -10,11 +10,11 @@
   max-width: 100vw;
   min-height: auto;
   height: auto;
-  padding: clamp(2rem, 8vw, 4rem) var(--page-padding) 0;
+  padding: 0 var(--page-padding) 0;
   box-sizing: border-box;
   text-align: center;
   gap: 0;
-  background-color: var(--amarillo-claro);
+  background-color: var(--section-bg, var(--amarillo-claro));
 }
 
 #contacto {
@@ -31,129 +31,10 @@
   font-size: clamp(2.5rem, 10vw, 7rem);
   line-height: 1.0;
   text-transform: uppercase;
-  margin: 0 0 clamp(1.5rem, 4vw, 3rem);
+  margin: clamp(2rem, 8vw, 4rem) 0 clamp(1.5rem, -20vw, 3rem);
   hyphens: auto;
   overflow-wrap: anywhere;
-}
 
-/* Formulario */
-.footer__form-wrap {
-  width: min(100%, 480px);
-  text-align: left;
-}
-
-.footer__form-title {
-  font-family: var(--font-titles);
-  font-size: clamp(1.25rem, 4vw, 2rem);
-  text-transform: uppercase;
-  line-height: 1.05;
-  margin: 0 0 0.4rem;
-  text-align: center;
-}
-
-.footer__form-sub {
-  font-size: clamp(0.85rem, 2vw, 1rem);
-  text-align: center;
-  opacity: 0.65;
-  margin: 0 0 1.75rem;
-}
-
-.footer__form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.form-field label {
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  opacity: 0.7;
-}
-
-.form-field input,
-.form-field textarea {
-  width: 100%;
-  box-sizing: border-box;
-  background: transparent;
-  border: 1.5px solid currentColor;
-  border-radius: 0.4rem;
-  padding: 0.65rem 0.85rem;
-  font-family: var(--font-family);
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  color: inherit;
-  outline: none;
-  transition: box-shadow 0.2s ease;
-  resize: vertical;
-}
-
-.form-field input::placeholder,
-.form-field textarea::placeholder {
-  opacity: 0.35;
-}
-
-.form-field input:focus,
-.form-field textarea:focus {
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.12);
-}
-
-.form-btn {
-  align-self: center;
-  background: currentColor;
-  color: var(--amarillo-oscuro);
-  border: none;
-  border-radius: 2rem;
-  padding: 0.75rem 2.5rem;
-  font-family: var(--font-titles);
-  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.15s ease;
-}
-
-.form-btn:hover  { opacity: 0.82; }
-.form-btn:active { transform: scale(0.97); }
-.form-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
-.form-btn__loading { display: none; }
-.form-btn.sending .form-btn__text    { display: none; }
-.form-btn.sending .form-btn__loading { display: inline; }
-
-.form-status {
-  display: none;
-  text-align: center;
-  font-size: 0.88rem;
-  padding: 0.6rem 1rem;
-  border-radius: 0.4rem;
-}
-
-.form-status.visible   { display: block; }
-.form-status--ok  { background: rgba(39,174,96,0.15);  color: #1a6e3a; }
-.form-status--err { background: rgba(192,57,43,0.12);  color: #c0392b; }
-
-.form-todo {
-  margin-top: 1rem;
-  font-size: 0.75rem;
-  opacity: 0.45;
-  text-align: center;
-  border: 1px dashed currentColor;
-  border-radius: 0.4rem;
-  padding: 0.5rem 0.75rem;
-}
-
-.form-todo code {
-  font-family: monospace;
-  background: rgba(0,0,0,0.07);
-  padding: 0 4px;
-  border-radius: 3px;
 }
 
 /* Divisor */
@@ -165,7 +46,107 @@
   margin: clamp(2rem, 6vw, 4rem) 0;
 }
 
-/* Bloque inferior — termina poco después de Instagram */
+.footer__divider--bottom {
+  margin-top: 0;
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.footer__experience {
+  width: min(100%, 520px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.25rem, 4vw, 2rem);
+}
+
+.footer__experience-title {
+  margin: 0;
+  font-family: var(--font-titles);
+  font-size: clamp(1.35rem, 4.5vw, 2.25rem);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--morado-oscuro);
+}
+
+.footer__experience-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(2rem, 8vw, 4rem);
+}
+
+.footer__experience-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 9.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer__experience-item--ig:hover {
+  opacity: 0.72;
+}
+
+.footer__experience-icon-link {
+  display: grid;
+  place-items: center;
+  width: 3.35rem;
+  height: 3.35rem;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+a.footer__experience-icon-link:hover {
+  opacity: 0.72;
+  transform: scale(1.04);
+}
+
+.footer__experience-icon-link svg,
+.footer__experience-icon-img {
+  width: 1.65rem;
+  height: 1.65rem;
+  display: block;
+  object-fit: contain;
+}
+
+.footer__experience-icon-link svg {
+  fill: currentColor;
+}
+
+.footer__experience-icon-img {
+  object-fit: contain;
+}
+
+.footer__experience-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: clamp(0.78rem, 1.8vw, 0.92rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.footer__experience-text a {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.footer__experience-text a:hover {
+  opacity: 0.72;
+  text-decoration: underline;
+}
+
+/* Bloque inferior — logo y créditos */
 .footer__bottom {
   display: flex;
   flex-direction: column;
@@ -194,44 +175,4 @@
 
 .footer__copy a:hover {
   text-decoration: underline;
-}
-
-.footer__emails {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.footer__emails a {
-  font-size: clamp(0.85rem, 2vw, 1rem);
-  font-weight: 700;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-
-.footer__emails a:hover {
-  opacity: 0.65;
-  text-decoration: underline;
-}
-
-.footer__ig {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  margin-top: 0.25rem;
-  margin-bottom: 0;
-  transition: opacity 0.2s;
-}
-
-.footer__ig:hover {
-  opacity: 0.65;
-}
-
-.footer__ig svg {
-  fill: currentColor;
-  flex-shrink: 0;
 }
