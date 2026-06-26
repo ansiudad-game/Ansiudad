@@ -82,7 +82,8 @@
   }
 
   .home-slogan__inner {
-    width: min(92vw, 42rem);
+    width: calc(100% - 2 * var(--page-padding));
+    max-width: none;
   }
 }
 

@@ -311,14 +311,16 @@ body.bg-loaded .home-logo__part--dad {
   box-sizing: border-box;
   background-color: var(--morado-claro);
   opacity: 0.97;
+  overflow: visible;
 }
 
 .home-slogan__inner {
   position: relative;
   z-index: 2;
-  width: min(94vw, 40rem);
+  width: 100%;
   max-width: calc(100% - 2rem);
   margin-inline: auto;
+  overflow: visible;
 }
 
 .slogan-container {
@@ -336,6 +338,10 @@ body.bg-loaded .home-logo__part--dad {
   transform: scaleX(0);
   transform-origin: center center;
   will-change: transform, opacity, height;
+}
+
+.slogan-container.is-line-ready:not(.is-revealed) {
+  overflow: hidden;
 }
 
 body.bg-loaded .slogan-container.is-line-ready:not(.is-revealed) {
@@ -362,6 +368,11 @@ body.bg-loaded .slogan-container.is-line-ready:not(.is-revealed) {
   /* box-shadow: inset 0px -6px 12px rgba(32, 1, 76, 0.28); */
   transform: scaleX(1);
   opacity: 1;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .slogan-container.is-measuring {
@@ -401,6 +412,7 @@ body.bg-loaded .slogan-container.is-line-ready:not(.is-revealed) {
 
 .slogan-text p {
   margin: 0;
+  text-align: center;
 }
 
 .home__scroll-hint {
@@ -447,6 +459,42 @@ body.bg-loaded .home__scroll-hint:not(.is-hidden) {
 @keyframes home-scroll-hint-bob {
   to {
     transform: translateY(10px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .home-slogan__inner {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: none;
+  }
+
+  .slogan-container,
+  .slogan-container.is-revealed {
+    overflow: visible;
+    justify-content: center;
+  }
+
+  .slogan-container.is-measuring {
+    width: calc(100% - 2 * var(--page-padding));
+    max-width: none;
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+  }
+
+  .slogan-text {
+    width: max-content;
+    max-width: none;
+    margin-inline: auto;
+    text-wrap: nowrap;
+    white-space: nowrap;
+    overflow: visible;
+    text-align: center;
+    font-size: clamp(1.5rem, 2.35vw, 3.5rem);
+    letter-spacing: -0.015em;
+    filter: drop-shadow(0 10px 10px color-mix(in srgb, var(--morado-claro) 55%, transparent));
   }
 }
 

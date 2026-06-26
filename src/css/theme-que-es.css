@@ -109,10 +109,16 @@
   overflow: visible;
 }
 
-.what-flow__text-card {
+.what-flow__text-pane.flow-stack-card {
   position: absolute;
   top: 0;
   left: 50%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.what-flow__text-card.flow-stack-card__content {
   width: 100%;
   max-width: 100%;
   min-height: clamp(5.5rem, 18vh, 9.5rem);
@@ -123,33 +129,21 @@
   text-align: left;
   font-size: clamp(1rem, 2.8vw, 1.8em);
   border-radius: 16px;
-  outline:none;
+  outline: none;
   backdrop-filter: blur(24px);
-  background: color-mix(in srgb, var(--morado-oscuro) 60%, transparent);
+  background: var(--morado-oscuro);
   box-shadow: 4px 12px 6px rgba(0, 0, 0, 0.28);
   box-sizing: border-box;
-  transform-origin: 50% 0;
-  will-change: transform, opacity;
-}
-
-.what-flow__text-pane:not(.is-active) {
-  filter: blur(1px);
 }
 
 .what-flow__text-pane:last-child {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.what-flow__text-pane:last-child.is-active {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-.what-flow__text-pane.is-active {
-  filter: none;
+.what-flow__text-pane:last-child:not(.is-active) {
+  pointer-events: none;
 }
 
 .what-flow__text-pane p {
@@ -254,7 +248,7 @@
     min-height: min(250px, 32vh);
   }
 
-  .what-flow__text-card {
+  .what-flow__text-card.flow-stack-card__content {
     min-height: clamp(4.75rem, 14vh, 7rem);
     text-align: center;
     justify-content: center;
@@ -263,7 +257,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .what-flow__card,
-  .what-flow__text-card {
+  .flow-stack-card__content {
     will-change: auto;
   }
 }

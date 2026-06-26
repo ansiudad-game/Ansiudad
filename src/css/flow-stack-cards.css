@@ -1,0 +1,78 @@
+/*
+  Text stack cards — patrón Codyhouse / scroll-driven stacking (scale + offset).
+  GSAP anima transform en secciones pin; CSS define layout y estilos de tarjeta.
+*/
+.flow-stack-cards {
+  --flow-stack-offset: 0.75rem;
+  --flow-stack-scale-step: 0.05;
+  --flow-stack-min-scale: 0.9;
+}
+
+.flow-stack-card {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transform-origin: 50% 0;
+}
+
+.flow-stack-card__content {
+  transform-origin: 50% 0;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-stack-card__content {
+    will-change: auto;
+  }
+}
+
+.what-flow__text-column,
+.desafio-flow__text-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: stretch;
+  align-self: center;
+  width: 100%;
+  gap: clamp(0.65rem, 1.8vh, 1rem);
+}
+
+.flow-stack-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  z-index: 12;
+}
+
+.flow-stack-dots__item {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.38);
+  transition:
+    transform 0.22s ease,
+    background-color 0.22s ease,
+    opacity 0.22s ease;
+}
+
+.flow-stack-dots__item.is-active {
+  background: var(--amarillo-claro, #f5e6a8);
+  transform: scale(1.35);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-stack-dots__item {
+    transition: none;
+  }
+}

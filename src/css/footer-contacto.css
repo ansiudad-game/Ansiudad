@@ -22,6 +22,11 @@
   padding-bottom: 0;
 }
 
+#contacto.theme-container {
+  position: relative;
+  z-index: 7;
+}
+
 #contacto .footer {
   padding-top: calc(var(--section-wave-height) + clamp(1.5rem, 5vw, 3.5rem));
 }

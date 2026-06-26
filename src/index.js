@@ -5,6 +5,16 @@ import { StackMotionEffect as StackMotionEffect3 } from '/js/effect-3/stackMotio
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
 import Experience from '/Experience/Experience.js';
+import { initWhereCarousel } from '/js/whereCarousel.js';
+import {
+  animateFlowStackFinaleStep,
+  animateFlowStackOutgoing,
+  animateFlowStackStep,
+  getFlowStackMetrics,
+  setFlowStackPaneState,
+  syncFlowStackActiveState,
+  syncFlowStackDotsFromItems,
+} from '/js/flowStackCards.js';
 
 /* =============================================================================
    EXPERIENCE (juego / canvas)
@@ -42,11 +52,24 @@ const STACK_TEXT_HOLD = 0.42;
 /** Extra Y where the finale / objective card starts its last rise */
 const STACK_FINALE_RISE_FROM_Y = 56;
 
-function getStackFinaleRiseFromSlot(slot) {
-  const extraY = mobileParallaxMq.matches
+function getFlowStackMetricsForViewport() {
+  return getFlowStackMetrics({ mobile: mobileParallaxMq.matches });
+}
+
+function getDesafioFlowStackMetrics() {
+  const metrics = getFlowStackMetricsForViewport();
+  if (!mobileParallaxMq.matches) return metrics;
+
+  return {
+    ...metrics,
+    enterY: metrics.enterY + 44,
+  };
+}
+
+function getFlowStackFinaleRiseY() {
+  return mobileParallaxMq.matches
     ? Math.round(STACK_FINALE_RISE_FROM_Y * 0.72)
     : STACK_FINALE_RISE_FROM_Y;
-  return { ...slot, y: slot.y + extraY };
 }
 
 function getWhatObjectiveIndex(textPanes) {
@@ -137,6 +160,11 @@ const menuBottom = document.querySelector('.menu__bottom');
 
 const PANEL_EXPANDED = 'menu__panel--expanded';
 const HOST_EXPANDED = 'menu__toggle-host--expanded';
+const menuDesktopMq = window.matchMedia('(min-width: 1024px)');
+
+function isDesktopMenu() {
+  return menuDesktopMq.matches;
+}
 
 function clipRadiusPx(panelEl, x, y) {
   const w = panelEl.offsetWidth;
@@ -164,6 +192,16 @@ function openMenu() {
   menuToggleHost.classList.add(HOST_EXPANDED);
   menuPanel.classList.add(PANEL_EXPANDED);
   menuBottom.classList.add('menu__bottom--visible');
+
+  if (isDesktopMenu()) {
+    gsap.fromTo(
+      menuBottom,
+      { opacity: 0, y: -8 },
+      { opacity: 1, y: 0, duration: prefersReducedMotion.matches ? 0.2 : 0.32, ease: 'power2.out' },
+    );
+    return;
+  }
+
   gsap.set(menuBottom, { opacity: 0 });
 
   requestAnimationFrame(() => {
@@ -210,6 +248,22 @@ function closeMenu() {
   if (!menuPanel.classList.contains(PANEL_EXPANDED)) return;
 
   gsap.killTweensOf([menuPanel, menuBottom, menuToggleHost]);
+
+  if (isDesktopMenu()) {
+    gsap.to(menuBottom, {
+      opacity: 0,
+      y: -6,
+      duration: 0.2,
+      ease: 'power2.in',
+      onComplete: () => {
+        menuToggleHost.classList.remove(HOST_EXPANDED);
+        menuPanel.classList.remove(PANEL_EXPANDED);
+        menuBottom.classList.remove('menu__bottom--visible');
+        gsap.set(menuBottom, { clearProps: 'opacity,transform' });
+      },
+    });
+    return;
+  }
 
   const { x, y } = pivotToggleTop(menuPanel);
   const r = clipRadiusPx(menuPanel, x, y);
@@ -741,21 +795,18 @@ function initWhatParallax() {
   const pin = flow.querySelector('.what-flow__pin');
   const title = flow.querySelector('.intro__title');
   const textPanes = [...flow.querySelectorAll('.what-flow__text-pane')];
+  const textDots = flow.querySelector('.what-flow__text-dots');
   const cards = [...flow.querySelectorAll('.what-flow__card')];
 
   if (!pin || !textPanes.length || !cards.length) return;
 
   const showReduced = () => {
-    const objective = getWhatObjectivePane(textPanes);
+    const metrics = getFlowStackMetricsForViewport();
     const objectiveIndex = getWhatObjectiveIndex(textPanes);
     textPanes.forEach((pane, i) => {
-      if (i === objectiveIndex) return;
-      setWhatTextTransform(pane, getWhatTextStackSlot(i), { alpha: 1 });
-      pane.classList.toggle('is-active', i === 0);
+      setFlowStackPaneState(pane, i, objectiveIndex, metrics, { allowFullStack: true });
     });
-    setWhatTextTransform(objective, getWhatTextStackSlot(objectiveIndex), { alpha: 1 });
-    gsap.set(objective, { autoAlpha: 1, visibility: 'visible' });
-    setWhatStackZIndex(textPanes, objective, 0);
+    syncFlowStackActiveState(textPanes, objectiveIndex, { dots: textDots });
     cards.forEach((card, i) => {
       setWhatCardTransform(card, getWhatCardSlot(i, 0), { alpha: 1 });
     });
@@ -785,16 +836,18 @@ function initWhatParallax() {
     });
   }
 
-  setWhatActiveTextPane(textPanes);
+  const metrics = getFlowStackMetricsForViewport();
   const objectivePane = getWhatObjectivePane(textPanes);
   const objectiveIndex = getWhatObjectiveIndex(textPanes);
+
   textPanes.forEach((pane, i) => {
-    if (i === objectiveIndex) return;
-    setWhatTextTransform(pane, getWhatTextStackSlot(i), { alpha: 0, enter: true });
+    if (i === objectiveIndex) {
+      gsap.set(pane, { autoAlpha: 0, visibility: 'hidden' });
+      return;
+    }
+    setFlowStackPaneState(pane, i, -1, metrics, { hidden: i !== 0, entering: i === 0 });
   });
-  setWhatTextTransform(objectivePane, getWhatTextStackSlot(objectiveIndex), { alpha: 0, enter: true });
-  gsap.set(objectivePane, { visibility: 'hidden' });
-  setWhatStackZIndex(textPanes, objectivePane, 0);
+
   cards.forEach((card, i) => {
     setWhatCardTransform(card, getWhatCardSlot(i, 0), { alpha: 0, enter: true });
   });
@@ -811,7 +864,10 @@ function initWhatParallax() {
       scrub: SCROLL_SCRUB_SMOOTH,
       anticipatePin: 1,
       invalidateOnRefresh: true,
-      onUpdate: () => syncStackTextActiveState(textPanes),
+      onUpdate: () => {
+        syncStackTextActiveState(textPanes);
+        syncFlowStackDotsFromItems(textDots, textPanes);
+      },
     },
   });
   whatParallaxTimeline = tl;
@@ -843,110 +899,39 @@ function initWhatParallax() {
     const outgoingStart = getWhatOutgoingStart(textEnterStart);
 
     if (groupIndex === 0) {
-      tl.call(
-        () => {
-          setWhatStackZIndex(textPanes, objectivePane, 0);
-        },
-        null,
-        textEnterStart,
-      );
-
-      textPanes.forEach((pane, i) => {
-        if (i === objectiveIndex) return;
-        addWhatTextEnter(tl, pane, getWhatTextStackSlot(i), textEnterStart, i, 0);
+      animateFlowStackStep(tl, textPanes, 0, textEnterStart, WHAT_TEXT_SCROLL_DUR, metrics, {
+        hiddenIndices: [objectiveIndex],
       });
-      addWhatTextEnter(
-        tl,
-        objectivePane,
-        getWhatTextStackSlot(objectiveIndex),
-        textEnterStart,
-        objectiveIndex,
-        0,
-        { reveal: false },
-      );
-      tl.call(() => hideStackFinalePane(objectivePane), null, textEnterStart);
+      tl.call(() => syncFlowStackActiveState(textPanes, 0, { dots: textDots }), null, textEnterStart);
     } else {
-      const outgoing = textPanes[groupIndex - 1];
-      const rising = isObjectiveStep ? [objectivePane] : textPanes.slice(groupIndex);
-
-      tl.call(
-        () => {
-          setWhatStackZIndex(textPanes, objectivePane, groupIndex, groupIndex - 1);
-        },
-        null,
-        textEnterStart,
-      );
-
       animateWhatCardsToFan(tl, cards, groupIndex, textEnterStart);
 
       if (isObjectiveStep) {
-        const frontSlot = getWhatTextStackSlot(0);
-        const riseFrom = getStackFinaleRiseFromSlot(frontSlot);
-        tl.set(
+        const backPane = textPanes[objectiveIndex - 1];
+        animateFlowStackFinaleStep(
+          tl,
           objectivePane,
-          {
-            xPercent: -50,
-            yPercent: 0,
-            x: riseFrom.x,
-            y: riseFrom.y,
-            rotation: riseFrom.rotate,
-          },
+          backPane ? [backPane] : [],
+          objectiveIndex,
           textEnterStart,
+          WHAT_TEXT_SCROLL_DUR,
+          metrics,
+          { riseFromY: getFlowStackFinaleRiseY() },
         );
-        tl.to(
-          objectivePane,
-          animateWhatTextMove(frontSlot, { duration: WHAT_TEXT_SCROLL_DUR, ease: 'none' }),
-          textEnterStart,
-        );
+        tl.call(() => syncFlowStackActiveState(textPanes, objectiveIndex, { dots: textDots }), null, textEnterStart);
+        if (backPane) {
+          animateFlowStackOutgoing(tl, backPane, outgoingStart, WHAT_TEXT_FADE_SCROLL_DUR, {
+            lift: WHAT_TEXT_EXIT_LIFT,
+          });
+        }
       } else {
-        rising.forEach((el, i) => {
-          tl.to(
-            el,
-            animateWhatTextMove(getWhatTextStackSlot(i), {
-              duration: WHAT_TEXT_SCROLL_DUR,
-              ease: 'none',
-            }),
-            textEnterStart,
-          );
+        animateFlowStackStep(tl, textPanes, groupIndex, textEnterStart, WHAT_TEXT_SCROLL_DUR, metrics, {
+          hiddenIndices: [objectiveIndex],
         });
-      }
-
-      if (isObjectiveStep) {
-        tl.to(
-          objectivePane,
-          {
-            autoAlpha: 1,
-            visibility: 'visible',
-            duration: WHAT_TEXT_SCROLL_DUR,
-            ease: 'none',
-          },
-          textEnterStart,
-        );
-        tl.call(
-          () => {
-            setWhatStackZIndex(textPanes, objectivePane, objectiveIndex);
-          },
-          null,
-          textEnterStart,
-        );
-      } else {
-        setStackTextOpacities(tl, textPanes, groupIndex, textEnterStart, {
-          keepOutgoingIndex: groupIndex - 1,
-          hidePane: objectivePane,
-          hidePaneIndex: objectiveIndex,
+        tl.call(() => syncFlowStackActiveState(textPanes, groupIndex, { dots: textDots }), null, textEnterStart);
+        animateFlowStackOutgoing(tl, textPanes[groupIndex - 1], outgoingStart, WHAT_TEXT_FADE_SCROLL_DUR, {
+          lift: WHAT_TEXT_EXIT_LIFT,
         });
-      }
-
-      if (outgoing) {
-        tl.to(
-          outgoing,
-          {
-            ...animateWhatTextExit(),
-            opacity: 0,
-            ease: 'none',
-          },
-          outgoingStart,
-        );
       }
     }
   }
@@ -962,10 +947,13 @@ const DESAFIO_CARD_STACK = [
 ];
 
 const DESAFIO_CARD_STACK_MOBILE = [
-  { x: 0, y: -58, rotate: -8 },
-  { x: 0, y: 0, rotate: 6 },
-  { x: 0, y: 58, rotate: -7 },
+  { x: 0, y: 0, rotate: -8 },
+  { x: 0, y: 58, rotate: 6 },
+  { x: 0, y: 116, rotate: -7 },
 ];
+
+const DESAFIO_MOBILE_Y_SHIFT = 22;
+const DESAFIO_CARD_ENTER_Y_MOBILE = 50;
 
 const DESAFIO_CARD_FAN_BY_GROUP = [
   null,
@@ -1021,7 +1009,7 @@ const DESAFIO_TEXT_ENTER_EASE = 'none';
 const DESAFIO_TEXT_EXIT_EASE = 'none';
 const DESAFIO_TEXT_HOLD = STACK_TEXT_HOLD;
 const DESAFIO_TEXT_ENTER_X = -280;
-const DESAFIO_TEXT_ENTER_Y = -112;
+const DESAFIO_TEXT_ENTER_Y = 40;
 const DESAFIO_TEXT_EXIT_X = 280;
 const DESAFIO_STACK_SLOTS = [
   { x: 0, y: 0, rotate: 0 },
@@ -1043,11 +1031,19 @@ function getDesafioCardFanByGroup() {
 function getDesafioCardSlot(cardIndex, groupIndex) {
   const base = getDesafioCardStack()[cardIndex] ?? { x: 0, y: 0, rotate: 0 };
   const fan = getDesafioCardFanByGroup()[groupIndex]?.[cardIndex];
-  if (!fan) return base;
+  const slot = !fan
+    ? base
+    : {
+        x: base.x + fan.x,
+        y: base.y + fan.y,
+        rotate: base.rotate + fan.rotate,
+      };
+
+  if (!mobileParallaxMq.matches) return slot;
+
   return {
-    x: base.x + fan.x,
-    y: base.y + fan.y,
-    rotate: base.rotate + fan.rotate,
+    ...slot,
+    y: slot.y + DESAFIO_MOBILE_Y_SHIFT,
   };
 }
 
@@ -1217,11 +1213,15 @@ function animateDesafioCardsToFan(tl, cards, groupIndex, startTime) {
 }
 
 function setDesafioCardTransform(card, slot, { alpha = 1, enter = false } = {}) {
+  const enterOffset = mobileParallaxMq.matches
+    ? { x: 0, y: DESAFIO_CARD_ENTER_Y_MOBILE }
+    : { x: DESAFIO_CARD_ENTER_X, y: DESAFIO_CARD_ENTER_Y };
+
   gsap.set(card, {
     xPercent: -50,
     yPercent: -50,
-    x: (slot?.x ?? 0) + (enter ? DESAFIO_CARD_ENTER_X : 0),
-    y: (slot?.y ?? 0) + (enter ? DESAFIO_CARD_ENTER_Y : 0),
+    x: (slot?.x ?? 0) + (enter ? enterOffset.x : 0),
+    y: (slot?.y ?? 0) + (enter ? enterOffset.y : 0),
     rotation: (slot?.rotate ?? 0) + (enter ? -14 : 0),
     autoAlpha: alpha,
     transformOrigin: DESAFIO_CARD_FAN_ORIGIN,
@@ -1232,37 +1232,32 @@ function resetFlowParallaxState(flowId, {
   titleSelector,
   titleInitial,
   textPanes,
-  textStack,
-  setTextTransform,
-  setActiveTextPane,
   cards,
   getCardSlot,
   setCardTransform,
   finale = null,
-  finaleSlot = null,
-  setStackZIndex = null,
+  finaleIndex = null,
 }) {
   const flow = document.getElementById(flowId);
   if (!flow) return;
 
+  const dots = flow.querySelector('.flow-stack-dots');
   const title = titleSelector ? flow.querySelector(titleSelector) : null;
   if (title && titleInitial) gsap.set(title, titleInitial);
 
+  const metrics = getFlowStackMetricsForViewport();
+
   if (textPanes?.length) {
-    setActiveTextPane(textPanes, 0, finale);
     textPanes.forEach((pane, i) => {
-      setTextTransform(pane, textStack[i] ?? textStack[0], { alpha: 0, enter: true });
-      gsap.set(pane, { opacity: 1 });
+      setFlowStackPaneState(pane, i, -1, metrics, { hidden: i !== 0, entering: i === 0 });
     });
+    syncFlowStackActiveState(textPanes, 0, { finale, dots });
   }
 
-  if (finale && finaleSlot) {
-    setTextTransform(finale, finaleSlot, { alpha: 0, enter: true });
-    gsap.set(finale, { opacity: 0, visibility: 'hidden' });
+  if (finale) {
+    gsap.set(finale, { autoAlpha: 0, visibility: 'hidden' });
     finale.classList.remove('is-active');
   }
-
-  if (setStackZIndex) setStackZIndex(textPanes, finale, 0);
 
   cards?.forEach((card, i) => {
     setCardTransform(card, getCardSlot(i, 0), { alpha: 0, enter: true });
@@ -1285,22 +1280,16 @@ function resetAnimationsAfterMenuJump() {
   const whatFlow = document.getElementById('whatFlow');
   if (whatFlow) {
     const whatTextPanes = [...whatFlow.querySelectorAll('.what-flow__text-pane')];
-    const whatObjective = getWhatObjectivePane(whatTextPanes);
     resetFlowParallaxState('whatFlow', {
       titleSelector: '.intro__title',
       titleInitial: { autoAlpha: 0, y: WHAT_TITLE_ENTER_Y },
       textPanes: whatTextPanes,
-      textStack: whatTextPanes.map((_, i) => getWhatTextStackSlot(i)),
-      setTextTransform: setWhatTextTransform,
-      setActiveTextPane: setWhatActiveTextPane,
       cards: [...whatFlow.querySelectorAll('.what-flow__card')],
       getCardSlot: getWhatCardSlot,
       setCardTransform: setWhatCardTransform,
-      finale: whatObjective,
-      finaleSlot: getWhatTextStackSlot(getWhatObjectiveIndex(whatTextPanes)),
-      setStackZIndex: setWhatStackZIndex,
     });
   }
+  const desafioFlow = document.getElementById('desafioFlow');
   if (desafioFlow) {
     const textPanes = [...desafioFlow.querySelectorAll('.desafio-flow__text-pane')];
     const finale = desafioFlow.querySelector('.desafio-flow__finale');
@@ -1308,15 +1297,10 @@ function resetAnimationsAfterMenuJump() {
       titleSelector: '.desafio-flow__title',
       titleInitial: { y: -DESAFIO_TITLE_DROP_OFFSET, autoAlpha: 0 },
       textPanes,
-      textStack: textPanes.map((_, i) => getDesafioStackSlot(i)),
-      setTextTransform: setDesafioTextTransform,
-      setActiveTextPane: setDesafioActiveTextPane,
       cards: [...desafioFlow.querySelectorAll('.desafio-flow__card')],
       getCardSlot: getDesafioCardSlot,
       setCardTransform: setDesafioCardTransform,
       finale,
-      finaleSlot: getDesafioStackSlot(textPanes.length),
-      setStackZIndex: setDesafioStackZIndex,
     });
   }
 }
@@ -1328,6 +1312,7 @@ function playWhatMenuIntro() {
   const title = flow.querySelector('.intro__title');
   const cards = [...flow.querySelectorAll('.what-flow__card')];
   const textPanes = [...flow.querySelectorAll('.what-flow__text-pane')];
+  const textDots = flow.querySelector('.what-flow__text-dots');
   const objectivePane = getWhatObjectivePane(textPanes);
   const objectiveIndex = getWhatObjectiveIndex(textPanes);
 
@@ -1366,14 +1351,16 @@ function playWhatMenuIntro() {
     );
   });
 
+  const metrics = getFlowStackMetricsForViewport();
   textPanes.forEach((pane, i) => {
-    if (i === objectiveIndex) return;
-    setWhatTextTransform(pane, getWhatTextStackSlot(i), { alpha: 0, enter: true });
+    if (i === objectiveIndex) {
+      gsap.set(pane, { autoAlpha: 0, visibility: 'hidden' });
+      return;
+    }
+    setFlowStackPaneState(pane, i, -1, metrics, { hidden: i !== 0, entering: i === 0 });
   });
-  setWhatTextTransform(objectivePane, getWhatTextStackSlot(objectiveIndex), { alpha: 0, enter: true });
   gsap.set(objectivePane, { visibility: 'hidden' });
-  setWhatStackZIndex(textPanes, objectivePane, 0);
-  setWhatActiveTextPane(textPanes);
+  syncFlowStackActiveState(textPanes, 0, { dots: textDots });
 
   if (whatParallaxTimeline) {
     const cardEnd = WHAT_CARD_INSET + WHAT_CARD_DUR;
@@ -1388,6 +1375,7 @@ function playDesafioMenuIntro() {
   const title = flow.querySelector('.desafio-flow__title');
   const cards = [...flow.querySelectorAll('.desafio-flow__card')];
   const textPanes = [...flow.querySelectorAll('.desafio-flow__text-pane')];
+  const textDots = flow.querySelector('.desafio-flow__text-dots');
   const finale = flow.querySelector('.desafio-flow__finale');
 
   if (title) {
@@ -1400,13 +1388,17 @@ function playDesafioMenuIntro() {
 
   cards.forEach((card, i) => {
     const slot = getDesafioCardSlot(i, 0);
+    const enterOffset = mobileParallaxMq.matches
+      ? { x: 0, y: DESAFIO_CARD_ENTER_Y_MOBILE }
+      : { x: DESAFIO_CARD_ENTER_X, y: DESAFIO_CARD_ENTER_Y };
+
     gsap.fromTo(
       card,
       {
         xPercent: -50,
         yPercent: -50,
-        x: slot.x + DESAFIO_CARD_ENTER_X,
-        y: slot.y + DESAFIO_CARD_ENTER_Y,
+        x: slot.x + enterOffset.x,
+        y: slot.y + enterOffset.y,
         rotation: slot.rotate - 14,
         autoAlpha: 0,
         transformOrigin: DESAFIO_CARD_FAN_ORIGIN,
@@ -1425,13 +1417,14 @@ function playDesafioMenuIntro() {
     );
   });
 
+  const metrics = getDesafioFlowStackMetrics();
   textPanes.forEach((pane, i) => {
-    setDesafioTextTransform(pane, getDesafioStackSlot(i), { alpha: 0, enter: true });
+    setFlowStackPaneState(pane, i, -1, metrics, { hidden: i !== 0, entering: i === 0 });
   });
   if (finale) {
-    setDesafioTextTransform(finale, getDesafioStackSlot(textPanes.length), { alpha: 0, enter: true });
+    gsap.set(finale, { autoAlpha: 0, visibility: 'hidden' });
   }
-  setDesafioActiveTextPane(textPanes, 0, finale);
+  syncFlowStackActiveState(textPanes, 0, { finale, dots: textDots });
 
   if (desafioParallaxTimeline) {
     const cardEnd = DESAFIO_CARD_INSET + DESAFIO_CARD_DUR;
@@ -1499,18 +1492,19 @@ function initDesafioParallax() {
   const title = flow.querySelector('.desafio-flow__title');
   const cards = [...flow.querySelectorAll('.desafio-flow__card')];
   const textPanes = [...flow.querySelectorAll('.desafio-flow__text-pane')];
+  const textDots = flow.querySelector('.desafio-flow__text-dots');
   const finale = flow.querySelector('.desafio-flow__finale');
 
   if (!pin || !title || !cards.length || !textPanes.length || !finale) return;
 
   const showReduced = () => {
+    const metrics = getDesafioFlowStackMetrics();
     gsap.set(title, { clearProps: 'all', opacity: 1, y: 0 });
     textPanes.forEach((pane, i) => {
-      setDesafioTextTransform(pane, getDesafioStackSlot(i), { alpha: 1 });
-      pane.classList.toggle('is-active', i === 0);
+      setFlowStackPaneState(pane, i, textPanes.length - 1, metrics, { allowFullStack: true });
     });
-    setDesafioTextTransform(finale, getDesafioStackSlot(textPanes.length), { alpha: 1 });
-    setDesafioStackZIndex(textPanes, finale, 0);
+    setFlowStackPaneState(finale, textPanes.length, textPanes.length, metrics, { allowFullStack: true });
+    syncFlowStackActiveState(textPanes, textPanes.length, { finale, dots: textDots });
     cards.forEach((card, i) => {
       setDesafioCardTransform(card, getDesafioCardSlot(i, 0), { alpha: 1 });
     });
@@ -1518,18 +1512,17 @@ function initDesafioParallax() {
 
   if (prefersReducedMotion.matches) {
     showReduced();
-    gsap.set(finale, { autoAlpha: 1 });
     return;
   }
 
   gsap.set(title, { y: -DESAFIO_TITLE_DROP_OFFSET, autoAlpha: 0 });
-  setDesafioActiveTextPane(textPanes, 0, finale);
+  const metrics = getDesafioFlowStackMetrics();
+
   textPanes.forEach((pane, i) => {
-    setDesafioTextTransform(pane, getDesafioStackSlot(i), { alpha: 0, enter: true });
+    setFlowStackPaneState(pane, i, -1, metrics, { hidden: i !== 0, entering: i === 0 });
   });
-  setDesafioTextTransform(finale, getDesafioStackSlot(textPanes.length), { alpha: 0, enter: true });
-  gsap.set(finale, { visibility: 'hidden' });
-  setDesafioStackZIndex(textPanes, finale, 0);
+  gsap.set(finale, { autoAlpha: 0, visibility: 'hidden' });
+
   cards.forEach((card, i) => {
     setDesafioCardTransform(card, getDesafioCardSlot(i, 0), { alpha: 0, enter: true });
   });
@@ -1546,7 +1539,10 @@ function initDesafioParallax() {
       scrub: SCROLL_SCRUB_SMOOTH,
       anticipatePin: 1,
       invalidateOnRefresh: true,
-      onUpdate: () => syncStackTextActiveState(textPanes, { finale }),
+      onUpdate: () => {
+        syncStackTextActiveState(textPanes, { finale });
+        syncFlowStackDotsFromItems(textDots, [...textPanes, finale]);
+      },
     },
   });
   desafioParallaxTimeline = tl;
@@ -1588,113 +1584,52 @@ function initDesafioParallax() {
     const outgoingStart = getDesafioOutgoingStart(textEnterStart);
 
     if (groupIndex === 0) {
-      tl.call(
-        () => {
-          setDesafioStackZIndex(textPanes, finale, 0);
-        },
-        null,
-        textEnterStart,
-      );
-
-      textPanes.forEach((pane, i) => {
-        addDesafioTextEnter(tl, pane, getDesafioStackSlot(i), textEnterStart, i, 0);
-      });
-      addDesafioTextEnter(
-        tl,
-        finale,
-        getDesafioStackSlot(textPanes.length),
-        textEnterStart,
-        textPanes.length,
-        0,
-        { reveal: false },
-      );
-      tl.call(() => hideStackFinalePane(finale), null, textEnterStart);
+      animateFlowStackStep(tl, textPanes, 0, textEnterStart, DESAFIO_TEXT_SCROLL_DUR, metrics);
+      tl.set(finale, { autoAlpha: 0, visibility: 'hidden' }, textEnterStart);
+      tl.call(() => syncFlowStackActiveState(textPanes, 0, { finale, dots: textDots }), null, textEnterStart);
     } else {
-      const outgoing = textPanes[groupIndex - 1];
-      const rising = isFinaleStep
-        ? [finale]
-        : [...textPanes.slice(groupIndex), finale];
-
-      tl.call(
-        () => {
-          setDesafioStackZIndex(textPanes, finale, groupIndex, groupIndex - 1);
-        },
-        null,
-        textEnterStart,
-      );
-
       animateDesafioCardsToFan(tl, cards, groupIndex, textEnterStart);
 
       if (isFinaleStep) {
-        const frontSlot = getDesafioStackSlot(0);
-        const riseFrom = getStackFinaleRiseFromSlot(frontSlot);
-        tl.set(
+        const backPane = textPanes[textPanes.length - 1];
+        animateFlowStackFinaleStep(
+          tl,
           finale,
-          {
-            xPercent: -50,
-            yPercent: 0,
-            x: riseFrom.x,
-            y: riseFrom.y,
-            rotation: riseFrom.rotate,
-          },
+          backPane ? [backPane] : [],
+          textPanes.length,
           textEnterStart,
-        );
-        tl.to(
-          finale,
-          animateDesafioTextMove(frontSlot, {
-            duration: DESAFIO_TEXT_SCROLL_DUR,
-            ease: 'none',
-          }),
-          textEnterStart,
-        );
-      } else {
-        rising.forEach((el, i) => {
-          tl.to(
-            el,
-            animateDesafioTextMove(getDesafioStackSlot(i), {
-              duration: DESAFIO_TEXT_SCROLL_DUR,
-              ease: 'none',
-            }),
-            textEnterStart,
-          );
-        });
-      }
-
-      if (isFinaleStep) {
-        tl.to(
-          finale,
-          {
-            autoAlpha: 1,
-            visibility: 'visible',
-            duration: DESAFIO_TEXT_SCROLL_DUR,
-            ease: 'none',
-          },
-          textEnterStart,
+          DESAFIO_TEXT_SCROLL_DUR,
+          metrics,
+          { riseFromY: getFlowStackFinaleRiseY() },
         );
         tl.call(
-          () => {
-            setDesafioStackZIndex(textPanes, finale, textPanes.length);
-          },
+          () => syncFlowStackActiveState(textPanes, textPanes.length, { finale, dots: textDots }),
           null,
           textEnterStart,
         );
+        if (backPane) {
+          animateFlowStackOutgoing(tl, backPane, outgoingStart, DESAFIO_TEXT_FADE_SCROLL_DUR, {
+            x: DESAFIO_TEXT_EXIT_X,
+          });
+        }
       } else {
-        setStackTextOpacities(tl, textPanes, groupIndex, textEnterStart, {
-          keepOutgoingIndex: groupIndex - 1,
-        });
-        tl.call(() => hideStackFinalePane(finale), null, textEnterStart);
-      }
-
-      if (outgoing) {
-        tl.to(
-          outgoing,
-          {
-            ...animateDesafioTextExit(),
-            opacity: 0,
-            ease: 'none',
-          },
-          outgoingStart,
+        animateFlowStackStep(
+          tl,
+          textPanes,
+          groupIndex,
+          textEnterStart,
+          DESAFIO_TEXT_SCROLL_DUR,
+          metrics,
         );
+        tl.set(finale, { autoAlpha: 0, visibility: 'hidden' }, textEnterStart);
+        tl.call(
+          () => syncFlowStackActiveState(textPanes, groupIndex, { finale, dots: textDots }),
+          null,
+          textEnterStart,
+        );
+        animateFlowStackOutgoing(tl, textPanes[groupIndex - 1], outgoingStart, DESAFIO_TEXT_FADE_SCROLL_DUR, {
+          x: DESAFIO_TEXT_EXIT_X,
+        });
       }
     }
   }
@@ -1855,58 +1790,10 @@ const initFlipCards = () => {
 };
 
 /* =============================================================================
-   DÓNDE — carrusel + galería fullscreen
+   DÓNDE — carrusel fan + galería fullscreen
 ============================================================================= */
 function initCarousel() {
-  const thumbs = Array.from(document.querySelectorAll('.thumb'));
-  const mainImg = document.getElementById('carouselMain');
-  const prevBtn = document.querySelector('.carousel-arrow--prev');
-  const nextBtn = document.querySelector('.carousel-arrow--next');
-
-  if (!thumbs.length || !mainImg) return;
-
-  let current = 0;
-
-  function goTo(index) {
-    current = (index + thumbs.length) % thumbs.length;
-
-    mainImg.classList.add('fade');
-    setTimeout(() => {
-      mainImg.src = thumbs[current].dataset.src;
-      mainImg.alt = thumbs[current].querySelector('img').alt;
-      mainImg.classList.remove('fade');
-    }, 250);
-
-    thumbs.forEach((t) => t.classList.remove('active'));
-    thumbs[current].classList.add('active');
-    thumbs[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }
-
-  thumbs.forEach((thumb, i) => {
-    thumb.addEventListener('click', () => goTo(i));
-  });
-
-  prevBtn?.addEventListener('click', () => goTo(current - 1));
-  nextBtn?.addEventListener('click', () => goTo(current + 1));
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') goTo(current - 1);
-    if (e.key === 'ArrowRight') goTo(current + 1);
-  });
-
-  mainImg.style.cursor = 'zoom-in';
-  const overlay = document.getElementById('fullscreenOverlay');
-  const overlayImg = document.getElementById('fullscreenImage');
-
-  if (overlay && overlayImg) {
-    mainImg.addEventListener('click', () => {
-      overlayImg.src = mainImg.src;
-      overlay.classList.add('show');
-    });
-    overlay.addEventListener('click', () => {
-      overlay.classList.remove('show');
-    });
-  }
+  initWhereCarousel({ reducedMotion: prefersReducedMotion.matches });
 }
 
 function initGallery() {

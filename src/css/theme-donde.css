@@ -1,6 +1,13 @@
 /*
   <section id="donde"> — #where, video, carrusel.
+  Por encima del último .wrap (data-stack-3, z-index 6) para que el carrusel no quede tapado.
 */
+#donde.theme-container {
+  position: relative;
+  z-index: 7;
+  overflow: visible;
+}
+
 #where {
   position: relative;
   width: 100%;
@@ -14,6 +21,7 @@
   text-align: center;
   box-sizing: border-box;
   background-color: var(--section-bg);
+  overflow: visible;
 }
 
 #where p b {
@@ -95,14 +103,14 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  margin-bottom: 0;
   text-align: left;
 }
 
 .evento {
   flex: 1;
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
   align-items: flex-start;
 }
 
@@ -129,111 +137,135 @@
   }
 }
 
-/* Carrusel */
 .carousel {
-  width: 100%;
-}
-
-.carousel-stage {
+  --carousel-card-width: clamp(10rem, 20vw, 17rem);
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  z-index: 8;
+  isolation: isolate;
+  width: 100%;
+  height: clamp(22rem, 54vh, 36rem);
+  overflow: visible;
+  margin-top: -1.25rem;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+  padding-top: 0;
+  padding-bottom: clamp(1.25rem, 4vh, 2rem);
+  cursor: none;
+  touch-action: none;
+  outline: none;
+  box-sizing: border-box;
 }
 
-.carousel-viewport {
-  flex: 1;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
+.carousel:focus-visible {
+  box-shadow: inset 0 0 0 3px var(--morado-oscuro);
   border-radius: 0.5rem;
-  background: #111;
 }
 
-.carousel-viewport img {
+.carousel__cards-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+}
+
+.carousel__intro-arrow {
+  position: absolute;
+  left: 50%;
+  top: 26%;
+  z-index: 20;
+  width: clamp(3rem, 8vw, 4.5rem);
+  height: clamp(3rem, 8vw, 4.5rem);
+  color: var(--rosa);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.22));
+}
+
+.carousel__intro-arrow-svg {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: opacity 0.25s ease;
 }
 
-.carousel-viewport img.fade {
-  opacity: 0;
-}
-
-/* Flechas */
-.carousel-arrow {
-  background: none;
-  border: 2px solid currentColor;
-  color: inherit;
-  border-radius: 50%;
-  width: clamp(2rem, 5vw, 3rem);
-  height: clamp(2rem, 5vw, 3rem);
-  font-size: clamp(0.9rem, 2vw, 1.2rem);
-  cursor: pointer;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.carousel-arrow:hover {
-  background: var(--morado-oscuro);
-  color: var(--amarillo-oscuro);
-  transform: scale(1.10);
-  transition: transform 0.2s ease;
-}
-
-/* Miniaturas */
-.carousel-thumbs {
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: thin;
-}
-
-.carousel-thumbs::-webkit-scrollbar {
-  height: 4px;
-}
-
-.carousel-thumbs::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.carousel-thumbs::-webkit-scrollbar-thumb {
-  background: currentColor;
-  opacity: 0.4;
-  border-radius: 2px;
-}
-
-.thumb {
-  flex-shrink: 0;
-  width: clamp(60px, 12vw, 100px);
-  aspect-ratio: 1 / 1;
-  border: 2px solid transparent;
-  border-radius: 4px;
+.carousel__card {
+  position: absolute;
+  z-index: 1;
+  width: var(--carousel-card-width);
+  max-width: 280px;
+  min-width: 175px;
+  aspect-ratio: 0.6;
   overflow: hidden;
-  cursor: pointer;
-  padding: 0;
-  background: none;
-  transition: border-color 0.2s ease, opacity 0.2s ease;
-  opacity: 0.55;
+  border-radius: 0.65rem;
+  box-shadow: -4px 8px 14px rgba(45, 20, 58, 0.22);
+  user-select: none;
+  background: var(--morado-oscuro);
 }
 
-.thumb img {
+.carousel__card.is-fan-edge {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carousel__card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  pointer-events: none;
 }
 
-.thumb.active,
-.thumb:hover {
-  border-color: currentColor;
-  opacity: 1;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.carousel-cursor {
+  position: fixed;
+  left: -32px;
+  top: -32px;
+  z-index: 10000;
+  width: 64px;
+  height: 64px;
+  color: var(--rosa);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+}
+
+.carousel-cursor__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (hover: none) {
+  .carousel {
+    cursor: grab;
+  }
+
+  .carousel-cursor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .carousel__intro-arrow {
+    display: none;
+  }
 }
 
 /* Overlay fullscreen */

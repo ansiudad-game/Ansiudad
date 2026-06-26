@@ -71,11 +71,16 @@ export class StackMotionEffect {
         this.imageElements,
         {
           rotationZ: 10,
+          xPercent: 48,
+          yPercent: 38,
+          scale: 1,
         },
         {
           rotationX: 20,
           rotationZ: 280,
+          xPercent: -48,
           yPercent: -100,
+          scale: 1,
           stagger: 0.005,
         },
         0,

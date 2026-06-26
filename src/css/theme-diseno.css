@@ -208,7 +208,6 @@
 .flip-front h3,
 .flip-back h3 {
   font-family: var(--font-titles);
-  font-size: clamp(1.05rem, 2.8vw, 1.5rem);
   text-transform: uppercase;
   font-weight: 600;
   font-style: italic;
@@ -218,22 +217,31 @@
 }
 
 .flip-front h3 {
+  font-size: clamp(1.3rem, 3.6vw, 1.9rem);
   color: var(--amarillo-oscuro);
 }
 
 .flip-back h3 {
+  font-size: clamp(1.05rem, 2.8vw, 1.5rem);
   color: var(--morado-oscuro);
 }
 
 .flip-front p,
 .flip-back p {
   font-family: var(--font-family);
-  font-size: clamp(0.82rem, 1.9vw, 1rem);
   line-height: 1.4;
   margin: 0 0 0.45rem;
   flex: 1 1 auto;
   min-height: 0;
   overflow-wrap: anywhere;
+}
+
+.flip-front p {
+  font-size: clamp(0.95rem, 2.45vw, 1.2rem);
+}
+
+.flip-back p {
+  font-size: clamp(0.82rem, 1.9vw, 1rem);
 }
 
 .flip-front p strong,
@@ -265,6 +273,10 @@
   object-fit: contain;
   object-position: bottom center;
   filter: drop-shadow(-4px 8px 8px rgba(0, 0, 0, 0.18));
+}
+
+.flip-front .card-hint {
+  font-size: clamp(0.72rem, 1.6vw, 0.82rem);
 }
 
 .card-hint {
