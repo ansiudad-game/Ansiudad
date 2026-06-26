@@ -22,19 +22,26 @@
   padding-bottom: 0;
 }
 
-/* Título CONTACTO */
+#contacto .footer {
+  padding-top: calc(var(--section-wave-height) + clamp(1.5rem, 5vw, 3.5rem));
+}
+
+/* Título CONTACTO — debajo de la onda (section-top-wave) */
 .footer__title {
   font-family: var(--font-titles);
   font-weight: 900;
   font-style: italic;
   color: var(--morado-oscuro);
-  font-size: clamp(2.5rem, 10vw, 7rem);
-  line-height: 1.0;
+  font-size: clamp(2.5rem, 6vw, 7rem);
+  line-height: 1.05;
   text-transform: uppercase;
-  margin: clamp(2rem, 8vw, 4rem) 0 clamp(1.5rem, -20vw, 3rem);
+  margin: 0;
   hyphens: auto;
   overflow-wrap: anywhere;
+}
 
+.footer__title + .footer__divider {
+  margin-top: clamp(0.35rem, 1.2vw, 0.75rem);
 }
 
 /* Divisor */
@@ -43,7 +50,7 @@
   border: none;
   border-top: 1.5px solid currentColor;
   opacity: 0.2;
-  margin: clamp(2rem, 6vw, 4rem) 0;
+  margin: clamp(0.25rem, 2vw, 1.5rem) 0;
 }
 
 .footer__divider--bottom {
@@ -63,7 +70,7 @@
   margin: 0;
   font-family: var(--font-titles);
   font-size: clamp(1.35rem, 4.5vw, 2.25rem);
-  font-weight: 900;
+  font-weight: 400;
   font-style: italic;
   line-height: 1.05;
   text-transform: uppercase;
@@ -116,7 +123,6 @@ a.footer__experience-icon-link:hover {
   display: block;
   object-fit: contain;
 }
-
 .footer__experience-icon-link svg {
   fill: currentColor;
 }

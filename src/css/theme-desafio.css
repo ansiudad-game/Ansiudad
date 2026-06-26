@@ -101,13 +101,13 @@
   max-width: 210px;
   min-width: 0;
   aspect-ratio: 400 / 694;
-  padding: 3px;
+  padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-radius: 10px;
   align-items: stretch;
-  outline: 1px solid var(--rosa);
-  background: var(--rosa);
+  outline: none;
+  background: transparent;
   grid-template-areas: "card-img card-img";
 }
 
@@ -118,7 +118,7 @@
   width: 100%;
   max-width: 210px;
   margin: 0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  filter: drop-shadow(-4px 8px 8px rgba(0, 0, 0, 0.18));
   will-change: transform, opacity;
   transform-origin: 50% 88%;
 }
@@ -135,7 +135,7 @@
 
 #desafio .card__img {
   grid-area: card-img;
-  background-color: var(--rosa);
+  background-color: transparent;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -177,7 +177,7 @@
   border-radius: 10px;
   outline: none;
   backdrop-filter: blur(24px);
-  background: color-mix(in srgb, var(--morado-oscuro) 60%, transparent);
+  background: color-mix(in srgb, var(--morado-claro) 60%, transparent);
   box-shadow: 4px 12px 6px rgba(0, 0, 0, 0.28);
   box-sizing: border-box;
   transform-origin: 50% 0;
@@ -198,7 +198,7 @@
 
 .desafio-flow__text-pane p {
   margin: 0;
-  color: var(--rosa);
+  color: var(--morado-oscuro);
 }
 
 .desafio-flow__text-pane p b {

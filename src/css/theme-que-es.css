@@ -183,8 +183,9 @@
   grid-template-columns: 1fr 1fr;
   border-radius: 10px;
   align-items: stretch;
-  outline: 1px solid var(--amarillo-claro);
-  background: var(--amarillo-claro);
+  outline: none;
+  background: transparent;
+  border: none;
   grid-template-areas: "card-img card-img";
 }
 
@@ -195,7 +196,6 @@
   width: 100%;
   max-width: 255px;
   margin: 0;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
   will-change: transform, opacity;
   transform-origin: 50% 88%;
 }
@@ -209,7 +209,7 @@
 
 .card__img {
   grid-area: card-img;
-  background-color: var(--amarillo-claro);
+  background-color: transparent;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -217,6 +217,7 @@
   min-height: 0;
   height: 100%;
   border-radius: 6px 6px 0 0;
+  filter: drop-shadow(-4px 8px 8px rgba(0, 0, 0, 0.18));
   overflow: hidden;
 }
 

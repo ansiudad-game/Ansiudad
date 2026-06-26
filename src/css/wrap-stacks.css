@@ -41,8 +41,15 @@
 
 .content .card {
   grid-area: card;
-  background: rgba(255, 255, 255, 1);
+  background: transparent;
+  outline: none;
+  border: none;
+  padding: 0;
   pointer-events: auto;
+}
+
+.content .card__img {
+  background-color: transparent;
 }
 
 /* Último muro: evita scroll fantasma tras Contacto (igual que antes) */
