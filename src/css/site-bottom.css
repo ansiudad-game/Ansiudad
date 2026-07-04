@@ -1,6 +1,4 @@
-/*
-  <aside class="site-bottom"> — guía fija inferior (fuera de <main>).
-*/
+
 .site-bottom {
   position: fixed;
   left: 0;
@@ -29,23 +27,46 @@
   display: block;
   line-height: 0;
   text-decoration: none;
-  color: transparent;
 }
 
 .site-bottom__play-btn__ring {
+  --s: clamp(92px, 23vw, 100px);
+  --b: 3px;
+  --g: 6px;
+  --c: var(--morado-oscuro);
+
   position: relative;
   display: block;
-  width: clamp(92px, 23vw, 100px);
+  width: var(--s);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--morado-oscuro) 25%, transparent);
+  border: 1px solid var(--morado-oscuro);
+  background: color-mix(in srgb, var(--morado-oscuro) 45%, transparent);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(5.3px);
   box-shadow: 0 8px 4px rgba(62, 21, 129, 0.28);
+  outline: calc(var(--s) / 2) solid transparent;
+  outline-offset: calc(var(--s) / -2);
+  animation: site-bottom-pulse 1.5s infinite;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    background 0.2s ease,
+    outline 0.3s ease,
+    outline-offset 0.3s ease;
+}
+
+@keyframes site-bottom-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 
@@ -60,11 +81,13 @@
 
 .site-bottom__play-btn__label text {
   font-family: var(--font-titles);
-  font-size: 18px;
-  font-weight: 300;
-  font-style:normal ;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-style: normal;
   letter-spacing: 0.05em;
-  fill: currentColor;
+  fill: var(--amarillo-oscuro);
+  transition: fill 0.2s ease;
 }
 
 .site-bottom__play-btn__llama {
@@ -77,17 +100,23 @@
   height: auto;
 }
 
-.site-bottom__play-btn:hover .site-bottom__play-btn__ring{
+.site-bottom__play-btn:hover .site-bottom__play-btn__ring {
+  animation: none;
   transform: translateY(-2px) scale(1.04);
   background: color-mix(in srgb, var(--amarillo-oscuro) 45%, transparent);
   backdrop-filter: blur(5.3px);
   -webkit-backdrop-filter: blur(5.3px);
   box-shadow: inset 0px -16px 24px rgba(62, 21, 129, 0.25);
+  outline: var(--b) solid var(--c);
+  outline-offset: var(--g);
 }
 
 .site-bottom__play-btn:hover .site-bottom__play-btn__label text {
+  font-size: 14px;
   font-weight: 400;
-  color: var(--morado-oscuro);
+  text-transform: uppercase;
+  font-style: bold;
+  fill: var(--morado-oscuro);
 }
 
 .site-bottom__play-btn:focus-visible {
@@ -96,6 +125,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .site-bottom__play-btn__ring {
+    animation: none;
     transition: none;
   }
 
@@ -106,7 +136,9 @@
 
 @media (max-width: 767px) {
   .site-bottom__play-btn__ring {
-    width: clamp(72px, 17vw, 86px);
+    --s: clamp(72px, 17vw, 86px);
+    --b: 6px;
+    --g: 10px;
   }
 
   .site-bottom__play-btn__label text {

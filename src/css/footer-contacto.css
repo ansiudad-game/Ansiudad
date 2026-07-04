@@ -100,40 +100,25 @@
   color: inherit;
 }
 
-.footer__experience-item--ig:hover {
-  opacity: 0.72;
-}
-
 .footer__experience-icon-link {
-  display: grid;
+  display: inline-flex;
   place-items: center;
-  width: 3.35rem;
-  height: 3.35rem;
-  border: 1.5px solid currentColor;
-  border-radius: 50%;
-  color: inherit;
+  color: var(--morado-oscuro);
   text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.15s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-a.footer__experience-icon-link:hover {
-  opacity: 0.72;
-  transform: scale(1.04);
+a.footer__experience-icon-link:hover,
+.footer__experience-item--ig:hover .footer__experience-icon-link {
+  color: var(--rosa);
+  transform: scale(1.15);
 }
 
-.footer__experience-icon-link svg,
-.footer__experience-icon-img {
+.footer__experience-icon-link svg {
   width: 1.65rem;
   height: 1.65rem;
   display: block;
-  object-fit: contain;
-}
-.footer__experience-icon-link svg {
   fill: currentColor;
-}
-
-.footer__experience-icon-img {
-  object-fit: contain;
 }
 
 .footer__experience-text {

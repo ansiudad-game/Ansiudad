@@ -48,7 +48,8 @@
   font-weight: 900;
   font-style: italic;
   text-transform: uppercase;
-  font-size: clamp(1.75rem, 9vw, 7rem);
+  font-size: clamp(1.75rem, 7vw, 6rem);
+  line-height: 1.05;
   position: relative;
   margin: -60px;
   text-align: center;
@@ -127,7 +128,6 @@
   display: flex;
   align-items: center;
   text-align: left;
-  font-size: clamp(1rem, 2.8vw, 1.8em);
   border-radius: 16px;
   outline: none;
   backdrop-filter: blur(24px);
@@ -148,7 +148,8 @@
 
 .what-flow__text-pane p {
   margin: 0;
-  line-height: 1.35;
+  font-size: clamp(0.95rem, 2.45vw, 1.2rem);
+  line-height: 1.4;
   color: var(--amarillo-claro);
   font-weight: 300;
 }
