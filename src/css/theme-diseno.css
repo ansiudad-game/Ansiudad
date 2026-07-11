@@ -112,7 +112,7 @@
 
 .flip-front {
   background-color: var(--morado-oscuro);
-  border: 2px solid var(--amarillo-oscuro);
+  border: none;
   color: var(--amarillo-oscuro);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
 }
@@ -121,7 +121,7 @@
   background-color: var(--rosa);
   color: var(--morado-oscuro);
   transform: rotateY(180deg);
-  border: 2px solid var(--morado-oscuro);
+  border: none;
   overflow: hidden;
   display: flex;
   flex-direction: column;

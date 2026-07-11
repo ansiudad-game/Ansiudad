@@ -19,6 +19,312 @@ main {
     height: 100%;
 }
 
+.juego-home-btn {
+    --juego-home-btn-w: 12rem;
+    --juego-home-btn-h: 3.5rem;
+    --juego-home-btn-slide-h: 3rem;
+
+    position: fixed;
+    top: max(8px, env(safe-area-inset-top, 0px));
+    left: max(12px, env(safe-area-inset-left, 0px));
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--juego-home-btn-w);
+    height: var(--juego-home-btn-h);
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--morado-oscuro) 75%, transparent);
+    color: var(--amarillo-oscuro);
+    font-family: var(--font-titles, "HelveticaNeue", sans-serif);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+.juego-home-btn__slide {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+    height: var(--juego-home-btn-slide-h);
+    border-radius: 9999px;
+    background-color: var(--amarillo-oscuro);
+    transition: width 0.5s ease;
+}
+
+.juego-home-btn__logo {
+    display: block;
+    width: auto;
+    height: 1.125rem;
+    max-width: 100%;
+}
+
+.juego-home-btn__label {
+    position: relative;
+    z-index: 0;
+    transform: translateX(0.5rem);
+    transition: color 0.5s ease;
+}
+
+.juego-home-btn:hover .juego-home-btn__slide,
+.juego-home-btn:focus-visible .juego-home-btn__slide {
+    width: calc(var(--juego-home-btn-w) - 8px);
+}
+
+.juego-home-btn:hover .juego-home-btn__label,
+.juego-home-btn:focus-visible .juego-home-btn__label {
+    color: #fff;
+}
+
+.juego-home-btn:focus-visible {
+    outline: 2px solid var(--morado-oscuro, #3e1581);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .juego-home-btn__slide,
+    .juego-home-btn__label {
+        transition: none;
+    }
+}
+
+.juego-slide-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    pointer-events: auto;
+}
+
+.juego-slide-nav--next-only {
+    justify-content: center;
+}
+
+.juego-slide-nav--back-only {
+    justify-content: flex-start;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+#slide3.show,
+#slide4.show,
+#slide5.show,
+#slide7.show {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.juego-nav-btn {
+    --juego-nav-btn-size: 3.5rem;
+    --juego-nav-btn-slide-h: 3rem;
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--juego-nav-btn-size);
+    height: var(--juego-nav-btn-size);
+    padding: 0;
+    border: none;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--morado-oscuro) 75%, transparent);
+    overflow: visible;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.juego-nav-btn--labeled {
+    --juego-nav-btn-labeled-w: 9rem;
+    width: var(--juego-nav-btn-labeled-w);
+}
+
+.juego-nav-btn__slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42%;
+    height: 100%;
+    border: 4px solid transparent;
+    border-radius: 9999px;
+    background-color: var(--amarillo-oscuro);
+    color: var(--morado-oscuro);
+    box-sizing: border-box;
+    transition:
+        width 0.5s ease,
+        height 0.5s ease,
+        top 0.5s ease,
+        border-radius 0.5s ease,
+        border-color 0.5s ease;
+}
+
+.juego-nav-btn--next .juego-nav-btn__slide,
+.juego-nav-btn--labeled .juego-nav-btn__slide {
+    border-radius: 9999px 0.85rem 0.85rem 9999px;
+}
+
+.juego-nav-btn--labeled .juego-nav-btn__slide {
+    width: 2.75rem;
+}
+
+.juego-nav-btn--labeled:hover .juego-nav-btn__slide,
+.juego-nav-btn--labeled:focus-visible .juego-nav-btn__slide,
+.juego-nav-btn--next:hover .juego-nav-btn__slide,
+.juego-nav-btn--next:focus-visible .juego-nav-btn__slide {
+    width: 100%;
+    border-radius: 9999px;
+}
+
+.juego-nav-btn__label {
+    position: relative;
+    z-index: 0;
+    font-family: var(--font-titles, "HelveticaNeue", sans-serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--amarillo-oscuro);
+    transform: translateX(0.5rem);
+}
+
+.juego-nav-btn--labeled:hover .juego-nav-btn__slide,
+.juego-nav-btn--labeled:focus-visible .juego-nav-btn__slide {
+    width: 100%;
+}
+
+.juego-slide-nav--setup {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.juego-nav-btn--back .juego-nav-btn__slide {
+    left: auto;
+    right: 0;
+    width: 42%;
+    border-radius: 0.85rem 9999px 9999px 0.85rem;
+}
+
+.juego-nav-btn--back:hover .juego-nav-btn__slide,
+.juego-nav-btn--back:focus-visible .juego-nav-btn__slide {
+    width: 100%;
+    border-radius: 9999px;
+}
+
+.juego-nav-btn__icon {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: transform 0.5s ease;
+}
+
+.juego-nav-btn--next .juego-nav-btn__icon {
+    transform: scaleX(-1);
+}
+
+.juego-nav-btn:hover .juego-nav-btn__slide,
+.juego-nav-btn:focus-visible .juego-nav-btn__slide {
+    width: 100%;
+    border-color: var(--morado-oscuro);
+}
+
+.juego-nav-btn:hover .juego-nav-btn__icon,
+.juego-nav-btn:focus-visible .juego-nav-btn__icon {
+    transform: scale(1.45);
+}
+
+.juego-nav-btn--next:hover .juego-nav-btn__icon,
+.juego-nav-btn--next:focus-visible .juego-nav-btn__icon {
+    transform: scaleX(-1) scale(1.45);
+}
+
+.juego-nav-btn:active .juego-nav-btn__icon,
+.juego-nav-btn:hover:active .juego-nav-btn__icon,
+.juego-nav-btn:focus-visible:active .juego-nav-btn__icon {
+    transform: scale(0.82);
+    transition: transform 0.12s ease;
+}
+
+.juego-nav-btn--next:active .juego-nav-btn__icon,
+.juego-nav-btn--next:hover:active .juego-nav-btn__icon,
+.juego-nav-btn--labeled:active .juego-nav-btn__icon,
+.juego-nav-btn--labeled:hover:active .juego-nav-btn__icon {
+    transform: scaleX(-1) scale(0.82);
+}
+
+.juego-nav-btn--back:active .juego-nav-btn__icon,
+.juego-nav-btn--back:hover:active .juego-nav-btn__icon {
+    transform: scale(0.82);
+}
+
+.juego-nav-btn:focus-visible {
+    outline: 2px solid var(--morado-oscuro, #3e1581);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .juego-nav-btn__slide,
+    .juego-nav-btn__icon {
+        transition: none;
+    }
+}
+
+.llama-intro .text-wrapper,
+.llama-instructions .text-wrapper,
+.llama-wait .text-wrapper,
+#llama-helper .right-wrapper {
+    background-color: color-mix(in srgb, var(--morado-claro) 85%, transparent);
+    color: var(--amarillo-claro);
+}
+
+.juego-text-box,
+.cards-container .card-wrapper {
+    background-color: color-mix(in srgb, var(--morado-oscuro) 85%, transparent);
+    color: var(--amarillo-oscuro);
+}
+
+.llama-intro .text-wrapper p,
+.llama-intro .text-wrapper h3,
+.llama-instructions .text-wrapper p,
+.llama-instructions .text-wrapper h2,
+.llama-instructions .text-wrapper h3,
+.llama-wait .text-wrapper p,
+.llama-wait .text-wrapper h3,
+#llama-helper .text-globe h2,
+#llama-helper .text-globe p {
+    color: var(--amarillo-claro);
+}
+
+.cards-container .card-wrapper p,
+.cards-container .card-wrapper h2,
+.cards-container .card-wrapper li,
+.guidelines,
+p.guideline-description,
+.llama-response h1,
+.llama-response h2,
+.llama-response h3,
+.llama-response p {
+    color: var(--amarillo-oscuro);
+}
+
 .webgl
 {
     z-index: 0;
@@ -35,6 +341,11 @@ main {
     padding: 140px 30px 30px;
     box-sizing: border-box;
     color: white;
+}
+
+#llama-helper.is-intro-pending {
+    opacity: 0;
+    pointer-events: none;
 }
 
 #llama-helper {
@@ -87,9 +398,6 @@ main {
         flex: 1;
         padding: 14px;
         border-radius: 14px;
-        background-color: rgba(20,20,20, 0.5);
-        backdrop-filter: blur(20px);
-        color: #fff;
         box-sizing: border-box;
     }
 
@@ -108,14 +416,8 @@ main {
             margin-top: 10px;
         }
 
-button#firstStepBtn.regular-btn.submitBtn {
-    background-color: #aa9ffd;
-    padding: 0.55rem 1rem;
-    font-family: "HelveticaNeue", sans-serif;
-    border: none;
-    border-radius: 50px;
-    color: #272723;
-    font-size: 0.82rem;
+button#firstStepBtn.juego-nav-btn {
+    margin-top: 10px;
 }
 
 /* Global UI */
@@ -125,7 +427,7 @@ button#firstStepBtn.regular-btn.submitBtn {
 }
 
 article#juegoContainer.pageContainer {
-    padding: 80px 0 0;
+    padding: 64px 0 0;
 }
 /* Slides shared classes */
 .allSlidesContainer {
@@ -181,11 +483,9 @@ article#juegoContainer.pageContainer {
     -webkit-overflow-scrolling: touch;
 }
 
-.horizontalStackWrapper > .goToNextStepBtn {
+.horizontalStackWrapper > .juego-slide-nav {
     flex-shrink: 0;
     align-self: center;
-    margin-top: 4px;
-    margin-bottom: 8px;
 }
 
 .leftToRightWrapper {
@@ -279,8 +579,6 @@ article#juegoContainer.pageContainer {
         width: 400px;
         padding: 20px 20px;
         border-radius: 5px;
-        background-color: rgba(20,20,20, 0.75);
-        backdrop-filter: blur(20px);
     }
 
 
@@ -317,14 +615,20 @@ article#juegoContainer.pageContainer {
     padding-right: 0;
 }
 
-/* Crear incidente — bloques expandidos en columna, sin scroll interno */
-#slide5 .leftToRightWrapper {
+/* Crear incidente — equipos e incidentes en fila + navegación aparte */
+#slide5 .slide5-layout {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
     flex-direction: column;
     align-items: stretch;
-    height: auto;
-    min-height: 100%;
-    overflow: visible;
     gap: 16px;
+    padding: 12px 20px 20px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 #slide5 .llama-instructions {
@@ -335,31 +639,30 @@ article#juegoContainer.pageContainer {
     padding-right: 0;
 }
 
-#slide5 .cards-container,
-#slide5 .cards-container.fitHeight {
+#slide5 .slide5-cards-row,
+#slide5 .cards-container.fitHeight.slide5-cards-row {
     width: 100%;
     height: auto;
     max-height: none;
-    flex-direction: column;
+    margin: 0;
+    flex-direction: row;
     align-items: stretch;
     overflow: visible;
-    margin: 0;
 }
 
-#slide5 .cards-container .card-wrapper,
-#slide5 .cards-container .card-wrapper.fitHeight,
-#slide5 .cards-container .card-wrapper.llama-input-cards {
-    width: 100%;
+#slide5 .slide5-cards-row .card-wrapper,
+#slide5 .slide5-cards-row .card-wrapper.fitHeight,
+#slide5 .slide5-cards-row .card-wrapper.llama-input-cards {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
     height: auto;
     max-height: none;
     overflow: visible;
 }
 
-#slide5 .llama-instructions .text-wrapper button {
-    position: static;
-    margin-top: 16px;
+#slide5 .llama-instructions .text-wrapper {
     margin-bottom: 0;
-    box-shadow: none;
 }
 
 .llama-instructions {
@@ -410,8 +713,6 @@ article#juegoContainer.pageContainer {
         /* height: 60%; */
         padding: 40px 30px;
         border-radius: 5px;
-        background-color: rgba(20,20,20, 0.5);
-        backdrop-filter: blur(80px);
     }
 
         .llama-instructions .text-wrapper h2 {
@@ -425,7 +726,7 @@ article#juegoContainer.pageContainer {
         }
 
         .llama-instructions .text-wrapper button {
-            margin-top: 48px;
+            margin-top: 0;
         }
 
 .llama-waiting-container {
@@ -518,8 +819,6 @@ article#juegoContainer.pageContainer {
         flex-direction: column;
         gap: 24px;
         border-radius: 10px;
-        background-image: linear-gradient(155deg, rgba(102, 35, 125, 0.75), rgba(109, 54, 160, 0.75));
-        backdrop-filter: blur(20px);
         overflow: hidden;
     }
     .cards-container .card-wrapper.fitHeight {
@@ -543,7 +842,7 @@ div.guideline-container {
     display: flex;
     align-items: flex-start;
     justify-content: flex-end;
-    border-bottom: 1px solid rgba(255,255,255, 0.2);
+    border-bottom: 1px solid color-mix(in srgb, var(--amarillo-oscuro) 35%, transparent);
 }
     .card-wrapper.llama-input-cards .guideline-container {
         height: 50px;
@@ -573,6 +872,13 @@ p.guideline-description {
     margin-top: 20px;
 }
 
+.input-label,
+.input-label.input-element,
+.input-number,
+label.input-label {
+    color: var(--amarillo-oscuro);
+}
+
 .input-element {
     margin-bottom: 0;
 }
@@ -584,9 +890,8 @@ p.guideline-description {
 h3#loading-title {
     padding: 15px 30px;
     border-radius: 20px;
-    background-color: rgba(70, 41, 65, .8);
-    box-shadow: 0 0 5px #ffffff;
-    backdrop-filter: blur(10px);
+    box-shadow: 0 0 5px color-mix(in srgb, var(--amarillo-claro) 50%, transparent);
+    color: var(--amarillo-claro);
 }
 img#loading-animation {
     width: 256px;
@@ -594,24 +899,9 @@ img#loading-animation {
     animation: oscillateY 2s infinite ease-in-out;
 }
 
-.regular-btn.goToNextStepBtn {
-    color: #dbdbdb;
-    font-family: "HelveticaNeue", sans-serif;
-    font-size: larger;
-    padding: 1rem 2rem;
-    border-radius: 2px;
-    border: none;
-    background-color: rgb(100, 19, 154);
-    transition: box-shadow 0.13s ease-in-out, color 0.13s ease-in-out;
-}
-
-.regular-btn.goToNextStepBtn:hover {
-    color: #ffffff;
-}
-
-.regular-btn.goToNextStepBtn#submit:hover {
-    box-shadow: 0px 0px 40px rgba(148, 33, 255, 0.8);
-    color: #ffffff;
+.regular-btn.goToNextStepBtn,
+.regular-btn.goToPrevStepBtn {
+    display: none;
 }
 
 #loader-container {
@@ -622,14 +912,49 @@ img#loading-animation {
     justify-content: center;
     align-items: center;
 }
-#loader {
+
+.juego-loader {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 20%;
     aspect-ratio: 1;
+}
+
+.juego-loader__ring {
+    --color-1: #514b82;
+
+    position: absolute;
+    inset: 0;
     border-radius: 50%;
-    border: 24px solid #514b82;
-    animation:
-    l20-1 0.8s infinite linear alternate,
-    l20-2 1.6s infinite linear;
+    border-top: 24px solid var(--color-1);
+    border-right: 24px solid transparent;
+    box-sizing: border-box;
+    animation: juego-loader-rotation 1s linear infinite;
+}
+
+.juego-loader__logo {
+    position: relative;
+    z-index: 1;
+    width: 58%;
+    height: auto;
+    display: block;
+}
+
+@keyframes juego-loader-rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .juego-loader__ring {
+        animation: none;
+    }
 }
 div.theme-input-group {
     display: flex;
@@ -797,22 +1122,6 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     margin-bottom: 10px;
 }
 
-@keyframes l20-1{
-   0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
-   12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
-   25%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 100% 100%, 100% 100% )}
-   50%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
-   62.5% {clip-path: polygon(50% 50%,100%    0, 100%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
-   75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
-   100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
-}
-@keyframes l20-2{ 
-  0%    {transform:scaleY(1)  rotate(0deg)}
-  49.99%{transform:scaleY(1)  rotate(135deg)}
-  50%   {transform:scaleY(-1) rotate(0deg)}
-  100%  {transform:scaleY(-1) rotate(-135deg)}
-}
-
 @keyframes oscillate{
     0% {box-shadow: 0 0 40px #ffffff;}
     50% {box-shadow: 0 0 40px rgba(255, 255, 255, 0);}
@@ -827,27 +1136,27 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 /* ── Viewport bajo (altura) ── */
 @media (max-height: 767px) and (max-width: 767px) {
     .allSlidesContainer {
-        height: calc(100dvh - 72px);
-        max-height: calc(100dvh - 72px);
+        height: calc(100dvh - 64px);
+        max-height: calc(100dvh - 64px);
         overflow-y: auto;
     }
 
     article#juegoContainer.pageContainer {
-        padding: 72px 0 0;
+        padding: 64px 0 0;
     }
 }
 
 /* ── Móvil (hasta tablet): apilado expandido + un solo scroll (slide) ── */
 @media (max-width: 767px) {
     article#juegoContainer.pageContainer {
-        padding: 72px 0 0;
+        padding: 64px 0 0;
         height: 100%;
         box-sizing: border-box;
     }
 
     .allSlidesContainer {
-        height: calc(100dvh - 72px);
-        max-height: calc(100dvh - 72px);
+        height: calc(100dvh - 64px);
+        max-height: calc(100dvh - 64px);
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
@@ -868,7 +1177,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     .slideContainer.show {
         position: relative;
         height: auto;
-        min-height: calc(100dvh - 72px);
+        min-height: calc(100dvh - 64px);
         overflow: visible;
         padding: 0 16px 32px;
         box-sizing: border-box;
@@ -876,7 +1185,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 
     .horizontalStackWrapper,
     .leftToRightWrapper,
-    #slide5 .leftToRightWrapper,
+    #slide5 .slide5-layout,
     #slide7 .leftToRightWrapper {
         flex-direction: column;
         align-items: stretch;
@@ -893,7 +1202,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 
     .horizontalStackWrapper .cards-container,
     .leftToRightWrapper .cards-container,
-    #slide5 .cards-container,
+    #slide5 .slide5-cards-row,
     #slide7 .cards-container {
         flex: none;
         width: 100%;
@@ -931,15 +1240,26 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         overflow: visible;
     }
 
-    .horizontalStackWrapper > .goToNextStepBtn,
-    .llama-instructions .text-wrapper button,
-    #slide3 .llama-instructions .text-wrapper button,
-    #slide4 .llama-instructions .text-wrapper button,
-    #slide5 .llama-instructions .text-wrapper button {
+    #slide5 .slide5-cards-row,
+    #slide5 .cards-container.fitHeight.slide5-cards-row {
+        flex-direction: column;
+    }
+
+    #slide5 .slide5-cards-row .card-wrapper,
+    #slide5 .slide5-cards-row .card-wrapper.fitHeight,
+    #slide5 .slide5-cards-row .card-wrapper.llama-input-cards {
+        width: 100%;
+        flex: none;
+    }
+
+    .horizontalStackWrapper > .juego-slide-nav,
+    .llama-instructions + .juego-slide-nav,
+    #slide3 .juego-slide-nav,
+    #slide4 .juego-slide-nav,
+    #slide5 .juego-slide-nav--setup {
         position: static;
         margin-top: 16px;
         margin-bottom: 0;
-        box-shadow: none;
         align-self: center;
     }
 
@@ -1012,7 +1332,6 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     }
 
     .llama-instructions .text-wrapper button,
-    .regular-btn.goToNextStepBtn,
     button#another-one,
     button#back-home {
         font-size: 0.82rem;
@@ -1073,7 +1392,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 /* ── Tablet ── */
 @media (min-width: 768px) {
     article#juegoContainer.pageContainer {
-        padding: 80px 0 0;
+        padding: 64px 0 0;
     }
 
     .slideContainer.show {
@@ -1123,17 +1442,20 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         line-height: 1.4;
     }
 
-    button#firstStepBtn.regular-btn.submitBtn {
-        padding: 1rem 2rem;
-        font-size: 1rem;
+    button#firstStepBtn.juego-nav-btn {
+        margin-top: 12px;
     }
 
-    .horizontalStackWrapper > .goToNextStepBtn,
-    .llama-instructions .text-wrapper button {
+    .horizontalStackWrapper > .juego-slide-nav,
+    .llama-instructions + .juego-slide-nav,
+    #slide3 .juego-slide-nav,
+    #slide4 .juego-slide-nav,
+    #slide5 .juego-slide-nav--setup,
+    #slide7 .juego-slide-nav {
         position: static;
-        box-shadow: none;
         margin-top: 16px;
         margin-bottom: 0;
+        align-self: center;
     }
 
     #slide3 .llama-instructions,
@@ -1156,7 +1478,6 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         font-size: 1rem;
     }
 
-    .regular-btn.goToNextStepBtn,
     button#another-one,
     button#back-home {
         font-size: larger;

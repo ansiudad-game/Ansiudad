@@ -23,6 +23,9 @@ export default class World
             this.TunnelScene = new TunnelScene()
 
             this.positionScenes()
+            this.CityScene.playIntroSequence(() => {
+                this.experience.events.trigger('cityIntroComplete')
+            })
         })
     }
     

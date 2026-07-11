@@ -1,5 +1,6 @@
 import Experience from '../Experience.js'
 import EventEmitter from './EventEmitter.js'
+import gsap from 'gsap'
 export default class UIManager extends EventEmitter {
     constructor() {
         super()
@@ -12,9 +13,17 @@ export default class UIManager extends EventEmitter {
         this.appState = this.experience.appState
         this.currentView = this.appState.currentStep
         this.response = null
+        this.cityIntroComplete = false
         this.initUI();
 
         this.addHandlers();
+
+        this.events.on('cityIntroComplete', () => {
+            this.cityIntroComplete = true
+            if (this.appState.currentStep === 0) {
+                this.showLlamaHelperIntro()
+            }
+        })
 
         this.showInputNumber();
         // Bind the method to preserve context
@@ -31,6 +40,7 @@ export default class UIManager extends EventEmitter {
         }
 
         this.initTriggers();
+        this.handleLlamaHelper(this.appState.currentStep);
     }
 
     initTriggers() {
@@ -45,6 +55,13 @@ export default class UIManager extends EventEmitter {
             element.addEventListener('click', this.fireNextStep.bind(this));
         });
 
+        this.prevStepTriggers = [];
+        const prevButtons = document.querySelectorAll('.goToPrevStepBtn');
+        prevButtons.forEach(element => { this.prevStepTriggers.push(element) });
+        this.prevStepTriggers.forEach(element => {
+            element.addEventListener('click', this.firePrevStep.bind(this));
+        });
+
         const goToLlamaBtns = document.querySelectorAll('.goToLlamaGeneration');
         goToLlamaBtns.forEach(element => { this.goToLLamaTriggers.push(element) });
         this.goToLLamaTriggers.forEach(element => {
@@ -56,8 +73,12 @@ export default class UIManager extends EventEmitter {
         this.events.trigger('nextStep');
     }
 
+    firePrevStep() {
+        this.events.trigger('prevStep');
+    }
+
     fireLlamaStep() {
-        this.events.trigger('goToStep', [5]);
+        this.events.trigger('goToStep', [4]);
     }
 
 
@@ -84,16 +105,19 @@ export default class UIManager extends EventEmitter {
         const tunnelScene = this.experience.world.TunnelScene;
 
         // Deactivate city scene and activate portal scene
-        if (newStep == 3) {
+        if (newStep == 2) {
             cityScene.isActivated = false;
             portalScene.isActivated = true;
         }
         // Deactivate portal scene and activate tunnel scene
-        if (newStep == 5) {
+        if (newStep == 4) {
             const submitButton = document.querySelector('#submit');
             portalScene.isActivated = false;
             tunnelScene.isActivated = true;
-            submitButton.addEventListener('click', this.sendPrompt);
+            if (submitButton && !submitButton.dataset.promptBound) {
+                submitButton.dataset.promptBound = 'true';
+                submitButton.addEventListener('click', this.sendPrompt);
+            }
         }
 
         /* console.log({
@@ -144,7 +168,7 @@ export default class UIManager extends EventEmitter {
             this.response = responseData;
 
             if (responseData.data?.events) {
-                this.events.trigger('goToStep', [7]);
+                this.events.trigger('goToStep', [6]);
 
                 const cityScene = this.experience.world.CityScene;
                 const tunnelScene = this.experience.world.TunnelScene;
@@ -202,20 +226,46 @@ export default class UIManager extends EventEmitter {
 
     handleLlamaHelper(newStep) {
         const element = document.getElementById('llama-helper');
-        if (element) {
-            if (newStep == 0) {
-                if (!this.response) {
-                    element.style.display = 'block';
-                    console.warn('error: response not found');
-                    element.textContent = 'Error: Failed to process response, please refresh the page and try again';
-                    element.style.color = 'red';
-                } else {
-                    element.style.display = 'flex';
-                }
-            } else {
-                element.style.display = 'none';
-            }
+        if (!element) return;
+
+        if (newStep == 0 && this.cityIntroComplete) {
+            element.style.display = 'flex';
+            element.style.opacity = '1';
+            element.style.pointerEvents = 'auto';
+            element.style.color = '';
+            element.classList.remove('is-intro-pending');
+        } else if (newStep == 0) {
+            element.style.display = 'flex';
+            element.style.opacity = '0';
+            element.style.pointerEvents = 'none';
+            element.classList.add('is-intro-pending');
+        } else {
+            element.style.display = 'none';
+            element.classList.remove('is-intro-pending');
         }
+    }
+
+    showLlamaHelperIntro() {
+        const element = document.getElementById('llama-helper');
+        if (!element) return;
+
+        element.style.display = 'flex';
+        element.classList.remove('is-intro-pending');
+
+        gsap.fromTo(
+            element,
+            { opacity: 0, y: 28 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                ease: 'power2.out',
+                pointerEvents: 'auto',
+                onStart: () => {
+                    element.style.pointerEvents = 'auto'
+                },
+            }
+        )
     }
 
     showInputNumber() {

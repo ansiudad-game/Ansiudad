@@ -15,6 +15,12 @@ export default class Camera
 
         this.initMouse()
 
+        this.cityCamera = {
+            position: { x: 0, y: 2.35, z: 5.4 },
+            lookAt: { x: 0.6, y: 0.15, z: 0.4 },
+            fov: 28,
+        }
+
         this.setInstance()
         this.setControls()
 
@@ -23,9 +29,17 @@ export default class Camera
 
     setInstance()
     {
-        this.instance = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100)
-        this.instance.position.set(0, 3, 8)
-        this.vectorLookAt = new THREE.Vector3(0, 0, 0)
+        this.instance = new THREE.PerspectiveCamera(this.cityCamera.fov, this.sizes.width / this.sizes.height, 0.1, 100)
+        this.instance.position.set(
+            this.cityCamera.position.x,
+            this.cityCamera.position.y,
+            this.cityCamera.position.z
+        )
+        this.vectorLookAt = new THREE.Vector3(
+            this.cityCamera.lookAt.x,
+            this.cityCamera.lookAt.y,
+            this.cityCamera.lookAt.z
+        )
         this.instance.lookAt(this.vectorLookAt);
 
         this.gazeWrapper = new THREE.Group()
@@ -47,11 +61,11 @@ export default class Camera
 
     addHandlers() {
         this.appState.on('stepChange', (newStep) => {
-            if (newStep == 3) {
+            if (newStep == 2) {
                 this.moveToPortalScene();
-            } else if (newStep == 5) {
+            } else if (newStep == 4) {
                 this.moveToTunnelScene();
-            } else if (newStep == 0 || newStep == 7) {
+            } else if (newStep == 0 || newStep == 6) {
                 this.moveToCityScene();
             }
         });
@@ -68,8 +82,26 @@ export default class Camera
     }
 
     moveToCityScene() {
-        gsap.to(this.instance.position, { x: 0, y: 3, z: 8, duration: 2, ease: "power2.inOut" });
-        gsap.to(this.vectorLookAt, { x: 0, y: 0, z: 0, duration: 1.2, ease: "power2.inOut" });
+        gsap.to(this.instance.position, {
+            x: this.cityCamera.position.x,
+            y: this.cityCamera.position.y,
+            z: this.cityCamera.position.z,
+            duration: 2,
+            ease: 'power2.inOut',
+        })
+        gsap.to(this.vectorLookAt, {
+            x: this.cityCamera.lookAt.x,
+            y: this.cityCamera.lookAt.y,
+            z: this.cityCamera.lookAt.z,
+            duration: 1.2,
+            ease: 'power2.inOut',
+        })
+        gsap.to(this.instance, {
+            fov: this.cityCamera.fov,
+            duration: 2,
+            ease: 'power2.inOut',
+            onUpdate: () => this.instance.updateProjectionMatrix(),
+        })
     }
 
     initMouse() {

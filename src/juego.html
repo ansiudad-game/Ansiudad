@@ -7,114 +7,39 @@
     <link rel="stylesheet" href="css/foundation.css" />
     <link rel="stylesheet" href="css/responsive.css" />
     <link rel="stylesheet" href="./juego.css">
-    <link rel="stylesheet" href="css/menu.css">
     <link rel="shortcut icon" href="/img/fav/favicon.ico" />
 </head>
 <body>
-    <nav class="menu" aria-label="Principal">
-      <div class="menu__top">
-        <div class="menu__bar">
-          <a href="/index.html#home" class="menu__logo-link">
+    <a href="/index.html" class="juego-home-btn" aria-label="Ir al menú principal">
+        <span class="juego-home-btn__slide" aria-hidden="true">
             <img
-              src="brand/ansiudadMorado.svg"
-              alt="Ansiudad"
-              class="menu__logo-image"
-              width="200"
-              height="24"
-              decoding="async"
+                src="brand/A_morado.svg"
+                alt=""
+                class="juego-home-btn__logo"
+                width="32"
+                height="18"
+                decoding="async"
             />
-          </a>
-        </div>
-        <div class="menu__toggle-host">
-          <div class="menu__toggle">
-            <label for="menu-toggle-juego">
-              <input id="menu-toggle-juego" type="checkbox" class="menu__toggle-checkbox" aria-controls="menu-panel-juego" />
-              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path class="menu__toggle-line line--1" d="M0 40h62c13 0 6 28-4 18L35 35" />
-                <path class="menu__toggle-line line--2" d="M0 50h70" />
-                <path class="menu__toggle-line line--3" d="M0 60h62c13 0 6-28-4-18L35 65" />
-              </svg>
-            </label>
-          </div>
-
-          <div id="menu-panel-juego" class="menu__panel" role="region" aria-label="Secciones">
-            <ul class="menu__bottom">
-              <li class="menu__item"><a href="/index.html#que-es" class="menu__link">¿Qué es Ansiudad?</a></li>
-              <li class="menu__item"><a href="/index.html#desafio" class="menu__link">¿Cuál es el desafío?</a></li>
-              <li class="menu__item"><a href="/index.html#diseno" class="menu__link">¿Cómo lo diseñamos?</a></li>
-              <li class="menu__item"><a href="/index.html#donde" class="menu__link">¿Dónde se ha jugado?</a></li>
-              <li class="menu__item"><a href="/index.html#contacto" class="menu__link">Contacto</a></li>
-              <li class="menu__item"><a href="/juego.html" class="menu__link">¿Quieres jugar?</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </nav>
+        </span>
+        <span class="juego-home-btn__label">Menú principal</span>
+    </a>
     <main data-taxi>
         <div id="loader-container">
-            <div id="loader"></div>
+            <div id="loader" class="juego-loader" role="status" aria-label="Cargando juego">
+                <span class="juego-loader__ring" aria-hidden="true"></span>
+                <img
+                    class="juego-loader__logo"
+                    src="brand/A_morado.svg"
+                    alt=""
+                    decoding="async"
+                />
+            </div>
         </div>
         <article data-taxi-view id="juegoContainer" class="pageContainer">
             <div class="allSlidesContainer">
                 <div class="slideContainer" id="slide0">
                     <!-- <h1 style="display: none;">ANSIUDAD</h1>
                     <img src="brand/animated-logo-white.gif" alt="Ansiudad logo" id="animated-logo"> -->
-                </div>
-                
-                <div class="slideContainer" id="slide1">
-                    <div class="horizontalStackWrapper">
-                        <header class="llama-intro">
-                            <div class="portrait-wrapper">
-                                <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
-                            </div>
-
-                            <div class="text-wrapper">
-                                <p>
-                                    Al enfrentar problemas socioambientales complejos con un toque de fantasía y humor, los jugadores pueden alcanzar varios objetivos de aprendizaje:
-                                </p>
-                            </div>
-                        </header>
-
-                        <div class="cards-container">
-                            <div class="card-wrapper">
-                                <div class="guideline-container">
-                                    <h2 class="guidelines">Pensamiento Crítico y Resolución de Problemas.</h2>
-                                </div>
-                                <div class="guideline-description-container">
-                                    <p class="guideline-description">Analizarán situaciones complejas, identificarán problemas y generarán soluciones creativas y sostenibles.</p>
-                                </div>
-                            </div>
-
-                            <div class="card-wrapper">
-                                <div class="guideline-container">
-                                    <h2 class="guidelines">Colaboración.</h2>
-                                </div>
-                                <div class="guideline-description-container">
-                                    <p class="guideline-description">Aprenderán a trabajar en conjunto, compartiendo ideas y valorando la diversidad de perspectivas y opiniones.</p>
-                                </div>
-                            </div>
-
-                            <div class="card-wrapper">
-                                <div class="guideline-container">
-                                    <h2 class="guidelines">Empatía.</h2>
-                                </div>
-                                <div class="guideline-description-container">
-                                    <p class="guideline-description">El juego promueve la empatía, al colocar a lxs estudiantes en distintos roles con prioridades, intereses y preocupaciones específicas.</p>
-                                </div>
-                            </div>
-
-                            <div class="card-wrapper">
-                                <div class="guideline-container">
-                                    <h2 class="guidelines">Pensamiento Creativo y Codiseño.</h2>
-                                </div>
-                                <div class="guideline-description-container">
-                                    <p class="guideline-description">Desarrollarán habilidades para idear posibles formas participativas de afrontar desafíos socioambientales complejos.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="regular-btn goToNextStepBtn">Siguiente ></button>
-                    </div>
                 </div>
                 
                 <div class="slideContainer" id="slide2">
@@ -127,7 +52,7 @@
                             <div class="text-wrapper">
                                 <h3>Antes de empezar a jugar</h3>
 
-                                <p>Ansiudad es un mega game, lo que significa que puede jugarse con muchas personas a la vez. Considera lo siguiente:</p>
+                                <p>Considera lo siguiente:</p>
                             </div>
                         </header>
 
@@ -173,7 +98,24 @@
                             </div>
                         </div>
 
-                        <button class="regular-btn goToNextStepBtn">Siguiente ></button>
+                        <div class="juego-slide-nav">
+                            <button type="button" class="juego-nav-btn juego-nav-btn--back goToPrevStepBtn" aria-label="Sección anterior">
+                                <span class="juego-nav-btn__slide" aria-hidden="true">
+                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                            <button type="button" class="juego-nav-btn juego-nav-btn--next goToNextStepBtn" aria-label="Siguiente sección">
+                                <span class="juego-nav-btn__slide" aria-hidden="true">
+                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -189,10 +131,26 @@
 
                             <p>He vivido en las montañas que rodean esta ciudad desde tiempos inmemoriales... de hecho, cuando yo llegué, ¡Ansiudad ni siquiera existía!</p>
                             <p>Hoy, necesito tu ayuda. En los últimos años, he sido testigo del daño que las actividades humanas han causado en nuestro ecosistema, afectando no solo a una gran diversidad de personas, sino también a todo el entorno natural.</p>
-
-                            <button class="regular-btn goToNextStepBtn">Continuar ></button>
                         </div>
                     </aside>
+                    <div class="juego-slide-nav">
+                        <button type="button" class="juego-nav-btn juego-nav-btn--back goToPrevStepBtn" aria-label="Sección anterior">
+                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                </svg>
+                            </span>
+                        </button>
+                        <button type="button" class="juego-nav-btn juego-nav-btn--next goToNextStepBtn" aria-label="Siguiente sección">
+                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="slideContainer" id="slide4">
@@ -209,14 +167,30 @@
                             <p>Recuerda que deberás hacer equipo con tus compañerxs. No es una competencia individual; se trata de unir fuerzas para construir una mejor ciudad.</p>
 
                             <h3>¿Me ayudas?</h3>
-
-                            <button class="regular-btn goToNextStepBtn">¡Vamos a jugar!</button>
                         </div>
                     </aside>
+                    <div class="juego-slide-nav">
+                        <button type="button" class="juego-nav-btn juego-nav-btn--back goToPrevStepBtn" aria-label="Sección anterior">
+                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                </svg>
+                            </span>
+                        </button>
+                        <button type="button" class="juego-nav-btn juego-nav-btn--next goToNextStepBtn" aria-label="Siguiente sección">
+                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="slideContainer" id="slide5">
-                    <div class="leftToRightWrapper">
+                    <div class="slide5-layout">
                         <aside class="llama-instructions">
                             <div class="portrait-wrapper">
                                 <img src="brand/pachallama.gif" alt="Pacha-Llama">
@@ -226,12 +200,10 @@
                                 <h2>¡Genial!</h2>
 
                                 <p>Ahora necesito que me ayudes a entender algunas cosas antes de empezar a jugar, lee las instrucciones y cuando estés listo presiona el botón debajo:</p>
-
-                                <button class="regular-btn goToNextStepBtn" id="submit">¡Listo!<br><br>¡Crea el incidente para jugar!</button>
                             </div>
                         </aside>
 
-                        <div class="cards-container fitHeight">
+                        <div class="cards-container fitHeight slide5-cards-row">
                             <div class="card-wrapper fitHeight llama-input-cards">
                                 <div class="guideline-container">
                                     <h2>1. Equipos</h2>
@@ -270,21 +242,26 @@
                                 </div>
 
                             </div>
+                        </div>
 
-                            <!-- <div class="card-wrapper fitHeight">
-                                <h4>3. Roles</h4>
-                                <p>Asignaré a cada jugador un rol con intereses únicos que deberá considerar y proteger en relación con los demás integrantes.</p>
-                                <p>Ayúdame a colocar los nombres de tus jugadores. Separados por una coma:</p>
-                                
-                                <div class="input-group">
-                                    <label for="" class="input-label">Jugadores:</label>
-                                    <textarea name="" id="" class="llama-input"></textarea>
-                                </div>
-
-                                <div class="card-footer">
-                                    <img src="brand/logo-short.svg" alt="A!">
-                                </div>
-                            </div> -->
+                        <div class="juego-slide-nav juego-slide-nav--setup">
+                            <button type="button" class="juego-nav-btn juego-nav-btn--next juego-nav-btn--labeled" id="submit" aria-label="Listo, crear incidente para jugar">
+                                <span class="juego-nav-btn__slide" aria-hidden="true">
+                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                                <span class="juego-nav-btn__label">Listo</span>
+                            </button>
+                            <button type="button" class="juego-nav-btn juego-nav-btn--back goToPrevStepBtn" aria-label="Sección anterior">
+                                <span class="juego-nav-btn__slide" aria-hidden="true">
+                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -356,6 +333,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="juego-slide-nav juego-slide-nav--back-only">
+                        <button type="button" class="juego-nav-btn juego-nav-btn--back goToPrevStepBtn" aria-label="Sección anterior">
+                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -368,9 +355,15 @@
                 <div class="right-wrapper">
                     <div class="text-globe" id="text1">
                         <h2>¡Bienvenidxs, ansiudadanxs habitantes de Ansiudad!</h1>
-                        <p>Ansiudad es una herramienta educativa creada para fomentar conversaciones en torno al diseño social a través del juego.</p>
 
-                        <button class="regular-btn submitBtn" id="firstStepBtn">Continuar ></button>
+                        <button type="button" class="juego-nav-btn juego-nav-btn--next submitBtn" id="firstStepBtn" aria-label="Continuar">
+                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                </svg>
+                            </span>
+                        </button>
 
                     </div>
                 </div>

@@ -18,7 +18,7 @@ export default class AppState extends EventEmitter
     }
 
     initStates() {
-        this.totalSteps = 8;
+        this.totalSteps = 7;
         this.bgColor = "#410062";
     }
 
@@ -29,6 +29,7 @@ export default class AppState extends EventEmitter
 
     addHandlers() {
         this.events.on('appStateNextStep', this.nextStep.bind(this));
+        this.events.on('appStatePrevStep', this.prevStep.bind(this));
         this.events.on('appStateStep', this.goToStep.bind(this));
         this.on('stepChange', this.updateBgColor.bind(this));
     }
@@ -50,6 +51,13 @@ export default class AppState extends EventEmitter
         this.trigger('stepChange', [this.currentStep]);
     }
 
+    prevStep() {
+        if (this.currentStep > 0) {
+            this.currentStep--;
+            this.trigger('stepChange', [this.currentStep]);
+        }
+    }
+
     goToStep(step) {
         this.currentStep = step;
         this.currentStep %= this.totalSteps;
@@ -59,12 +67,12 @@ export default class AppState extends EventEmitter
     }
 
     updateBgColor() {
-        if (this.currentStep == 3 || this.currentStep == 5) {
+        if (this.currentStep == 2 || this.currentStep == 4) {
             if (this.bgColor != '#170027') {
                 this.bgColor = '#170027';
                 this.trigger('bgColorChange', [this.bgColor]);
             }
-        } else if ( (this.currentStep >= 0 && this.currentStep < 3) || this.currentStep == this.totalSteps - 1) {
+        } else if ( (this.currentStep >= 0 && this.currentStep < 2) || this.currentStep == this.totalSteps - 1) {
             if (this.bgColor != '#410062') {
                 this.bgColor = '#410062';
                 this.trigger('bgColorChange', [this.bgColor]);

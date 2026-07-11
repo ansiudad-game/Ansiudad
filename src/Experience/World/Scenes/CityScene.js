@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import gsap from 'gsap'
 import BaseScene from './BaseScene.js'
 import Floor from '../Floor.js'
 import Building from '../Building.js'
@@ -37,9 +38,100 @@ export default class CityScene extends BaseScene {
         this.centerVector = new THREE.Vector2(0, 0)
         this.cars = []
         this.buildings = []
+        this.introComplete = false
 
         this.initScene()
         this.isActivated = true
+    }
+
+    stashIntroScale(object3d) {
+        if (!object3d?.scale) return
+
+        object3d.userData.introScale = object3d.scale.clone()
+        object3d.scale.set(0, 0, 0)
+    }
+
+    revealIntroScale(object3d, duration = 0.55, ease = 'back.out(1.35)') {
+        const target = object3d.userData.introScale
+
+        if (!target) return gsap.delayedCall(0, () => {})
+
+        return gsap.to(object3d.scale, {
+            x: target.x,
+            y: target.y,
+            z: target.z,
+            duration,
+            ease,
+        })
+    }
+
+    prepareIntroState() {
+        this.stashIntroScale(this.floor.mesh)
+        this.buildings.forEach((building) => this.stashIntroScale(building.model))
+        this.cars.forEach((car) => this.stashIntroScale(car.model))
+        this.stashIntroScale(this.axolotl.model)
+        this.stashIntroScale(this.helicopter.container)
+        this.stashIntroScale(this.helicopter2.container)
+    }
+
+    playIntroSequence(onComplete) {
+        const buildingModels = this.buildings.map((building) => building.model)
+        const carModels = this.cars.map((car) => car.model)
+        const timeline = gsap.timeline({
+            onComplete: () => {
+                this.introComplete = true
+                if (typeof onComplete === 'function') onComplete()
+            },
+        })
+
+        timeline.add(() => {
+            this.revealIntroScale(this.floor.mesh, 0.7, 'power2.out')
+        })
+
+        timeline.to({}, { duration: 0.45 })
+
+        timeline.add(() => {
+            gsap.to(buildingModels.map((model) => model.scale), {
+                x: (index) => buildingModels[index].userData.introScale.x,
+                y: (index) => buildingModels[index].userData.introScale.y,
+                z: (index) => buildingModels[index].userData.introScale.z,
+                duration: 0.5,
+                ease: 'back.out(1.2)',
+                stagger: 0.04,
+            })
+        })
+
+        timeline.to({}, { duration: 0.35 + buildingModels.length * 0.04 })
+
+        timeline.add(() => {
+            if (!carModels.length) return
+
+            gsap.to(carModels.map((model) => model.scale), {
+                x: (index) => carModels[index].userData.introScale.x,
+                y: (index) => carModels[index].userData.introScale.y,
+                z: (index) => carModels[index].userData.introScale.z,
+                duration: 0.45,
+                ease: 'back.out(1.3)',
+                stagger: 0.08,
+            })
+        })
+
+        timeline.to({}, { duration: carModels.length ? 0.25 + carModels.length * 0.08 : 0 })
+
+        timeline.add(() => {
+            this.revealIntroScale(this.axolotl.model, 0.65, 'back.out(1.5)')
+        })
+
+        timeline.to({}, { duration: 0.55 })
+
+        timeline.add(() => {
+            this.revealIntroScale(this.helicopter.container, 0.55, 'back.out(1.3)')
+            this.revealIntroScale(this.helicopter2.container, 0.55, 'back.out(1.3)')
+        })
+
+        timeline.to({}, { duration: 0.7 })
+
+        return timeline
     }
 
     createAdditionalBuilding(buildingIndex, xPos, zPos, scale) {
@@ -178,6 +270,7 @@ export default class CityScene extends BaseScene {
 
         this.generateCars()
         this.generateBuildings()
+        this.prepareIntroState()
     }
 
     updateCars() {
