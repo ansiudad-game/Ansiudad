@@ -1,8 +1,14 @@
 import { Groq } from "groq-sdk"
 
-const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY,
-})
+function getGroqClient() {
+    const apiKey = process.env.GROQ_API_KEY?.trim()
+
+    if (!apiKey) {
+        throw new Error('GROQ_API_KEY is missing. Add it to your .env file and restart the dev server.')
+    }
+
+    return new Groq({ apiKey })
+}
 
 function cleanJsonResponse(str) {
     try {
@@ -12,12 +18,12 @@ function cleanJsonResponse(str) {
         try {
             const fixedStr = str.replace(/'/g, '"')
             return JSON.parse(fixedStr)
-        } catch (e) {
+        } catch (e2) {
             try {
                 const cleanedStr = str.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t")
                 return JSON.parse(cleanedStr)
-            } catch (e) {
-                throw new Error("Unable to parse JSON string: " + e.message)
+            } catch (e3) {
+                throw new Error("Unable to parse JSON string: " + e3.message)
             }
         }
     }
@@ -28,9 +34,12 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { prompt, _numberOfTeams, _numberOfRoles } = req.body;
+    const { prompt, _numberOfTeams, _numberOfRoles } = req.body ?? {};
+    const themePrompt = (typeof prompt === 'string' && prompt.trim())
+        ? prompt.trim()
+        : 'Elige un tema socioambiental aleatorio relevante para una metrópolis moderna llamada Ansiudad.';
 
-    if (!prompt || !_numberOfTeams || !_numberOfRoles) {
+    if (!_numberOfTeams || !_numberOfRoles) {
         return res.status(400).json({
             success: false,
             error: 'Missing required fields'
@@ -62,7 +71,7 @@ Formato y narrativas de ejemplo:
         },
         {
             role: "user",
-            content: prompt
+            content: themePrompt
         }
     ]
 
@@ -87,11 +96,12 @@ Formato y narrativas de ejemplo:
         },
         {
             role: "user",
-            content: prompt
+            content: themePrompt
         }
     ]
 
     try {
+        const groq = getGroqClient()
         const eventResponse = await groq.chat.completions.create({
             messages: eventPrompt,
             model: "llama-3.3-70b-versatile",

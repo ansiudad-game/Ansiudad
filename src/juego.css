@@ -119,7 +119,19 @@ main {
 }
 
 #slide3.show,
-#slide4.show,
+#slide4.show {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#slide3 .juego-slide-nav,
+#slide4 .juego-slide-nav {
+    width: min(100%, 520px);
+    justify-content: center;
+    align-self: flex-start;
+}
+
 #slide5.show,
 #slide7.show {
     display: flex;
@@ -353,15 +365,25 @@ p.guideline-description,
     top: auto;
     bottom: 12px;
     left: 12px;
-    right: 12px;
+    right: auto;
     transform: none;
     display: flex;
-    gap: 10px;
+    gap: 24px;
     align-items: flex-end;
-    max-width: calc(100vw - 24px);
+    width: min(360px, calc(100vw - 24px));
+    max-width: min(360px, calc(100vw - 24px));
     max-height: none;
     box-sizing: border-box;
 }
+
+    #llama-helper .llama-helper-main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 0;
+    }
 
     #llama-helper .left-wrapper {
         position: relative;
@@ -381,8 +403,6 @@ p.guideline-description,
             border-radius: 50%;
             backdrop-filter: blur(20px);
         }
-        .portrait-wrapper {}
-
     #llama-helper img {
         position: relative;
         display: block;
@@ -395,29 +415,41 @@ p.guideline-description,
         position: relative;
         width: 100%;
         min-width: 0;
-        flex: 1;
+        flex: none;
         padding: 14px;
         border-radius: 14px;
         box-sizing: border-box;
     }
 
+    #llama-helper .text-globe {
+        display: block;
+        text-align: center;
+    }
+
         #llama-helper .text-globe h2 {
-            margin-bottom: 10px;
+            margin-bottom: 0;
             font-size: clamp(0.95rem, 4.2vw, 1.1rem);
             line-height: 1.2;
+            text-align: center;
         }
 
         #llama-helper .text-globe p {
             font-size: clamp(0.75rem, 3.4vw, 0.88rem);
             line-height: 1.35;
-        }
-
-        #llama-helper .text-globe button {
-            margin-top: 10px;
+            text-align: center;
         }
 
 button#firstStepBtn.juego-nav-btn {
-    margin-top: 10px;
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    width: var(--juego-nav-btn-size);
+    height: var(--juego-nav-btn-size);
+    min-width: var(--juego-nav-btn-size);
+    min-height: var(--juego-nav-btn-size);
+    margin: 0;
+    padding: 0;
+    z-index: auto;
 }
 
 /* Global UI */
@@ -514,7 +546,10 @@ article#juegoContainer.pageContainer {
     height: auto;
     min-height: 0;
     align-items: flex-start;
+    margin-left: 0;
     padding: 16px 20px 32px;
+    width: min(100%, 520px);
+    min-width: 0;
 }
 
 
@@ -1261,6 +1296,14 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         margin-top: 16px;
         margin-bottom: 0;
         align-self: center;
+        justify-content: center;
+    }
+
+    #slide3 .juego-slide-nav,
+    #slide4 .juego-slide-nav {
+        align-self: flex-start;
+        width: min(100%, 420px);
+        justify-content: center;
     }
 
     .llama-intro {
@@ -1298,11 +1341,14 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     #slide3 .llama-instructions,
     #slide4 .llama-instructions {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         height: auto;
         flex: none;
         overflow: visible;
+        margin-left: 0;
         padding: 4px 0 16px;
+        width: min(100%, 420px);
+        min-width: 0;
     }
 
     .llama-instructions {
@@ -1383,9 +1429,10 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 @media (min-width: 480px) and (max-width: 767px) {
     #llama-helper {
         left: 16px;
-        right: 16px;
+        right: auto;
         bottom: 16px;
-        max-width: calc(100vw - 32px);
+        width: min(380px, calc(100vw - 32px));
+        max-width: min(380px, calc(100vw - 32px));
     }
 }
 
@@ -1400,15 +1447,16 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     }
 
     #llama-helper {
-        top: 50%;
-        bottom: auto;
-        left: clamp(24px, 4vw, 48px);
+        top: auto;
+        bottom: 28px;
+        left: clamp(24px, 3vw, 40px);
         right: auto;
-        transform: translateY(-50%);
-        gap: 20px;
-        align-items: center;
-        max-width: none;
-        max-height: calc(100vh - 96px);
+        transform: none;
+        gap: 24px;
+        align-items: flex-end;
+        width: min(420px, 34vw);
+        max-width: min(420px, 34vw);
+        max-height: none;
     }
 
     #llama-helper .left-wrapper {
@@ -1424,26 +1472,37 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         width: 128px;
     }
 
+    #llama-helper .llama-helper-main {
+        gap: 14px;
+    }
+
     #llama-helper .right-wrapper {
-        width: min(400px, calc(100vw - 200px));
+        width: 100%;
         flex: none;
-        padding: 30px 20px;
+        padding: 20px 16px;
         border-radius: 20px;
     }
 
     #llama-helper .text-globe h2 {
-        margin-bottom: 32px;
-        font-size: 1.25rem;
-        line-height: 1.15;
+        margin-bottom: 0;
+        font-size: 1.15rem;
+        line-height: 1.2;
+        text-align: center;
     }
 
     #llama-helper .text-globe p {
         font-size: 1rem;
         line-height: 1.4;
+        text-align: center;
     }
 
     button#firstStepBtn.juego-nav-btn {
-        margin-top: 12px;
+        position: relative;
+        width: var(--juego-nav-btn-size);
+        height: var(--juego-nav-btn-size);
+        min-width: var(--juego-nav-btn-size);
+        min-height: var(--juego-nav-btn-size);
+        margin: 0;
     }
 
     .horizontalStackWrapper > .juego-slide-nav,
@@ -1456,14 +1515,25 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         margin-top: 16px;
         margin-bottom: 0;
         align-self: center;
+        justify-content: center;
+    }
+
+    #slide3 .juego-slide-nav,
+    #slide4 .juego-slide-nav {
+        align-self: flex-start;
+        width: min(100%, 560px);
+        justify-content: center;
     }
 
     #slide3 .llama-instructions,
     #slide4 .llama-instructions {
         overflow-y: visible;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
+        margin-left: 0;
         padding: 16px 20px 32px;
+        width: min(100%, 560px);
+        min-width: 0;
     }
 
     .llama-instructions .text-wrapper,
@@ -1477,7 +1547,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     .llama-instructions .text-wrapper h3 {
         font-size: 1rem;
     }
-
+    
     button#another-one,
     button#back-home {
         font-size: larger;
@@ -1508,18 +1578,19 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 /* ── Desktop ── */
 @media (min-width: 1280px) {
     #llama-helper {
-        left: 48px;
+        left: 40px;
+        width: min(440px, 32vw);
+        max-width: min(440px, 32vw);
     }
 
     #llama-helper .text-globe h2 {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
     }
 }
 
 /* ── Desktop grande ── */
 @media (min-width: 1536px) {
     #llama-helper .right-wrapper {
-        width: 440px;
-        padding: 36px 28px;
+        padding: 24px 20px;
     }
 }

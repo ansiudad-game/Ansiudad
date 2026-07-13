@@ -39,6 +39,7 @@ export default class CityScene extends BaseScene {
         this.cars = []
         this.buildings = []
         this.introComplete = false
+        this.idleRotationSpeed = 0.00004
 
         this.initScene()
         this.isActivated = true
@@ -101,7 +102,14 @@ export default class CityScene extends BaseScene {
             })
         })
 
-        timeline.to({}, { duration: 0.35 + buildingModels.length * 0.04 })
+        // Wait only until buildings finish, then axolotl right away
+        timeline.to({}, { duration: 0.5 + Math.max(buildingModels.length - 1, 0) * 0.04 })
+
+        timeline.add(() => {
+            this.revealIntroScale(this.axolotl.model, 0.28, 'back.out(1.5)')
+        })
+
+        timeline.to({}, { duration: 0.2 })
 
         timeline.add(() => {
             if (!carModels.length) return
@@ -117,12 +125,6 @@ export default class CityScene extends BaseScene {
         })
 
         timeline.to({}, { duration: carModels.length ? 0.25 + carModels.length * 0.08 : 0 })
-
-        timeline.add(() => {
-            this.revealIntroScale(this.axolotl.model, 0.65, 'back.out(1.5)')
-        })
-
-        timeline.to({}, { duration: 0.55 })
 
         timeline.add(() => {
             this.revealIntroScale(this.helicopter.container, 0.55, 'back.out(1.3)')
@@ -141,6 +143,35 @@ export default class CityScene extends BaseScene {
         model.position.set(xPos, 0, zPos)
         model.rotation.y = this.getRandomRotation()
         return { building, model }
+    }
+
+    getBuildingScale(xPos, zPos) {
+        const config = CityScene.BUILDING_CONFIG
+        this.tempVector.set(xPos, zPos)
+        const distanceToCenter = this.tempVector.distanceTo(this.centerVector)
+        let scale = this.calculations.map(
+            distanceToCenter,
+            0,
+            7,
+            config.SCALE_RANGE.MIN,
+            config.SCALE_RANGE.MAX,
+            true
+        )
+
+        // Keep buildings on both sides of the axolotl small so they never overlap it
+        const distToAxolotl = Math.hypot(xPos, zPos)
+        const clearRadius = 1.75
+        if (distToAxolotl < clearRadius) {
+            const t = distToAxolotl / clearRadius
+            const maxNearAxolotl = this.calculations.lerp(
+                config.SCALE_RANGE.MIN,
+                6.45,
+                t * t
+            )
+            scale = Math.min(scale, maxNearAxolotl)
+        }
+
+        return scale
     }
 
     getRandomRotation() {
@@ -179,20 +210,13 @@ export default class CityScene extends BaseScene {
                 if (this.isLastRow(z)) continue
                 if (this.isSecondToLastRow(z, x)) continue
 
-                this.tempVector.set(xPos, zPos)
-                const distanceToCenter = this.tempVector.distanceTo(this.centerVector)
-                const scale = this.calculations.map(
-                    distanceToCenter,
-                    0,
-                    7,
-                    config.SCALE_RANGE.MIN,
-                    config.SCALE_RANGE.MAX
-                )
+                const finalX = xPos - 0.5
+                const scale = this.getBuildingScale(finalX, zPos)
 
                 // Main building
                 const { building, model } = this.createAdditionalBuilding(
                     buildingIndex,
-                    xPos - 0.5,
+                    finalX,
                     zPos,
                     scale
                 )
@@ -203,11 +227,12 @@ export default class CityScene extends BaseScene {
                 // Extra buildings on sides
                 if (this.shouldAddExtraBuilding(z, x)) {
                     if (x === config.TOTAL_X - 1) {
+                        const sideX = xPos + 0.2
                         const { building: newBuilding, model: newModel } = this.createAdditionalBuilding(
                             buildingIndex,
-                            xPos + 0.2,
+                            sideX,
                             zPos,
-                            scale
+                            this.getBuildingScale(sideX, zPos)
                         )
                         buildings.push(newBuilding)
                         models.push(newModel)
@@ -215,11 +240,12 @@ export default class CityScene extends BaseScene {
                     }
 
                     if (x < 1) {
+                        const sideX = xPos - 1
                         const { building: newBuilding, model: newModel } = this.createAdditionalBuilding(
                             buildingIndex,
-                            xPos - 1,
+                            sideX,
                             zPos,
-                            scale
+                            this.getBuildingScale(sideX, zPos)
                         )
                         buildings.push(newBuilding)
                         models.push(newModel)
@@ -280,6 +306,10 @@ export default class CityScene extends BaseScene {
     }
 
     update() {
+        if (this.introComplete) {
+            this.group.rotation.y += this.idleRotationSpeed * this.time.delta
+        }
+
         this.updateCars()
         if (this.axolotl) {
             this.axolotl.update()

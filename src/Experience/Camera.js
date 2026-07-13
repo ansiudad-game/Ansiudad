@@ -16,8 +16,8 @@ export default class Camera
         this.initMouse()
 
         this.cityCamera = {
-            position: { x: 0, y: 2.35, z: 5.4 },
-            lookAt: { x: 0.6, y: 0.15, z: 0.4 },
+            position: { x: 0, y: 1.0, z: 5.25 },
+            lookAt: { x: -0.35, y: -0.05, z: 0.4 },
             fov: 28,
         }
 
@@ -203,8 +203,8 @@ export default class Camera
     {
         // this.controls.update()
         this.updateMouseExtraData();
-        this.gazeWrapper.position.x = -myMouse.tiltSmooth.x * 2;
-        this.gazeWrapper.position.y = -myMouse.tiltSmooth.y * 0.7;
+        this.gazeWrapper.position.x = -myMouse.tiltSmooth.x * 0.35;
+        this.gazeWrapper.position.y = -myMouse.tiltSmooth.y * 0.12;
 
         this.instance.lookAt(this.vectorLookAt);
 

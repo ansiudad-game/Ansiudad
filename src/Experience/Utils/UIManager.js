@@ -143,6 +143,8 @@ export default class UIManager extends EventEmitter {
             const _numberOfTeams = numOfTeamsField.value;
             const _numberOfRoles = numOfPlayersField.value;
 
+            this.events.trigger('goToStep', [5]);
+
             const response = await fetch('/api/sendPrompt', {
                 method: 'POST',
                 headers: {
@@ -155,14 +157,10 @@ export default class UIManager extends EventEmitter {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error(`Server responded with status: ${response.status}`);
-            }
+            const responseData = await response.json().catch(() => ({}));
 
-            const responseData = await response.json();
-
-            if (!responseData.success) {
-                throw new Error(responseData.error || 'Unknown error occurred');
+            if (!response.ok || !responseData.success) {
+                throw new Error(responseData.error || `Server responded with status: ${response.status}`);
             }
 
             this.response = responseData;
@@ -219,7 +217,8 @@ export default class UIManager extends EventEmitter {
             }
         } catch (error) {
             console.error('Error processing response:', error);
-            this.events.trigger('goToStep', [0]);
+            alert(`No se pudo generar el incidente: ${error.message}`);
+            this.events.trigger('goToStep', [4]);
         }
     }
 

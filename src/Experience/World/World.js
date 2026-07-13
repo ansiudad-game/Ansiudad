@@ -30,8 +30,8 @@ export default class World
     }
     
     positionScenes() {
-        this.CityScene.group.rotateY(Math.PI / 4)
-        this.CityScene.group.position.set(1, -0.5, 1);
+        this.CityScene.group.rotateY(-Math.PI / 4)
+        this.CityScene.group.position.set(-0.4, -0.5, 1);
 
         this.PortalScene.group.position.y = -20
         this.PortalScene.group.rotateY(Math.PI / 2)
