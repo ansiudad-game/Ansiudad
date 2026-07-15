@@ -78,7 +78,7 @@ export default class UIManager extends EventEmitter {
     }
 
     fireLlamaStep() {
-        this.events.trigger('goToStep', [4]);
+        this.events.trigger('goToStep', [7]);
     }
 
 
@@ -104,14 +104,17 @@ export default class UIManager extends EventEmitter {
         const portalScene = this.experience.world.PortalScene;
         const tunnelScene = this.experience.world.TunnelScene;
 
-        // Deactivate city scene and activate portal scene
-        if (newStep == 2) {
+        if (newStep <= 4 || newStep == 9) {
+            cityScene.isActivated = true;
+            portalScene.isActivated = false;
+            tunnelScene.isActivated = false;
+        } else if (newStep == 5 || newStep == 6) {
             cityScene.isActivated = false;
             portalScene.isActivated = true;
-        }
-        // Deactivate portal scene and activate tunnel scene
-        if (newStep == 4) {
+            tunnelScene.isActivated = false;
+        } else if (newStep == 7 || newStep == 8) {
             const submitButton = document.querySelector('#submit');
+            cityScene.isActivated = false;
             portalScene.isActivated = false;
             tunnelScene.isActivated = true;
             if (submitButton && !submitButton.dataset.promptBound) {
@@ -143,7 +146,7 @@ export default class UIManager extends EventEmitter {
             const _numberOfTeams = numOfTeamsField.value;
             const _numberOfRoles = numOfPlayersField.value;
 
-            this.events.trigger('goToStep', [5]);
+            this.events.trigger('goToStep', [8]);
 
             const response = await fetch('/api/sendPrompt', {
                 method: 'POST',
@@ -166,7 +169,7 @@ export default class UIManager extends EventEmitter {
             this.response = responseData;
 
             if (responseData.data?.events) {
-                this.events.trigger('goToStep', [6]);
+                this.events.trigger('goToStep', [9]);
 
                 const cityScene = this.experience.world.CityScene;
                 const tunnelScene = this.experience.world.TunnelScene;
@@ -218,7 +221,7 @@ export default class UIManager extends EventEmitter {
         } catch (error) {
             console.error('Error processing response:', error);
             alert(`No se pudo generar el incidente: ${error.message}`);
-            this.events.trigger('goToStep', [4]);
+            this.events.trigger('goToStep', [7]);
         }
     }
 

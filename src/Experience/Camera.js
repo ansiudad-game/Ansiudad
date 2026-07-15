@@ -16,7 +16,7 @@ export default class Camera
         this.initMouse()
 
         this.cityCamera = {
-            position: { x: 0, y: 1.0, z: 5.25 },
+            position: { x: 0, y: 1.0, z: 6.25 },
             lookAt: { x: -0.35, y: -0.05, z: 0.4 },
             fov: 28,
         }
@@ -61,11 +61,11 @@ export default class Camera
 
     addHandlers() {
         this.appState.on('stepChange', (newStep) => {
-            if (newStep == 2) {
+            if (newStep == 5 || newStep == 6) {
                 this.moveToPortalScene();
-            } else if (newStep == 4) {
+            } else if (newStep == 7 || newStep == 8) {
                 this.moveToTunnelScene();
-            } else if (newStep == 0 || newStep == 6) {
+            } else {
                 this.moveToCityScene();
             }
         });

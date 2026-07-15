@@ -118,6 +118,9 @@ main {
     box-sizing: border-box;
 }
 
+#slide2b.show,
+#slide2c.show,
+#slide2d.show,
 #slide3.show,
 #slide4.show {
     display: flex;
@@ -125,6 +128,9 @@ main {
     align-items: flex-start;
 }
 
+#slide2b .juego-slide-nav,
+#slide2c .juego-slide-nav,
+#slide2d .juego-slide-nav,
 #slide3 .juego-slide-nav,
 #slide4 .juego-slide-nav {
     width: min(100%, 520px);
@@ -161,6 +167,10 @@ main {
 .juego-nav-btn--labeled {
     --juego-nav-btn-labeled-w: 9rem;
     width: var(--juego-nav-btn-labeled-w);
+}
+
+#slide2 .juego-nav-btn--labeled {
+    --juego-nav-btn-labeled-w: 9.75rem;
 }
 
 .juego-nav-btn__slide {
@@ -534,6 +544,9 @@ article#juegoContainer.pageContainer {
     -webkit-overflow-scrolling: touch;
 }
 
+#slide2b,
+#slide2c,
+#slide2d,
 #slide3,
 #slide4 {
     overflow-x: hidden;
@@ -541,6 +554,9 @@ article#juegoContainer.pageContainer {
     -webkit-overflow-scrolling: touch;
 }
 
+#slide2b .llama-instructions,
+#slide2c .llama-instructions,
+#slide2d .llama-instructions,
 #slide3 .llama-instructions,
 #slide4 .llama-instructions {
     height: auto;
@@ -856,6 +872,80 @@ article#juegoContainer.pageContainer {
         border-radius: 10px;
         overflow: hidden;
     }
+
+/* Slide2: Pacha popup + guideline cards centered */
+#slide2.show {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#slide2 .horizontalStackWrapper {
+    width: min(100%, 960px);
+    height: auto;
+    max-height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+#slide2 .llama-intro {
+    width: auto;
+    max-width: 100%;
+    justify-content: center;
+}
+
+#slide2 .horizontalStackWrapper > .juego-slide-nav {
+    align-self: center;
+    width: 100%;
+    justify-content: center;
+}
+
+/* Slide2 guideline cards: smaller boxes, side by side, centered */
+#slide2 .cards-container {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+    gap: 14px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+}
+
+#slide2 .cards-container .card-wrapper {
+    width: 200px;
+    flex: 0 0 200px;
+    height: auto;
+    min-height: 0;
+    padding: 12px 14px;
+    gap: 10px;
+}
+
+#slide2 .cards-container .guideline-container {
+    height: auto;
+    min-height: 0;
+    padding-bottom: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+#slide2 .cards-container .guideline-container h2 {
+    text-align: center;
+    width: 100%;
+}
+
+#slide2 .cards-container .guideline-description-container {
+    padding: 0;
+}
+
+#slide2 .cards-container .guideline-description-container p,
+#slide2 .cards-container .guideline-description-container ul {
+    text-align: center;
+}
     .cards-container .card-wrapper.fitHeight {
         height: 100%;
         max-height: 600px;
@@ -1235,6 +1325,15 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         box-sizing: border-box;
     }
 
+    #slide2 .horizontalStackWrapper {
+        width: min(100%, 960px);
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 8px;
+        padding-right: 8px;
+        align-items: center;
+    }
+
     .horizontalStackWrapper .cards-container,
     .leftToRightWrapper .cards-container,
     #slide5 .slide5-cards-row,
@@ -1257,6 +1356,15 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         max-height: none;
     }
 
+    #slide2 .cards-container {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        width: auto;
+        gap: 12px;
+        overflow-x: auto;
+    }
+
     .cards-container .card-wrapper,
     .cards-container .card-wrapper.fitHeight,
     .cards-container .card-wrapper.llama-input-cards {
@@ -1267,6 +1375,15 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         overflow: visible;
         padding: 16px;
         gap: 12px;
+    }
+
+    #slide2 .cards-container .card-wrapper {
+        width: 180px;
+        flex: 0 0 180px;
+        justify-content: center;
+        align-items: center;
+        padding: 12px 14px;
+        gap: 10px;
     }
 
     .llama-response {
@@ -1289,6 +1406,9 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 
     .horizontalStackWrapper > .juego-slide-nav,
     .llama-instructions + .juego-slide-nav,
+    #slide2b .juego-slide-nav,
+    #slide2c .juego-slide-nav,
+    #slide2d .juego-slide-nav,
     #slide3 .juego-slide-nav,
     #slide4 .juego-slide-nav,
     #slide5 .juego-slide-nav--setup {
@@ -1299,6 +1419,9 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         justify-content: center;
     }
 
+    #slide2b .juego-slide-nav,
+    #slide2c .juego-slide-nav,
+    #slide2d .juego-slide-nav,
     #slide3 .juego-slide-nav,
     #slide4 .juego-slide-nav {
         align-self: flex-start;
@@ -1332,12 +1455,18 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         line-height: 1.35;
     }
 
+    #slide2b,
+    #slide2c,
+    #slide2d,
     #slide3,
     #slide4 {
         overflow: visible;
         align-items: stretch;
     }
 
+    #slide2b .llama-instructions,
+    #slide2c .llama-instructions,
+    #slide2d .llama-instructions,
     #slide3 .llama-instructions,
     #slide4 .llama-instructions {
         flex-direction: column;
@@ -1507,6 +1636,9 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 
     .horizontalStackWrapper > .juego-slide-nav,
     .llama-instructions + .juego-slide-nav,
+    #slide2b .juego-slide-nav,
+    #slide2c .juego-slide-nav,
+    #slide2d .juego-slide-nav,
     #slide3 .juego-slide-nav,
     #slide4 .juego-slide-nav,
     #slide5 .juego-slide-nav--setup,
@@ -1518,6 +1650,9 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         justify-content: center;
     }
 
+    #slide2b .juego-slide-nav,
+    #slide2c .juego-slide-nav,
+    #slide2d .juego-slide-nav,
     #slide3 .juego-slide-nav,
     #slide4 .juego-slide-nav {
         align-self: flex-start;
@@ -1525,6 +1660,9 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         justify-content: center;
     }
 
+    #slide2b .llama-instructions,
+    #slide2c .llama-instructions,
+    #slide2d .llama-instructions,
     #slide3 .llama-instructions,
     #slide4 .llama-instructions {
         overflow-y: visible;
