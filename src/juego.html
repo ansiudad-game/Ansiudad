@@ -23,6 +23,149 @@
         </span>
         <span class="juego-home-btn__label">Menú principal</span>
     </a>
+
+    <button type="button" class="juego-home-btn juego-instructions-btn" id="juegoInstructionsBtn" aria-expanded="false" aria-controls="juegoInstructionsPanel">
+        <span class="juego-home-btn__slide juego-instructions-btn__slide" aria-hidden="true">
+            <img
+                src="brand/ala.svg"
+                alt=""
+                class="juego-instructions-btn__icon"
+                width="40"
+                height="40"
+                decoding="async"
+            />
+        </span>
+        <span class="juego-home-btn__label">Instrucciones</span>
+    </button>
+
+    <aside id="juegoInstructionsPanel" class="juego-instructions-panel" hidden aria-hidden="true" aria-labelledby="juegoInstructionsTitle">
+        <div class="bg-noise" aria-hidden="true"></div>
+        <button type="button" class="juego-instructions-panel__close" id="juegoInstructionsClose" aria-label="Cerrar instrucciones">
+            <span aria-hidden="true">×</span>
+        </button>
+        <div class="juego-instructions-panel__inner">
+            <h2 id="juegoInstructionsTitle" class="juego-instructions-panel__title">Instrucciones</h2>
+
+
+            <div class="juego-instructions-accordions" id="juegoInstructionsAccordions">
+                <section class="juego-instr-dropdown is-open" data-dropdown="guias">
+                    <button type="button" class="juego-instr-dropdown__toggle" aria-expanded="true">
+                        <span class="juego-instr-dropdown__name">Guías</span>
+                        <span class="juego-instr-dropdown__icon" aria-hidden="true">
+                            <svg class="juego-instr-dropdown__arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" focusable="false">
+                                <path d="M6.7 9.3a1 1 0 0 1 1.4 0L12 13.17l3.9-3.87a1 1 0 1 1 1.4 1.42l-4.6 4.58a1 1 0 0 1-1.4 0l-4.6-4.58a1 1 0 0 1 0-1.42z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="juego-instr-dropdown__body">
+                        <div class="juego-instructions-stack__track" id="juegoInstructionsTextTrack">
+                            <article class="juego-instructions-card juego-instructions-stack__card is-active" data-text-index="0">
+                                <h3>Te recomiendo:</h3>
+                                <p>Jugar con un mínimo de 3 equipos de al menos 4 personas cada uno y un máximo de 6 equipos de hasta 8 personas, permitiendo entre 12 y 50 jugadorexs en total.</p>
+                            </article>
+                            <article class="juego-instructions-card juego-instructions-stack__card" data-text-index="1">
+                                <h3>Para facilitar la colaboración:</h3>
+                                <p>Para facilitar la colaboración y el intercambio de ideas, cada equipo deberá ubicarse en una mesa.</p>
+                            </article>
+                            <article class="juego-instructions-card juego-instructions-stack__card" data-text-index="2">
+                                <h3>Edades:</h3>
+                                <p>Ansiudad está pensado para estudiantes de 12 años en adelante y puede adaptarse a grupos de diversas edades.</p>
+                            </article>
+                            <article class="juego-instructions-card juego-instructions-stack__card" data-text-index="3">
+                                <h3>Qué necesitas:</h3>
+                                <ul>
+                                    <li>Hojas blancas</li>
+                                    <li>Plumones</li>
+                                    <li>Pantalla o proyector</li>
+                                </ul>
+                            </article>
+                        </div>
+                        <div class="juego-instructions-nav">
+                            <button type="button" class="juego-nav-btn juego-nav-btn--back" id="juegoInstructionsTextPrev" aria-label="Texto anterior">
+                                <span class="juego-nav-btn__slide" aria-hidden="true">
+                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                            <button type="button" class="juego-nav-btn juego-nav-btn--next" id="juegoInstructionsTextNext" aria-label="Texto siguiente">
+                                <span class="juego-nav-btn__slide" aria-hidden="true">
+                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="juego-instr-dropdown" data-dropdown="cartas">
+                    <button type="button" class="juego-instr-dropdown__toggle" aria-expanded="false">
+                        <span class="juego-instr-dropdown__name">Cartas</span>
+                        <span class="juego-instr-dropdown__icon" aria-hidden="true">
+                            <svg class="juego-instr-dropdown__arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" focusable="false">
+                                <path d="M6.7 9.3a1 1 0 0 1 1.4 0L12 13.17l3.9-3.87a1 1 0 1 1 1.4 1.42l-4.6 4.58a1 1 0 0 1-1.4 0l-4.6-4.58a1 1 0 0 1 0-1.42z" fill="currentColor"/>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="juego-instr-dropdown__body">
+                        <div class="juego-instructions-cartas__stage" id="juegoInstructionsCartasStage">
+                            <div class="juego-instructions-cartas__section is-active" data-cartas-index="0">
+                                <h4 class="juego-instructions-cartas__label">Incidentes</h4>
+                                <div class="juego-instructions-cartas__stack" aria-hidden="true">
+                                    <div class="card juego-instructions-cartas__card"><div class="card__img" style="background-image: url(img/2-c.svg)"></div></div>
+                                    <div class="card juego-instructions-cartas__card"><div class="card__img" style="background-image: url(img/4-b.svg)"></div></div>
+                                    <div class="card juego-instructions-cartas__card"><div class="card__img" style="background-image: url(img/noticias-2.svg)"></div></div>
+                                </div>
+                                <p class="juego-instructions-cartas__text">Esta carta te explicará el incidente que deberá abordar tu mesa.</p>
+                            </div>
+
+                            <div class="juego-instructions-cartas__section" data-cartas-index="1">
+                                <h4 class="juego-instructions-cartas__label">Roles</h4>
+                                <div class="juego-instructions-cartas__stack juego-instructions-cartas__stack--single" aria-hidden="true">
+                                    <div class="card juego-instructions-cartas__card"><div class="card__img" style="background-image: url(img/roles.svg)"></div></div>
+                                </div>
+                                <p class="juego-instructions-cartas__text">Cada integrante seleccionará una carta al azar.</p>
+                                <p class="juego-instructions-cartas__text">Este rol tendrá intereses únicos que deberá considerar y proteger en relación con los demás integrantes.</p>
+                            </div>
+
+                            <div class="juego-instructions-cartas__section" data-cartas-index="2">
+                                <h4 class="juego-instructions-cartas__label">Noticias</h4>
+                                <div class="juego-instructions-cartas__stack" aria-hidden="true">
+                                    <div class="card juego-instructions-cartas__card"><div class="card__img" style="background-image: url(img/noticias1.svg)"></div></div>
+                                    <div class="card juego-instructions-cartas__card"><div class="card__img" style="background-image: url(img/noticias-3.svg)"></div></div>
+                                    <div class="card juego-instructions-cartas__card"><div class="card__img" style="background-image: url(img/3-c.svg)"></div></div>
+                                </div>
+                                <p class="juego-instructions-cartas__text">Cartas que van a afectar tus decisiones finales. Léela hasta que te demos indicaciones.</p>
+                            </div>
+                        </div>
+
+                        <div class="juego-instructions-nav">
+                            <button type="button" class="juego-nav-btn juego-nav-btn--back" id="juegoInstructionsCartasPrev" aria-label="Sección de cartas anterior">
+                                <span class="juego-nav-btn__slide" aria-hidden="true">
+                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                            <button type="button" class="juego-nav-btn juego-nav-btn--next" id="juegoInstructionsCartasNext" aria-label="Sección de cartas siguiente">
+                                <span class="juego-nav-btn__slide" aria-hidden="true">
+                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </aside>
+
     <main data-taxi>
         <div id="loader-container">
             <div id="loader" class="juego-loader" role="status" aria-label="Cargando juego">
@@ -41,89 +184,11 @@
                     <!-- <h1 style="display: none;">ANSIUDAD</h1>
                     <img src="brand/animated-logo-white.gif" alt="Ansiudad logo" id="animated-logo"> -->
                 </div>
-                
-                <div class="slideContainer" id="slide2">
-                    <div class="horizontalStackWrapper">
-                        <header class="llama-intro">
-                            <div class="portrait-wrapper">
-                                <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
-                            </div>
-
-                            <div class="text-wrapper">
-                                <h3>Antes de empezar a jugar</h3>
-
-                                <p>Considera lo siguiente:</p>
-                            </div>
-                        </header>
-
-                        <div class="cards-container">
-                            <div class="card-wrapper">
-                                <div class="guideline-container">
-                                   <h2>Te recomiendo:</h2>
-                                </div>
-                                <div class="guideline-description-container">
-                                    <p>Jugar con un mínimo de 3 equipos de al menos 4 personas cada uno y un máximo de 6 equipos de hasta 8 personas, permitiendo entre 12 y 50 jugadorexs en total.</p>
-                                </div>
-                            </div>
-
-                            <div class="card-wrapper">
-                                <div class="guideline-container">
-                                    <h2>Para facilitar la colaboración:</h2>
-                                </div>
-                                <div class="guideline-description-container">
-                                    <p>Para facilitar la colaboración y el intercambio de ideas, cada equipo deberá ubicarse en una mesa.</p>
-                                </div>
-                            </div>
-
-                            <div class="card-wrapper">
-                                <div class="guideline-container">
-                                    <h2>Edades:</h2>
-                                </div>
-                                <div class="guideline-description-container">
-                                    <p>Ansiudad está pensado para estudiantes de 12 años en adelante y puede adaptarse a grupos de diversas edades.</p>
-                                </div>
-                            </div>
-
-                            <div class="card-wrapper">
-                                <div class="guideline-container">
-                                    <h2>Qué necesitas:</h2>
-                                </div>
-                                <div class="guideline-description-container">
-                                    <ul>
-                                        <li>Hojas blancas</li>
-                                        <li>Plumones</li>
-                                        <li>Pantalla o proyector</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="juego-slide-nav">
-                            <button type="button" class="juego-nav-btn juego-nav-btn--back goToPrevStepBtn" aria-label="Sección anterior">
-                                <span class="juego-nav-btn__slide" aria-hidden="true">
-                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
-                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
-                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                            </button>
-                            <button type="button" class="juego-nav-btn juego-nav-btn--next juego-nav-btn--labeled goToNextStepBtn" aria-label="¡Jugar!">
-                                <span class="juego-nav-btn__slide" aria-hidden="true">
-                                    <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
-                                        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
-                                        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                                <span class="juego-nav-btn__label">¡Jugar!</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="slideContainer" id="slide2b">
                     <aside class="llama-instructions">
                         <div class="portrait-wrapper">
-                            <img src="brand/pachallama.gif" alt="Pacha-Llama">
+                            <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
                         </div>
 
                         <div class="text-wrapper">
@@ -153,7 +218,7 @@
                 <div class="slideContainer" id="slide2c">
                     <aside class="llama-instructions">
                         <div class="portrait-wrapper">
-                            <img src="brand/pachallama.gif" alt="Pacha-Llama">
+                            <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
                         </div>
 
                         <div class="text-wrapper">
@@ -184,7 +249,7 @@
                 <div class="slideContainer" id="slide2d">
                     <aside class="llama-instructions">
                         <div class="portrait-wrapper">
-                            <img src="brand/pachallama.gif" alt="Pacha-Llama">
+                            <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
                         </div>
 
                         <div class="text-wrapper">
@@ -214,7 +279,7 @@
                 <div class="slideContainer" id="slide3">
                     <aside class="llama-instructions">
                         <div class="portrait-wrapper">
-                            <img src="brand/pachallama.gif" alt="Pacha-Llama">
+                            <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
                         </div>
 
                         <div class="text-wrapper">
@@ -248,7 +313,7 @@
                 <div class="slideContainer" id="slide4">
                     <aside class="llama-instructions">
                         <div class="portrait-wrapper">
-                            <img src="brand/pachallama.gif" alt="Pacha-Llama">
+                            <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
                         </div>
 
                         <div class="text-wrapper">
@@ -285,7 +350,7 @@
                     <div class="slide5-layout">
                         <aside class="llama-instructions">
                             <div class="portrait-wrapper">
-                                <img src="brand/pachallama.gif" alt="Pacha-Llama">
+                                <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
                             </div>
 
                             <div class="text-wrapper">
@@ -371,7 +436,7 @@
                 </div>
 
                 <div class="slideContainer" id="slide7">
-                    <div class="leftToRightWrapper">
+                    <div class="leftToRightWrapper slide7-layout">
                         <aside class="llama-instructions">
                             <div class="portrait-wrapper">
                                 <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
@@ -384,56 +449,89 @@
                                 <p>¡Ahora sí, todo listo para jugar!</p>
 
                                 <div class="buttons-wrapper">
-                                    <button class="regular-btn goToNextStepBtn" id="back-home">Volver al inicio</button>
-                                    <button class="regular-btn goToLlamaGeneration" id="another-one">Generar otro incidente ></button>
+                                    <button type="button" class="juego-nav-btn juego-nav-btn--next juego-nav-btn--labeled goToLlamaGeneration" id="another-one" aria-label="Generar otro incidente">
+                                        <span class="juego-nav-btn__slide" aria-hidden="true">
+                                            <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                                <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                                <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="juego-nav-btn__label">Otro incidente</span>
+                                    </button>
                                 </div>
                             </div>
                         </aside>
 
-                        <div class="cards-container fitHeight">
-                            <div class="card-wrapper fitHeight llama-input-cards">
-                                <div class="guideline-container">
-                                    <h2>1. Incidente</h2>
+                        <div class="slide7-results" aria-live="polite">
+                            <div class="slide7-results__panel">
+                            <section class="slide7-results__column slide7-results__column--incident" aria-label="Incidente">
+                                <div class="slide7-results__heading-row">
+                                    <h2 class="slide7-results__heading">Incidente</h2>
+                                    <span class="slide7-results__counter" id="slide7EventCounter" aria-live="polite">1/1</span>
                                 </div>
-                                <div id="llama-event" class="llama-response">
-                                    <h1>False title</h1>
-                                    <h2>False subtitle</h2>
-                                    <p>False body Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
-                                    <p>False body Temporibus tempora id error facere tenetur eaque dolore sit! At dicta necessitatibus modi laborum molestias velit quos, odit eius.</p>
-                                    <p>Facilis magni iusto!</p>
+                                <div class="slide7-results__stack">
+                                    <div id="llama-event" class="slide7-results__track">
+                                        <article class="slide7-result-card slide7-results__stack-card is-active">
+                                            <h3 class="slide7-result-card__title">False title</h3>
+                                            <p class="slide7-result-card__body">False body Lorem ipsum dolor sit amet.</p>
+                                        </article>
+                                    </div>
+                                    <div class="juego-instructions-nav slide7-results__nav">
+                                        <button type="button" class="juego-nav-btn juego-nav-btn--back" id="slide7EventPrev" aria-label="Incidente anterior">
+                                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="juego-nav-btn juego-nav-btn--next" id="slide7EventNext" aria-label="Incidente siguiente">
+                                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="card-wrapper fitHeight llama-input-cards">
-                                <div class="guideline-container">
-                                    <h2>2. Roles</h2>
-                                </div>
-                                <div id="llama-roles" class="llama-response">
-                                    <h1>False title</h1>
-                                    <h2>False subtitle</h2>
-                                    <p>False body Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
-                                    <p>False body Temporibus tempora id error facere tenetur eaque dolore sit! At dicta necessitatibus modi laborum molestias velit quos, odit eius.</p>
-                                    <p>Facilis magni iusto!</p>
-                                    <p>False body Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
-                                    <p>False body Temporibus tempora id error facere tenetur eaque dolore sit! At dicta necessitatibus modi laborum molestias velit quos, odit eius.</p>
-                                    <p>Facilis magni iusto!</p>
-                                    <p>False body Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
-                                    <p>False body Temporibus tempora id error facere tenetur eaque dolore sit! At dicta necessitatibus modi laborum molestias velit quos, odit eius.</p>
-                                    <p>Facilis magni iusto!</p>
-                                </div>
+                            </section>
 
+                            <section class="slide7-results__column slide7-results__column--roles" aria-label="Roles">
+                                <div class="slide7-results__heading-row">
+                                    <h2 class="slide7-results__heading">Roles</h2>
+                                    <span class="slide7-results__counter" id="slide7RolesCounter" aria-live="polite">1/1</span>
+                                </div>
+                                <div class="slide7-results__stack">
+                                    <div id="llama-roles" class="slide7-results__track">
+                                        <article class="slide7-result-card slide7-result-card--role slide7-results__stack-card is-active">
+                                            <p class="slide7-result-card__player">JUGADOR 1</p>
+                                            <h3 class="slide7-result-card__title">False title</h3>
+                                            <p class="slide7-result-card__body">False body Lorem ipsum dolor sit amet.</p>
+                                        </article>
+                                    </div>
+                                    <div class="juego-instructions-nav slide7-results__nav">
+                                        <button type="button" class="juego-nav-btn juego-nav-btn--back" id="slide7RolesPrev" aria-label="Rol anterior">
+                                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="juego-nav-btn juego-nav-btn--next" id="slide7RolesNext" aria-label="Rol siguiente">
+                                            <span class="juego-nav-btn__slide" aria-hidden="true">
+                                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+                                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+                                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </section>
                             </div>
                         </div>
-                    </div>
-                    <div class="juego-slide-nav juego-slide-nav--back-only">
-                        <button type="button" class="juego-nav-btn juego-nav-btn--back goToPrevStepBtn" aria-label="Sección anterior">
-                            <span class="juego-nav-btn__slide" aria-hidden="true">
-                                <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
-                                    <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
-                                    <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
-                                </svg>
-                            </span>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -451,13 +549,14 @@
                         </div>
                     </div>
 
-                    <button type="button" class="juego-nav-btn juego-nav-btn--next submitBtn" id="firstStepBtn" aria-label="Continuar">
+                    <button type="button" class="juego-nav-btn juego-nav-btn--next juego-nav-btn--labeled submitBtn" id="firstStepBtn" aria-label="¡Jugar!">
                         <span class="juego-nav-btn__slide" aria-hidden="true">
                             <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
                                 <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
                                 <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
                             </svg>
                         </span>
+                        <span class="juego-nav-btn__label">¡Jugar!</span>
                     </button>
                 </div>
             </aside>

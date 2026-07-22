@@ -102,14 +102,16 @@ export default class CityScene extends BaseScene {
             })
         })
 
-        // Wait only until buildings finish, then axolotl right away
+        // Wait only until buildings finish, then axolotl + helicopters right away
         timeline.to({}, { duration: 0.5 + Math.max(buildingModels.length - 1, 0) * 0.04 })
 
         timeline.add(() => {
             this.revealIntroScale(this.axolotl.model, 0.28, 'back.out(1.5)')
+            this.revealIntroScale(this.helicopter.container, 0.45, 'back.out(1.3)')
+            this.revealIntroScale(this.helicopter2.container, 0.45, 'back.out(1.3)')
         })
 
-        timeline.to({}, { duration: 0.2 })
+        timeline.to({}, { duration: 0.35 })
 
         timeline.add(() => {
             if (!carModels.length) return
@@ -124,14 +126,7 @@ export default class CityScene extends BaseScene {
             })
         })
 
-        timeline.to({}, { duration: carModels.length ? 0.25 + carModels.length * 0.08 : 0 })
-
-        timeline.add(() => {
-            this.revealIntroScale(this.helicopter.container, 0.55, 'back.out(1.3)')
-            this.revealIntroScale(this.helicopter2.container, 0.55, 'back.out(1.3)')
-        })
-
-        timeline.to({}, { duration: 0.7 })
+        timeline.to({}, { duration: carModels.length ? 0.25 + carModels.length * 0.08 : 0.35 })
 
         return timeline
     }

@@ -61,9 +61,9 @@ export default class Camera
 
     addHandlers() {
         this.appState.on('stepChange', (newStep) => {
-            if (newStep == 5 || newStep == 6) {
+            if (newStep == 4 || newStep == 5) {
                 this.moveToPortalScene();
-            } else if (newStep == 7 || newStep == 8) {
+            } else if (newStep == 6 || newStep == 7) {
                 this.moveToTunnelScene();
             } else {
                 this.moveToCityScene();

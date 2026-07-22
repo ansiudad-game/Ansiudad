@@ -14,6 +14,9 @@ export default class UIManager extends EventEmitter {
         this.currentView = this.appState.currentStep
         this.response = null
         this.cityIntroComplete = false
+        this.eventStackIndex = 0
+        this.roleStackIndex = 0
+        this.resultsStacksBound = false
         this.initUI();
 
         this.addHandlers();
@@ -28,6 +31,7 @@ export default class UIManager extends EventEmitter {
         this.showInputNumber();
         // Bind the method to preserve context
         this.sendPrompt = this.sendPrompt.bind(this);
+        this.setupResultsStacks();
     }
 
     initUI() {
@@ -78,7 +82,7 @@ export default class UIManager extends EventEmitter {
     }
 
     fireLlamaStep() {
-        this.events.trigger('goToStep', [7]);
+        this.events.trigger('goToStep', [6]);
     }
 
 
@@ -104,15 +108,15 @@ export default class UIManager extends EventEmitter {
         const portalScene = this.experience.world.PortalScene;
         const tunnelScene = this.experience.world.TunnelScene;
 
-        if (newStep <= 4 || newStep == 9) {
+        if (newStep <= 3 || newStep == 8) {
             cityScene.isActivated = true;
             portalScene.isActivated = false;
             tunnelScene.isActivated = false;
-        } else if (newStep == 5 || newStep == 6) {
+        } else if (newStep == 4 || newStep == 5) {
             cityScene.isActivated = false;
             portalScene.isActivated = true;
             tunnelScene.isActivated = false;
-        } else if (newStep == 7 || newStep == 8) {
+        } else if (newStep == 6 || newStep == 7) {
             const submitButton = document.querySelector('#submit');
             cityScene.isActivated = false;
             portalScene.isActivated = false;
@@ -146,7 +150,7 @@ export default class UIManager extends EventEmitter {
             const _numberOfTeams = numOfTeamsField.value;
             const _numberOfRoles = numOfPlayersField.value;
 
-            this.events.trigger('goToStep', [8]);
+            this.events.trigger('goToStep', [7]);
 
             const response = await fetch('/api/sendPrompt', {
                 method: 'POST',
@@ -169,7 +173,7 @@ export default class UIManager extends EventEmitter {
             this.response = responseData;
 
             if (responseData.data?.events) {
-                this.events.trigger('goToStep', [9]);
+                this.events.trigger('goToStep', [8]);
 
                 const cityScene = this.experience.world.CityScene;
                 const tunnelScene = this.experience.world.TunnelScene;
@@ -184,45 +188,131 @@ export default class UIManager extends EventEmitter {
                     eventBox.innerHTML = '';
                     responseData.data.events.events.forEach(event => {
                         if (event?.title && event?.description) {
-                            const eventContainer = document.createElement('div');
+                            const eventCard = document.createElement('article');
+                            eventCard.className = 'slide7-result-card slide7-results__stack-card';
 
                             const eventTitle = document.createElement('h3');
+                            eventTitle.className = 'slide7-result-card__title';
                             eventTitle.textContent = event.title;
-                            eventContainer.appendChild(eventTitle);
+                            eventCard.appendChild(eventTitle);
 
                             const eventDescription = document.createElement('p');
+                            eventDescription.className = 'slide7-result-card__body';
                             eventDescription.textContent = event.description;
-                            eventContainer.appendChild(eventDescription);
+                            eventCard.appendChild(eventDescription);
 
-                            eventBox.appendChild(eventContainer);
+                            eventBox.appendChild(eventCard);
                         }
                     });
                 }
 
                 if (rolesBox && responseData.data.roles?.roles) {
                     rolesBox.innerHTML = '';
-                    responseData.data.roles.roles.forEach(role => {
+                    responseData.data.roles.roles.forEach((role, index) => {
                         if (role?.name || role?.title) {
-                            const roleContainer = document.createElement('div');
+                            const roleCard = document.createElement('article');
+                            roleCard.className = 'slide7-result-card slide7-result-card--role slide7-results__stack-card';
+
+                            const playerLabel = document.createElement('p');
+                            playerLabel.className = 'slide7-result-card__player';
+                            playerLabel.textContent = `JUGADOR ${index + 1}`;
+                            roleCard.appendChild(playerLabel);
 
                             const roleTitle = document.createElement('h3');
+                            roleTitle.className = 'slide7-result-card__title';
                             roleTitle.textContent = role.name || role.title;
-                            roleContainer.appendChild(roleTitle);
+                            roleCard.appendChild(roleTitle);
 
                             const rolePriorities = document.createElement('p');
+                            rolePriorities.className = 'slide7-result-card__body';
                             rolePriorities.textContent = role.priorities || role.prioridades || '';
-                            roleContainer.appendChild(rolePriorities);
+                            roleCard.appendChild(rolePriorities);
 
-                            rolesBox.appendChild(roleContainer);
+                            rolesBox.appendChild(roleCard);
                         }
                     });
                 }
+
+                this.eventStackIndex = 0;
+                this.roleStackIndex = 0;
+                this.syncResultsStack('event');
+                this.syncResultsStack('role');
             }
         } catch (error) {
             console.error('Error processing response:', error);
             alert(`No se pudo generar el incidente: ${error.message}`);
-            this.events.trigger('goToStep', [7]);
+            this.events.trigger('goToStep', [6]);
         }
+    }
+
+    setupResultsStacks() {
+        if (this.resultsStacksBound) return;
+
+        const eventPrev = document.getElementById('slide7EventPrev');
+        const eventNext = document.getElementById('slide7EventNext');
+        const rolesPrev = document.getElementById('slide7RolesPrev');
+        const rolesNext = document.getElementById('slide7RolesNext');
+
+        eventPrev?.addEventListener('click', () => {
+            if (this.eventStackIndex <= 0) return;
+            this.eventStackIndex -= 1;
+            this.syncResultsStack('event');
+        });
+
+        eventNext?.addEventListener('click', () => {
+            const cards = this.getResultsCards('event');
+            if (this.eventStackIndex >= cards.length - 1) return;
+            this.eventStackIndex += 1;
+            this.syncResultsStack('event');
+        });
+
+        rolesPrev?.addEventListener('click', () => {
+            if (this.roleStackIndex <= 0) return;
+            this.roleStackIndex -= 1;
+            this.syncResultsStack('role');
+        });
+
+        rolesNext?.addEventListener('click', () => {
+            const cards = this.getResultsCards('role');
+            if (this.roleStackIndex >= cards.length - 1) return;
+            this.roleStackIndex += 1;
+            this.syncResultsStack('role');
+        });
+
+        this.resultsStacksBound = true;
+        this.syncResultsStack('event');
+        this.syncResultsStack('role');
+    }
+
+    getResultsCards(kind) {
+        const trackId = kind === 'event' ? 'llama-event' : 'llama-roles';
+        const track = document.getElementById(trackId);
+        if (!track) return [];
+        return [...track.querySelectorAll('.slide7-results__stack-card')];
+    }
+
+    syncResultsStack(kind) {
+        const cards = this.getResultsCards(kind);
+        const index = kind === 'event' ? this.eventStackIndex : this.roleStackIndex;
+        const prev = document.getElementById(kind === 'event' ? 'slide7EventPrev' : 'slide7RolesPrev');
+        const next = document.getElementById(kind === 'event' ? 'slide7EventNext' : 'slide7RolesNext');
+        const nav = prev?.closest('.slide7-results__nav');
+
+        cards.forEach((card, cardIndex) => {
+            card.classList.remove('is-active', 'is-behind-1', 'is-behind-2');
+            if (cardIndex === index) card.classList.add('is-active');
+            else if (cardIndex === index - 1) card.classList.add('is-behind-1');
+            else if (cardIndex === index - 2) card.classList.add('is-behind-2');
+        });
+
+        if (prev) prev.disabled = index <= 0 || cards.length <= 1;
+        if (next) next.disabled = index >= cards.length - 1 || cards.length <= 1;
+        if (nav) nav.hidden = cards.length <= 1;
+
+        const counter = document.getElementById(kind === 'event' ? 'slide7EventCounter' : 'slide7RolesCounter');
+        const total = Math.max(cards.length, 1);
+        const current = cards.length ? index + 1 : 0;
+        if (counter) counter.textContent = `${current}/${total}`;
     }
 
 
@@ -256,9 +346,10 @@ export default class UIManager extends EventEmitter {
 
         gsap.fromTo(
             element,
-            { opacity: 0, y: 28 },
+            { opacity: 0, yPercent: -50, y: 28 },
             {
                 opacity: 1,
+                yPercent: -50,
                 y: 0,
                 duration: 0.7,
                 ease: 'power2.out',

@@ -18,7 +18,7 @@ export default class AppState extends EventEmitter
     }
 
     initStates() {
-        this.totalSteps = 10;
+        this.totalSteps = 9;
         this.bgColor = "#410062";
     }
 
@@ -67,12 +67,12 @@ export default class AppState extends EventEmitter
     }
 
     updateBgColor() {
-        if (this.currentStep == 5 || this.currentStep == 7) {
+        if (this.currentStep == 4 || this.currentStep == 6) {
             if (this.bgColor != '#170027') {
                 this.bgColor = '#170027';
                 this.trigger('bgColorChange', [this.bgColor]);
             }
-        } else if ( (this.currentStep >= 0 && this.currentStep < 5) || this.currentStep == this.totalSteps - 1) {
+        } else if ( (this.currentStep >= 0 && this.currentStep < 4) || this.currentStep == this.totalSteps - 1) {
             if (this.bgColor != '#410062') {
                 this.bgColor = '#410062';
                 this.trigger('bgColorChange', [this.bgColor]);

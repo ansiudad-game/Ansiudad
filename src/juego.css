@@ -96,6 +96,437 @@ main {
     }
 }
 
+.juego-instructions-btn {
+    --juego-home-btn-w: 12.5rem;
+    left: auto;
+    right: max(12px, env(safe-area-inset-right, 0px));
+    border: none;
+    cursor: pointer;
+}
+
+.juego-instructions-btn__slide {
+    width: var(--juego-home-btn-slide-h) !important;
+    height: var(--juego-home-btn-slide-h) !important;
+    border-radius: 50% !important;
+    overflow: hidden;
+}
+
+.juego-instructions-btn__icon {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+}
+
+.juego-instructions-btn:hover .juego-instructions-btn__slide,
+.juego-instructions-btn:focus-visible .juego-instructions-btn__slide {
+    width: calc(var(--juego-home-btn-w) - 8px) !important;
+    height: calc(var(--juego-home-btn-h) - 8px) !important;
+    border-radius: 9999px !important;
+}
+
+.juego-instructions-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 70;
+    width: min(42vw, 520px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--morado-oscuro, #3E1581);
+    color: var(--amarillo-claro, #E7F2A5);
+    box-shadow: -12px 0 40px rgba(0, 0, 0, 0.35);
+    transform: translateX(105%);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.juego-instructions-panel.is-open {
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.juego-instructions-panel[hidden] {
+    display: none !important;
+}
+
+.juego-instructions-panel.is-open[hidden] {
+    display: flex !important;
+}
+
+.juego-instructions-panel .bg-noise {
+    z-index: 0;
+}
+
+.juego-instructions-panel__close {
+    position: absolute;
+    top: max(10px, env(safe-area-inset-top, 0px));
+    right: max(10px, env(safe-area-inset-right, 0px));
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--amarillo-oscuro) 85%, transparent);
+    color: var(--morado-oscuro, #3E1581);
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.juego-instructions-panel__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+    height: 100%;
+    padding: max(3.75rem, calc(env(safe-area-inset-top, 0px) + 3.25rem)) 1.15rem 1.35rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.juego-instructions-panel__title {
+    margin: 0;
+    font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+    font-weight: 700;
+    color: var(--amarillo-claro, #E7F2A5);
+}
+
+.juego-instructions-accordions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.juego-instr-dropdown {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--morado-oscuro) 72%, #000 28%);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+}
+
+.juego-instr-dropdown__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    margin: 0;
+    padding: 0.85rem 0.95rem;
+    border: none;
+    background: transparent;
+    color: var(--amarillo-claro, #E7F2A5);
+    cursor: pointer;
+    text-align: left;
+}
+
+.juego-instr-dropdown__name {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.juego-instr-dropdown__icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--morado-oscuro) 55%, #1a0738 45%);
+    color: var(--amarillo-claro, #E7F2A5);
+}
+
+.juego-instr-dropdown__arrow {
+    display: block;
+    transition: transform 0.3s ease;
+    transform: rotate(0deg);
+}
+
+.juego-instr-dropdown.is-open .juego-instr-dropdown__arrow {
+    transform: rotate(180deg);
+}
+
+.juego-instr-dropdown__body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.35rem;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 0.95rem;
+    pointer-events: none;
+    transition:
+        max-height 0.4s ease,
+        opacity 0.3s ease,
+        padding 0.3s ease;
+}
+
+.juego-instr-dropdown.is-open .juego-instr-dropdown__body {
+    max-height: 48rem;
+    opacity: 1;
+    overflow: visible;
+    padding: 0 0.95rem 1.1rem;
+    pointer-events: auto;
+}
+
+.juego-instructions-cartas__stage {
+    position: relative;
+    width: 100%;
+    min-height: 26rem;
+}
+
+.juego-instructions-cartas__section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(18px) scale(0.94);
+    transform-origin: 50% 0;
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease,
+        visibility 0.35s ease;
+}
+
+.juego-instructions-cartas__section.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    z-index: 2;
+}
+
+.juego-instructions-cartas__label {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--amarillo-oscuro, #DBDB7B);
+}
+
+.juego-instructions-stack__track {
+    --instr-stack-offset: 0.65rem;
+    --instr-stack-scale-step: 0.045;
+    position: relative;
+    width: 100%;
+    min-height: 12.5rem;
+    overflow: hidden;
+    padding-top: 1rem;
+    box-sizing: border-box;
+}
+
+.juego-instructions-stack__card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(18px) scale(0.94);
+    transform-origin: 50% 0;
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease,
+        visibility 0.35s ease;
+}
+
+.juego-instructions-stack__card.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    z-index: 4;
+}
+
+.juego-instructions-stack__card.is-behind-1 {
+    opacity: 0.55;
+    visibility: visible;
+    transform: translateY(calc(var(--instr-stack-offset) * -1)) scale(calc(1 - var(--instr-stack-scale-step)));
+    z-index: 3;
+}
+
+.juego-instructions-stack__card.is-behind-2 {
+    opacity: 0.28;
+    visibility: visible;
+    transform: translateY(calc(var(--instr-stack-offset) * -2)) scale(calc(1 - (var(--instr-stack-scale-step) * 2)));
+    z-index: 2;
+}
+
+.juego-instructions-card {
+    width: 100%;
+    margin: 0;
+    padding: clamp(0.85rem, 2.2vw, 1.15rem) clamp(1rem, 2.5vw, 1.25rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    text-align: left;
+    border-radius: 16px;
+    backdrop-filter: blur(24px);
+    background: color-mix(in srgb, var(--morado-oscuro) 88%, #000 12%);
+    box-shadow: 4px 12px 6px rgba(0, 0, 0, 0.28);
+    box-sizing: border-box;
+    color: var(--amarillo-claro, #E7F2A5);
+}
+
+.juego-instructions-card h3 {
+    margin: 0;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    font-weight: 700;
+    color: var(--amarillo-claro, #E7F2A5);
+    text-align: center;
+}
+
+.juego-instructions-card p,
+.juego-instructions-card li {
+    margin: 0;
+    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+    line-height: 1.4;
+    font-weight: 300;
+    color: var(--amarillo-claro, #E7F2A5);
+}
+
+.juego-instructions-card ul {
+    margin: 0;
+    padding-left: 1.15rem;
+}
+
+.juego-instructions-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.juego-instructions-nav .juego-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.juego-instructions-cartas__stack {
+    position: relative;
+    z-index: 1;
+    width: min(220px, 52vw);
+    height: min(300px, 38vh);
+    margin: 0 auto;
+    overflow: visible;
+    perspective: 900px;
+    transform-style: preserve-3d;
+    flex-shrink: 0;
+}
+
+.juego-instructions-cartas__stack--single {
+    width: min(180px, 44vw);
+    height: min(270px, 34vh);
+}
+
+.juego-instructions-cartas__card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 72%;
+    max-width: 150px;
+    margin: 0;
+    aspect-ratio: 400 / 694;
+    padding: 3px;
+    display: grid;
+    grid-template-columns: 1fr;
+    border-radius: 10px;
+    background: transparent;
+    border: none;
+    transform-origin: 50% 88%;
+    will-change: transform, opacity;
+}
+
+.juego-instructions-cartas__card .card__img {
+    grid-area: auto;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.juego-instructions-cartas__stack .juego-instructions-cartas__card:nth-child(1) {
+    z-index: 1;
+    transform: translate(-58%, -48%) rotate(-8deg);
+}
+
+.juego-instructions-cartas__stack .juego-instructions-cartas__card:nth-child(2) {
+    z-index: 2;
+    transform: translate(-50%, -50%) rotate(1deg);
+}
+
+.juego-instructions-cartas__stack .juego-instructions-cartas__card:nth-child(3) {
+    z-index: 3;
+    transform: translate(-42%, -52%) rotate(9deg);
+}
+
+.juego-instructions-cartas__stack--single .juego-instructions-cartas__card:nth-child(1) {
+    width: 80%;
+    max-width: 160px;
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.juego-instructions-cartas__text {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    max-width: 28rem;
+    padding: 0 0.25rem;
+    text-align: center;
+    font-size: clamp(0.88rem, 1.7vw, 1rem);
+    line-height: 1.4;
+    font-weight: 300;
+    color: var(--amarillo-claro, #E7F2A5);
+}
+
+body.juego-instructions-open {
+    overflow: hidden;
+}
+
+@media (max-width: 767px) {
+    .juego-instructions-panel {
+        width: 100%;
+        max-width: none;
+    }
+
+    .juego-instructions-btn {
+        --juego-home-btn-w: 10.5rem;
+        font-size: 0.78rem;
+    }
+
+    .juego-instructions-cartas__stage {
+        min-height: 24rem;
+    }
+
+    .juego-instructions-cartas__stack {
+        width: min(200px, 56vw);
+        height: min(280px, 36vh);
+    }
+}
+
 .juego-slide-nav {
     display: flex;
     align-items: center;
@@ -126,6 +557,10 @@ main {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
+    padding-left: clamp(16px, 6vw, 10vw);
+    padding-right: clamp(16px, 4vw, 40px);
+    box-sizing: border-box;
 }
 
 #slide2b .juego-slide-nav,
@@ -138,11 +573,17 @@ main {
     align-self: flex-start;
 }
 
-#slide5.show,
-#slide7.show {
+#slide5.show {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#slide7.show {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 .juego-nav-btn {
@@ -372,14 +813,14 @@ p.guideline-description,
 
 #llama-helper {
     position: absolute;
-    top: auto;
-    bottom: 12px;
-    left: 12px;
+    top: 50%;
+    bottom: auto;
+    left: clamp(12px, 3vw, 40px);
     right: auto;
-    transform: none;
+    transform: translateY(-50%);
     display: flex;
     gap: 24px;
-    align-items: flex-end;
+    align-items: center;
     width: min(360px, calc(100vw - 24px));
     max-width: min(360px, calc(100vw - 24px));
     max-height: none;
@@ -453,13 +894,17 @@ button#firstStepBtn.juego-nav-btn {
     position: relative;
     display: inline-flex;
     flex-shrink: 0;
-    width: var(--juego-nav-btn-size);
+    width: var(--juego-nav-btn-labeled-w, 9.75rem);
     height: var(--juego-nav-btn-size);
-    min-width: var(--juego-nav-btn-size);
+    min-width: var(--juego-nav-btn-labeled-w, 9.75rem);
     min-height: var(--juego-nav-btn-size);
     margin: 0;
     padding: 0;
     z-index: auto;
+}
+
+button#firstStepBtn.juego-nav-btn--labeled {
+    --juego-nav-btn-labeled-w: 9.75rem;
 }
 
 /* Global UI */
@@ -563,7 +1008,8 @@ article#juegoContainer.pageContainer {
     min-height: 0;
     align-items: flex-start;
     margin-left: 0;
-    padding: 16px 20px 32px;
+    margin-right: auto;
+    padding: 16px 20px 24px;
     width: min(100%, 520px);
     min-width: 0;
 }
@@ -612,8 +1058,8 @@ article#juegoContainer.pageContainer {
             margin: auto;
             bottom: 0;
             left: 0; right: 0;
-            width: 80px;
-            height: 80px;
+            width: 125px;
+            height: 125px;
             background-color: rgba(255,255,255, 0.1);
             border-radius: 50%;
             backdrop-filter: blur(20px);
@@ -633,33 +1079,254 @@ article#juegoContainer.pageContainer {
     }
 
 
-#slide7 .leftToRightWrapper {
-    flex-direction: column;
-    align-items: stretch;
-    height: auto;
-    min-height: 0;
+
+
+#slide7 .leftToRightWrapper,
+#slide7 .leftToRightWrapper.slide7-layout {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: min(70vh, 640px);
     overflow: visible;
-    gap: 16px;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-#slide7 .cards-container,
-#slide7 .cards-container.fitHeight {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    flex-direction: column;
-    align-items: stretch;
-    overflow: visible;
+#slide7 .llama-instructions {
+    position: absolute;
+    top: 50%;
+    left: clamp(12px, 3vw, 40px);
+    transform: translateY(-50%);
+    z-index: 2;
+    width: min(260px, 28vw);
+    min-width: 180px;
+    max-width: 280px;
     margin: 0;
+    height: auto;
 }
 
-#slide7 .cards-container .card-wrapper,
-#slide7 .cards-container .card-wrapper.fitHeight,
-#slide7 .cards-container .card-wrapper.llama-input-cards {
+#slide7 .slide7-results {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    width: auto;
+    max-width: min(520px, 54vw);
+}
+
+#slide7 .slide7-results__panel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 190px));
+    gap: clamp(10px, 1.5vw, 16px);
+    align-items: stretch;
+    justify-content: center;
+    justify-items: center;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: clamp(0.75rem, 1.5vw, 1rem);
+    border-radius: 18px;
+    box-sizing: border-box;
+    background: color-mix(in srgb, var(--morado-oscuro, #3E1581) 45%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+#slide7 .slide7-results__column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
     width: 100%;
-    height: auto;
+    max-width: 190px;
+    justify-self: center;
+}
+
+#slide7 .slide7-results__heading-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+#slide7 .slide7-results__heading {
+    margin: 0;
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--amarillo-oscuro, #DBDB7B);
+    text-align: center;
+}
+
+#slide7 .slide7-results__counter {
+    font-size: clamp(0.75rem, 1.3vw, 0.9rem);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--amarillo-claro, #E7F2A5);
+    opacity: 0.85;
+    white-space: nowrap;
+}
+
+#slide7 .slide7-results__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+    align-items: center;
+}
+
+#slide7 .slide7-results__track {
+    --slide7-stack-offset: 0.55rem;
+    --slide7-stack-scale-step: 0.04;
+    position: relative;
+    width: 100%;
+    min-height: 14.5rem;
+    flex: 1;
+    overflow: hidden;
+    padding-top: 0.85rem;
+    box-sizing: border-box;
+}
+
+#slide7 .slide7-results__stack-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(18px) scale(0.94);
+    transform-origin: 50% 0;
+    transition:
+        opacity 0.35s ease,
+        transform 0.35s ease,
+        visibility 0.35s ease;
+}
+
+#slide7 .slide7-results__stack-card.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    z-index: 4;
+}
+
+#slide7 .slide7-results__stack-card.is-behind-1 {
+    opacity: 0.55;
+    visibility: visible;
+    transform: translateY(calc(var(--slide7-stack-offset) * -1)) scale(calc(1 - var(--slide7-stack-scale-step)));
+    z-index: 3;
+}
+
+#slide7 .slide7-results__stack-card.is-behind-2 {
+    opacity: 0.28;
+    visibility: visible;
+    transform: translateY(calc(var(--slide7-stack-offset) * -2)) scale(calc(1 - (var(--slide7-stack-scale-step) * 2)));
+    z-index: 2;
+}
+
+#slide7 .slide7-result-card {
+    margin: 0 auto;
+    padding: 0.85rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    height: 100%;
+    min-height: 13.5rem;
     max-height: none;
-    overflow: visible;
+    max-width: 190px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--morado-oscuro) 88%, #000 12%);
+    box-shadow: 4px 10px 6px rgba(0, 0, 0, 0.24);
+    box-sizing: border-box;
+    color: var(--amarillo-claro, #E7F2A5);
+    overflow: hidden;
+    text-align: center;
+}
+
+#slide7 .slide7-result-card--role {
+    min-height: 13.5rem;
+}
+
+#slide7 .slide7-result-card__player {
+    margin: 0;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--amarillo-oscuro, #DBDB7B);
+    text-align: center;
+    width: 100%;
+}
+
+#slide7 .slide7-result-card__title {
+    margin: 0;
+    font-size: clamp(0.8rem, 1.35vw, 0.95rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--amarillo-claro, #E7F2A5);
+    text-align: center;
+    width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+#slide7 .slide7-result-card__body {
+    margin: 0;
+    font-size: clamp(0.7rem, 1.15vw, 0.82rem);
+    font-weight: 300;
+    line-height: 1.35;
+    color: var(--amarillo-claro, #E7F2A5);
+    text-align: center;
+    width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    line-clamp: 8;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+#slide7 .slide7-results__nav {
+    justify-content: center;
+}
+
+#slide7 .slide7-results__nav .juego-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+#slide7 .buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+#slide7 #another-one.juego-nav-btn--labeled {
+    --juego-nav-btn-labeled-w: 12.5rem;
+}
+
+#slide7 .llama-instructions .text-wrapper {
+    text-align: center;
+}
+
+#slide7 .llama-instructions .text-wrapper h3,
+#slide7 .llama-instructions .text-wrapper p {
+    text-align: center;
 }
 
 #slide5 .llama-instructions, #slide7 .llama-instructions {
@@ -745,9 +1412,9 @@ article#juegoContainer.pageContainer {
             margin: auto;
             bottom: 0;
             left: 0; right: 0;
-            width: 80px;
-            height: 80px;
-            background-color: rgba(0,0,0, 0.1);
+            width: 125px;
+            height: 125px;
+            background-color: rgba(255,255,255, 0.1);
             border-radius: 50%;
             backdrop-filter: blur(20px);
         }
@@ -873,7 +1540,7 @@ article#juegoContainer.pageContainer {
         overflow: hidden;
     }
 
-/* Slide2: Pacha popup + guideline cards centered */
+/* Slide2: guideline cards centered, Qué es card style */
 #slide2.show {
     display: flex;
     flex-direction: column;
@@ -891,20 +1558,13 @@ article#juegoContainer.pageContainer {
     justify-content: center;
 }
 
-#slide2 .llama-intro {
-    width: auto;
-    max-width: 100%;
-    justify-content: center;
-}
-
 #slide2 .horizontalStackWrapper > .juego-slide-nav {
     align-self: center;
     width: 100%;
     justify-content: center;
 }
 
-/* Slide2 guideline cards: smaller boxes, side by side, centered */
-#slide2 .cards-container {
+#slide2 .cards-container.slide2-instruction-cards {
     width: auto;
     max-width: 100%;
     height: auto;
@@ -916,34 +1576,16 @@ article#juegoContainer.pageContainer {
     align-items: stretch;
 }
 
-#slide2 .cards-container .card-wrapper {
+#slide2 .slide2-instruction-cards .juego-instructions-card {
     width: 200px;
     flex: 0 0 200px;
-    height: auto;
     min-height: 0;
-    padding: 12px 14px;
-    gap: 10px;
-}
-
-#slide2 .cards-container .guideline-container {
-    height: auto;
-    min-height: 0;
-    padding-bottom: 8px;
-    justify-content: center;
-    align-items: center;
-}
-
-#slide2 .cards-container .guideline-container h2 {
     text-align: center;
-    width: 100%;
 }
 
-#slide2 .cards-container .guideline-description-container {
-    padding: 0;
-}
-
-#slide2 .cards-container .guideline-description-container p,
-#slide2 .cards-container .guideline-description-container ul {
+#slide2 .slide2-instruction-cards .juego-instructions-card ul {
+    padding-left: 0;
+    list-style-position: inside;
     text-align: center;
 }
     .cards-container .card-wrapper.fitHeight {
@@ -1187,40 +1829,8 @@ div.theme-input-group {
         input#theme-input:active {
             box-shadow: 0px 0px 40px rgba(148, 33, 255, 0.8);
         }
-button#another-one {
-    background-color: rgba(148, 33, 255, 0.8);
-    padding: 1rem 2rem;
-    font-family: "HelveticaNeue", sans-serif;
-    border: none;
-    font-size: 1.2rem;
-    border-radius: 12px;
-    color: #ffffff;
-    transition: box-shadow 0.13s ease-in-out, color 0.13s ease-in-out;
-}
-button#another-one:hover {
-    box-shadow: 0px 0px 40px rgba(148, 33, 255, 0.8);
-    color: #ffffff;
-}
-button#back-home {
-    background-color: rgba(148, 33, 255, 0.8);
-    padding: 1rem 2rem;
-    font-family: "HelveticaNeue", sans-serif;
-    border: none;
-    font-size: 1.2rem;
-    border-radius: 12px;
-    color: #ffffff;
-    transition: box-shadow 0.13s ease-in-out, color 0.13s ease-in-out;
-}
-button#back-home:hover {
-    box-shadow: 0px 0px 40px rgba(148, 33, 255, 0.8);
-    color: #ffffff;
-}
-div.slide7 div.cards-container div.card-wrapper.fitHeight {
-    transition: box-shadow 0.13s ease-in-out;
-}
-
-div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
-    box-shadow: 0px 0px 40px rgba(148, 33, 255, 0.8);
+button#another-one.juego-nav-btn {
+    background-color: color-mix(in srgb, var(--morado-oscuro) 75%, transparent);
 }
 
 /* Styles for container holding Llama responses */
@@ -1310,8 +1920,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 
     .horizontalStackWrapper,
     .leftToRightWrapper,
-    #slide5 .slide5-layout,
-    #slide7 .leftToRightWrapper {
+    #slide5 .slide5-layout {
         flex-direction: column;
         align-items: stretch;
         justify-content: flex-start;
@@ -1336,8 +1945,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 
     .horizontalStackWrapper .cards-container,
     .leftToRightWrapper .cards-container,
-    #slide5 .slide5-cards-row,
-    #slide7 .cards-container {
+    #slide5 .slide5-cards-row {
         flex: none;
         width: 100%;
         height: auto;
@@ -1345,6 +1953,48 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         overflow: visible;
         margin: 0;
         padding: 0;
+    }
+
+    #slide7 .leftToRightWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 8px 0 24px;
+    }
+
+    #slide7 .llama-instructions {
+        position: static;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+    }
+
+    #slide7 .slide7-results {
+        position: static;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        max-width: none;
+    }
+
+    #slide7 .slide7-results__panel {
+        grid-template-columns: 1fr;
+        width: fit-content;
+        max-width: 100%;
+        justify-items: center;
+    }
+
+    #slide7 .slide7-results__column {
+        max-width: 200px;
     }
 
     .cards-container,
@@ -1356,7 +2006,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         max-height: none;
     }
 
-    #slide2 .cards-container {
+    #slide2 .cards-container.slide2-instruction-cards {
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: stretch;
@@ -1377,13 +2027,9 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         gap: 12px;
     }
 
-    #slide2 .cards-container .card-wrapper {
+    #slide2 .slide2-instruction-cards .juego-instructions-card {
         width: 180px;
         flex: 0 0 180px;
-        justify-content: center;
-        align-items: center;
-        padding: 12px 14px;
-        gap: 10px;
     }
 
     .llama-response {
@@ -1462,6 +2108,9 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     #slide4 {
         overflow: visible;
         align-items: stretch;
+        justify-content: center;
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
     #slide2b .llama-instructions,
@@ -1501,14 +2150,19 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
         width: 72px;
     }
 
+    .llama-instructions .portrait-wrapper:before,
+    .llama-intro .portrait-wrapper:before {
+        width: 68px;
+        height: 68px;
+        background-color: rgba(255,255,255, 0.1);
+    }
+
     .llama-instructions .portrait-wrapper img,
     .llama-intro .portrait-wrapper img {
         width: 72px;
     }
 
-    .llama-instructions .text-wrapper button,
-    button#another-one,
-    button#back-home {
+    .llama-instructions .text-wrapper button {
         font-size: 0.82rem;
         padding: 0.55rem 0.9rem;
         margin-top: 12px;
@@ -1557,9 +2211,11 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 /* ── Móvil grande / landscape ── */
 @media (min-width: 480px) and (max-width: 767px) {
     #llama-helper {
-        left: 16px;
+        left: clamp(16px, 4vw, 28px);
         right: auto;
-        bottom: 16px;
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
         width: min(380px, calc(100vw - 32px));
         max-width: min(380px, calc(100vw - 32px));
     }
@@ -1576,13 +2232,13 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     }
 
     #llama-helper {
-        top: auto;
-        bottom: 28px;
-        left: clamp(24px, 3vw, 40px);
+        top: 50%;
+        bottom: auto;
+        left: clamp(24px, 4vw, 48px);
         right: auto;
-        transform: none;
+        transform: translateY(-50%);
         gap: 24px;
-        align-items: flex-end;
+        align-items: center;
         width: min(420px, 34vw);
         max-width: min(420px, 34vw);
         max-height: none;
@@ -1627,9 +2283,9 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
 
     button#firstStepBtn.juego-nav-btn {
         position: relative;
-        width: var(--juego-nav-btn-size);
+        width: var(--juego-nav-btn-labeled-w, 9.75rem);
         height: var(--juego-nav-btn-size);
-        min-width: var(--juego-nav-btn-size);
+        min-width: var(--juego-nav-btn-labeled-w, 9.75rem);
         min-height: var(--juego-nav-btn-size);
         margin: 0;
     }
@@ -1641,8 +2297,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     #slide2d .juego-slide-nav,
     #slide3 .juego-slide-nav,
     #slide4 .juego-slide-nav,
-    #slide5 .juego-slide-nav--setup,
-    #slide7 .juego-slide-nav {
+    #slide5 .juego-slide-nav--setup {
         position: static;
         margin-top: 16px;
         margin-bottom: 0;
@@ -1685,12 +2340,6 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     .llama-instructions .text-wrapper h3 {
         font-size: 1rem;
     }
-    
-    button#another-one,
-    button#back-home {
-        font-size: larger;
-        padding: 1rem 2rem;
-    }
 }
 
 /* ── Tablet grande / laptop pequeño ── */
@@ -1704,12 +2353,7 @@ div.slide7 div.cards-container div.card-wrapper.fitHeight:hover {
     }
 
     .llama-instructions {
-        min-width: 400px;
-    }
-
-    #slide7 .leftToRightWrapper {
-        flex-direction: row;
-        align-items: center;
+        min-width: 0;
     }
 }
 

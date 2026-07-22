@@ -29,6 +29,125 @@ if (experience && !window.location.pathname.includes('juego')) {
 }
 
 /* =============================================================================
+   JUEGO — panel Instrucciones
+============================================================================= */
+if (window.location.pathname.includes('juego')) {
+  const instructionsBtn = document.getElementById('juegoInstructionsBtn');
+  const instructionsPanel = document.getElementById('juegoInstructionsPanel');
+  const instructionsClose = document.getElementById('juegoInstructionsClose');
+  const textCards = [...document.querySelectorAll('#juegoInstructionsTextTrack .juego-instructions-stack__card')];
+  const textPrev = document.getElementById('juegoInstructionsTextPrev');
+  const textNext = document.getElementById('juegoInstructionsTextNext');
+  const cartasSections = [...document.querySelectorAll('#juegoInstructionsCartasStage .juego-instructions-cartas__section')];
+  const cartasPrev = document.getElementById('juegoInstructionsCartasPrev');
+  const cartasNext = document.getElementById('juegoInstructionsCartasNext');
+  const dropdowns = [...document.querySelectorAll('#juegoInstructionsAccordions .juego-instr-dropdown')];
+
+  let textIndex = 0;
+  let cartasIndex = 0;
+
+  const syncTextStack = () => {
+    textCards.forEach((card, index) => {
+      card.classList.remove('is-active', 'is-behind-1', 'is-behind-2');
+      if (index === textIndex) card.classList.add('is-active');
+      else if (index === textIndex - 1) card.classList.add('is-behind-1');
+      else if (index === textIndex - 2) card.classList.add('is-behind-2');
+    });
+
+    if (textPrev) textPrev.disabled = textIndex <= 0;
+    if (textNext) textNext.disabled = textIndex >= textCards.length - 1;
+  };
+
+  const syncCartasSection = () => {
+    cartasSections.forEach((section, index) => {
+      section.classList.toggle('is-active', index === cartasIndex);
+    });
+
+    if (cartasPrev) cartasPrev.disabled = cartasIndex <= 0;
+    if (cartasNext) cartasNext.disabled = cartasIndex >= cartasSections.length - 1;
+  };
+
+  const setDropdownOpen = (dropdown, open) => {
+    dropdown.classList.toggle('is-open', open);
+    const toggle = dropdown.querySelector('.juego-instr-dropdown__toggle');
+    toggle?.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+
+  const setInstructionsOpen = (open) => {
+    if (!instructionsBtn || !instructionsPanel) return;
+
+    if (open) {
+      instructionsPanel.hidden = false;
+      requestAnimationFrame(() => {
+        instructionsPanel.classList.add('is-open');
+      });
+      textIndex = 0;
+      cartasIndex = 0;
+      syncTextStack();
+      syncCartasSection();
+    } else {
+      instructionsPanel.classList.remove('is-open');
+      window.setTimeout(() => {
+        if (!instructionsPanel.classList.contains('is-open')) {
+          instructionsPanel.hidden = true;
+        }
+      }, 450);
+    }
+
+    instructionsPanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    instructionsBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.classList.toggle('juego-instructions-open', open);
+  };
+
+  instructionsBtn?.addEventListener('click', () => {
+    const isOpen = instructionsPanel?.classList.contains('is-open');
+    setInstructionsOpen(!isOpen);
+  });
+
+  instructionsClose?.addEventListener('click', () => setInstructionsOpen(false));
+
+  textPrev?.addEventListener('click', () => {
+    if (textIndex <= 0) return;
+    textIndex -= 1;
+    syncTextStack();
+  });
+
+  textNext?.addEventListener('click', () => {
+    if (textIndex >= textCards.length - 1) return;
+    textIndex += 1;
+    syncTextStack();
+  });
+
+  cartasPrev?.addEventListener('click', () => {
+    if (cartasIndex <= 0) return;
+    cartasIndex -= 1;
+    syncCartasSection();
+  });
+
+  cartasNext?.addEventListener('click', () => {
+    if (cartasIndex >= cartasSections.length - 1) return;
+    cartasIndex += 1;
+    syncCartasSection();
+  });
+
+  dropdowns.forEach((dropdown) => {
+    const toggle = dropdown.querySelector('.juego-instr-dropdown__toggle');
+    toggle?.addEventListener('click', () => {
+      setDropdownOpen(dropdown, !dropdown.classList.contains('is-open'));
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && instructionsPanel?.classList.contains('is-open')) {
+      setInstructionsOpen(false);
+    }
+  });
+
+  syncTextStack();
+  syncCartasSection();
+}
+
+/* =============================================================================
    MAIN / UTILS
 ============================================================================= */
 const preloadImages = (selector = 'img') =>
