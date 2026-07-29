@@ -890,17 +890,30 @@ Date: 05-26 to 07-26
 
     <!-- Carrusel -->
     <section class="carousel" role="region" aria-label="Galería de imágenes" tabindex="0">
-      <div class="carousel__cards-wrapper"></div>
-      <p class="carousel__status visually-hidden" aria-live="polite"></p>
-      <div class="carousel__intro-arrow" hidden aria-hidden="true">
-        <svg class="carousel__intro-arrow-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" focusable="false">
-          <path
-            fill="currentColor"
-            d="M12 32c0-2.2 1.8-4 4-4h18.2L26.6 21.4a4 4 0 1 1 5.6-5.6l16 16a4 4 0 0 1 0 5.6l-16 16a4 4 0 1 1-5.6-5.6L34.2 36H16c-2.2 0-4-1.8-4-4z"
-          />
-        </svg>
+      <div class="carousel__stage">
+        <div class="carousel__cards-wrapper"></div>
       </div>
+      <p class="carousel__status visually-hidden" aria-live="polite"></p>
     </section>
+
+    <div class="carousel__nav" role="group" aria-label="Controles de la galería">
+      <button type="button" class="juego-nav-btn juego-nav-btn--back carousel__nav-btn--prev" aria-label="Imagen anterior">
+        <span class="juego-nav-btn__slide" aria-hidden="true">
+          <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+            <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+            <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+          </svg>
+        </span>
+      </button>
+      <button type="button" class="juego-nav-btn juego-nav-btn--next carousel__nav-btn--next" aria-label="Imagen siguiente">
+        <span class="juego-nav-btn__slide" aria-hidden="true">
+          <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
+            <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="currentColor"></path>
+            <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="currentColor"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
 
     <!-- Overlay fullscreen (se mantiene) -->
     <div id="fullscreenOverlay" class="hidden">
@@ -1215,14 +1228,7 @@ Date: 05-26 to 07-26
       </div>
     </aside>
 
-    <div class="carousel-cursor" aria-hidden="true">
-      <svg class="carousel-cursor__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" focusable="false">
-        <path
-          fill="currentColor"
-          d="M12 32c0-2.2 1.8-4 4-4h18.2L26.6 21.4a4 4 0 1 1 5.6-5.6l16 16a4 4 0 0 1 0 5.6l-16 16a4 4 0 1 1-5.6-5.6L34.2 36H16c-2.2 0-4-1.8-4-4z"
-        />
-      </svg>
-    </div>
+    <div class="carousel-cursor" hidden aria-hidden="true"></div>
 
     <script async type="module" src="/index.js"></script>
     <script type="module" src="/script.js"></script>

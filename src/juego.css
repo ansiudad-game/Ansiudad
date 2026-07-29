@@ -658,12 +658,12 @@ body.juego-instructions-open {
     position: relative;
     z-index: 0;
     font-family: var(--font-titles, "HelveticaNeue", sans-serif);
-    font-size: 0.95rem;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--amarillo-oscuro);
-    transform: translateX(0.5rem);
+    transform: translateX(1.25rem);
 }
 
 .juego-nav-btn--labeled:hover .juego-nav-btn__slide,

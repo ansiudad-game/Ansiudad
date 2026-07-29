@@ -142,15 +142,16 @@
   position: relative;
   z-index: 8;
   isolation: isolate;
+  display: block;
   width: 100%;
-  height: clamp(22rem, 54vh, 36rem);
+  height: auto;
+  min-height: 0;
   overflow: visible;
   margin-top: -1.25rem;
-  margin-bottom: clamp(1rem, 3vw, 2rem);
-  padding-top: 0;
-  padding-bottom: clamp(1.25rem, 4vh, 2rem);
-  cursor: none;
-  touch-action: none;
+  margin-bottom: 0;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  cursor: default;
+  touch-action: manipulation;
   outline: none;
   box-sizing: border-box;
 }
@@ -160,32 +161,159 @@
   border-radius: 0.5rem;
 }
 
+.carousel__stage {
+  position: relative;
+  width: 100%;
+  height: clamp(18rem, 48vh, 30rem);
+  overflow: visible;
+}
+
 .carousel__cards-wrapper {
   position: absolute;
   left: 50%;
-  top: 6%;
+  top: 48%;
   z-index: 1;
   transform: translate(-50%, -50%);
   overflow: visible;
 }
 
-.carousel__intro-arrow {
-  position: absolute;
-  left: 50%;
-  top: 26%;
-  z-index: 20;
-  width: clamp(3rem, 8vw, 4.5rem);
-  height: clamp(3rem, 8vw, 4.5rem);
-  color: var(--rosa);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.22));
+.carousel__nav {
+  position: relative;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: clamp(7rem, 18vh, 12rem);
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  box-sizing: border-box;
 }
 
-.carousel__intro-arrow-svg {
-  display: block;
-  width: 100%;
+/* Mismo estilo que botones de navegación en Juego */
+#where .juego-nav-btn,
+.carousel__nav .juego-nav-btn {
+  --juego-nav-btn-size: 2.6rem;
+  --juego-nav-btn-slide-h: 2.2rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--juego-nav-btn-size);
+  height: var(--juego-nav-btn-size);
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  background-color: color-mix(in srgb, var(--morado-oscuro) 75%, transparent);
+  overflow: visible;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+#where .juego-nav-btn__slide,
+.carousel__nav .juego-nav-btn__slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42%;
   height: 100%;
+  border: 4px solid transparent;
+  border-radius: 9999px;
+  background-color: var(--amarillo-oscuro);
+  color: var(--morado-oscuro);
+  box-sizing: border-box;
+  transition:
+    width 0.5s ease,
+    height 0.5s ease,
+    top 0.5s ease,
+    border-radius 0.5s ease,
+    border-color 0.5s ease;
+}
+
+#where .juego-nav-btn--next .juego-nav-btn__slide,
+.carousel__nav .juego-nav-btn--next .juego-nav-btn__slide {
+  border-radius: 9999px 0.85rem 0.85rem 9999px;
+}
+
+#where .juego-nav-btn--back .juego-nav-btn__slide,
+.carousel__nav .juego-nav-btn--back .juego-nav-btn__slide {
+  left: auto;
+  right: 0;
+  width: 42%;
+  border-radius: 0.85rem 9999px 9999px 0.85rem;
+}
+
+#where .juego-nav-btn--next:hover .juego-nav-btn__slide,
+#where .juego-nav-btn--next:focus-visible .juego-nav-btn__slide,
+#where .juego-nav-btn--back:hover .juego-nav-btn__slide,
+#where .juego-nav-btn--back:focus-visible .juego-nav-btn__slide,
+#where .juego-nav-btn:hover .juego-nav-btn__slide,
+#where .juego-nav-btn:focus-visible .juego-nav-btn__slide,
+.carousel__nav .juego-nav-btn:hover .juego-nav-btn__slide,
+.carousel__nav .juego-nav-btn:focus-visible .juego-nav-btn__slide {
+  width: 100%;
+  border-radius: 9999px;
+  border-color: var(--morado-oscuro);
+}
+
+#where .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn__icon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.5s ease;
+}
+
+#where .juego-nav-btn--next .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn--next .juego-nav-btn__icon {
+  transform: scaleX(-1);
+}
+
+#where .juego-nav-btn:hover .juego-nav-btn__icon,
+#where .juego-nav-btn:focus-visible .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn:hover .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn:focus-visible .juego-nav-btn__icon {
+  transform: scale(1.45);
+}
+
+#where .juego-nav-btn--next:hover .juego-nav-btn__icon,
+#where .juego-nav-btn--next:focus-visible .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn--next:hover .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn--next:focus-visible .juego-nav-btn__icon {
+  transform: scaleX(-1) scale(1.45);
+}
+
+#where .juego-nav-btn:active .juego-nav-btn__icon,
+#where .juego-nav-btn:hover:active .juego-nav-btn__icon,
+#where .juego-nav-btn:focus-visible:active .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn:active .juego-nav-btn__icon {
+  transform: scale(0.82);
+  transition: transform 0.12s ease;
+}
+
+#where .juego-nav-btn--next:active .juego-nav-btn__icon,
+#where .juego-nav-btn--next:hover:active .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn--next:active .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn--next:hover:active .juego-nav-btn__icon {
+  transform: scaleX(-1) scale(0.82);
+}
+
+#where .juego-nav-btn--back:active .juego-nav-btn__icon,
+#where .juego-nav-btn--back:hover:active .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn--back:active .juego-nav-btn__icon,
+.carousel__nav .juego-nav-btn--back:hover:active .juego-nav-btn__icon {
+  transform: scale(0.82);
+}
+
+#where .juego-nav-btn:focus-visible,
+.carousel__nav .juego-nav-btn:focus-visible {
+  outline: 2px solid var(--morado-oscuro, #3e1581);
+  outline-offset: 2px;
 }
 
 .carousel__card {
@@ -200,6 +328,24 @@
   box-shadow: -4px 8px 14px rgba(45, 20, 58, 0.22);
   user-select: none;
   background: var(--morado-oscuro);
+  cursor: default;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    --carousel-card-width: clamp(8.5rem, 46vw, 13rem);
+    padding-inline: clamp(0.5rem, 2vw, 1rem);
+  }
+
+  .carousel__stage {
+    height: clamp(16rem, 52vh, 24rem);
+  }
+
+  .carousel__card {
+    min-width: 0;
+    max-width: min(280px, 72vw);
+  }
 }
 
 .carousel__card.is-fan-edge {
@@ -228,70 +374,18 @@
 }
 
 .carousel-cursor {
-  position: fixed;
-  left: -32px;
-  top: -32px;
-  z-index: 10000;
-  width: 64px;
-  height: 64px;
-  color: var(--rosa);
-  pointer-events: none;
-  user-select: none;
-  opacity: 0;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
-}
-
-.carousel-cursor__svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-@media (hover: none) {
-  .carousel {
-    cursor: grab;
-  }
-
-  .carousel-cursor {
-    display: none;
-  }
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .carousel {
-    cursor: pointer;
-    touch-action: manipulation;
-  }
-
-  .carousel__intro-arrow {
-    display: none;
+  .carousel__nav .juego-nav-btn__slide,
+  .carousel__nav .juego-nav-btn__icon,
+  #where .juego-nav-btn__slide,
+  #where .juego-nav-btn__icon {
+    transition: none;
   }
 }
 
-/* Overlay fullscreen */
 #fullscreenOverlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--morado-oscuro);
-  z-index: 9999;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-#fullscreenOverlay img {
-  max-width: 90%;
-  max-height: 90%;
-  cursor: pointer;
-}
-
-#fullscreenOverlay.show {
-  opacity: 1;
-  visibility: visible;
+  display: none !important;
 }

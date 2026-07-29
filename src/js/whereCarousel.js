@@ -9,24 +9,52 @@ const GALLERY = [
   { src: 'img/gallery/img-6.jpg', alt: 'Galería 6' },
 ];
 
-const INTRO_STORAGE_KEY = 'ansiudad-where-carousel-intro';
-
 /** Grados totales del abanico (−spread/2 … +spread/2). Menos = imágenes más juntas. */
 const FAN_SPREAD_DEG = 150;
+const FAN_SPREAD_DEG_NARROW = 110;
+const NARROW_MQ = '(max-width: 768px)';
 
 /** Distancia del pivote bajo cada carta (%). Menos = arco más cerrado arriba. */
 const FAN_ORIGIN_Y = '235%';
 
-function buildRotations(nCards, spread = FAN_SPREAD_DEG) {
-  const rots = [];
-  const half = spread / 2;
-  const step = nCards > 1 ? spread / (nCards - 1) : 0;
+/**
+ * Desktop: abanico simétrico (−spread/2 … +spread/2).
+ * Narrow: ancla una carta en 0° para que no quede el hueco central con N par.
+ */
+function buildRotations(nCards, spread = FAN_SPREAD_DEG, { centerFront = false } = {}) {
+  if (nCards <= 0) return [];
+  if (nCards === 1) return [0];
 
-  for (let i = 0; i < nCards; i += 1) {
-    rots.push(gsap.utils.clamp(-half, half, i * step - half));
+  const half = spread / 2;
+
+  if (!centerFront) {
+    const step = spread / (nCards - 1);
+    return Array.from({ length: nCards }, (_, i) =>
+      gsap.utils.clamp(-half, half, i * step - half),
+    );
   }
 
-  return rots;
+  const centerIndex = Math.floor((nCards - 1) / 2);
+  const maxSteps = Math.max(centerIndex, nCards - 1 - centerIndex);
+  const step = half / maxSteps;
+
+  return Array.from({ length: nCards }, (_, i) =>
+    gsap.utils.clamp(-half, half, (i - centerIndex) * step),
+  );
+}
+
+function isNarrowViewport() {
+  return window.matchMedia(NARROW_MQ).matches;
+}
+
+function getFanSpread() {
+  return isNarrowViewport() ? FAN_SPREAD_DEG_NARROW : FAN_SPREAD_DEG;
+}
+
+function getFanRotations(nCards) {
+  return buildRotations(nCards, getFanSpread(), {
+    centerFront: isNarrowViewport(),
+  });
 }
 
 function getFrontCard(cardsWrapper) {
@@ -47,33 +75,21 @@ function getFrontCard(cardsWrapper) {
   return front;
 }
 
-function openFullscreen(src, alt) {
-  const overlay = document.getElementById('fullscreenOverlay');
-  const overlayImg = document.getElementById('fullscreenImage');
-  if (!overlay || !overlayImg) return;
-
-  overlayImg.src = src;
-  overlayImg.alt = alt || 'Imagen ampliada';
-  overlay.classList.add('show');
-}
-
 export function initWhereCarousel({ reducedMotion = false } = {}) {
   const carousel = document.querySelector('#where .carousel');
   const cardsWrapper = carousel?.querySelector('.carousel__cards-wrapper');
-  const cursor = document.querySelector('.carousel-cursor');
   const status = carousel?.querySelector('.carousel__status');
-  const introArrow = carousel?.querySelector('.carousel__intro-arrow');
+  const whereSection = document.querySelector('#where');
+  const prevBtn = whereSection?.querySelector('.carousel__nav-btn--prev');
+  const nextBtn = whereSection?.querySelector('.carousel__nav-btn--next');
+  const nav = whereSection?.querySelector('.carousel__nav');
 
   if (!carousel || !cardsWrapper) return;
 
   const nCards = GALLERY.length;
-  const rots = buildRotations(nCards);
+  let rots = getFanRotations(nCards);
   let dir = 1;
-  let pointerActive = false;
-  let pointerMoved = false;
-  let pointerDownX = 0;
-  let introPending = !localStorage.getItem(INTRO_STORAGE_KEY);
-  let introPulse = null;
+  let animating = false;
 
   cardsWrapper.replaceChildren();
 
@@ -122,6 +138,7 @@ export function initWhereCarousel({ reducedMotion = false } = {}) {
 
     const cards = cardsWrapper.children;
     const lastIndex = nCards - 1;
+    animating = true;
 
     for (let i = 0; i < nCards; i += 1) {
       const card = cards[i];
@@ -145,10 +162,16 @@ export function initWhereCarousel({ reducedMotion = false } = {}) {
       });
     }
 
-    gsap.delayedCall(elastic ? 0.45 : 0.12, updateStatus);
+    gsap.delayedCall(elastic ? 0.45 : 0.12, () => {
+      updateStatus();
+      animating = false;
+    });
   };
 
-  const move = () => {
+  const stepOnce = (direction) => {
+    if (animating) return;
+
+    dir = direction;
     gsap.killTweensOf(cardsWrapper.children);
 
     if (dir > 0) cardsWrapper.append(cardsWrapper.firstElementChild);
@@ -157,177 +180,18 @@ export function initWhereCarousel({ reducedMotion = false } = {}) {
     animateCards({ elastic: !reducedMotion });
   };
 
-  const stepOnce = (direction) => {
-    dir = direction;
-    move();
-  };
-
-  const dismissIntro = () => {
-    if (!introPending) return;
-
-    introPending = false;
-    localStorage.setItem(INTRO_STORAGE_KEY, '1');
-
-    if (introArrow) {
-      introPulse?.kill();
-      gsap.to(introArrow, {
-        autoAlpha: 0,
-        scale: 0.85,
-        duration: 0.25,
-        onComplete: () => {
-          introArrow.hidden = true;
-        },
-      });
-    }
-  };
-
-  const showIntroIfNeeded = () => {
-    if (!introPending || !introArrow || reducedMotion) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-
-        introArrow.hidden = false;
-        gsap.set(introArrow, { autoAlpha: 1, scale: 1 });
-        introPulse = gsap.to(introArrow, {
-          scale: 1.14,
-          duration: 0.65,
-          yoyo: true,
-          repeat: -1,
-          ease: 'power1.inOut',
-        });
-
-        observer.disconnect();
-      },
-      { threshold: 0.35 },
-    );
-
-    observer.observe(carousel);
+  const applyFanLayout = ({ elastic = false } = {}) => {
+    rots = getFanRotations(nCards);
+    animateCards({ elastic });
   };
 
   updateStatus();
   syncEdgeOpacity();
-  showIntroIfNeeded();
 
-  if (reducedMotion) {
-    dismissIntro();
-
-    cardsWrapper.addEventListener('click', (event) => {
-      const card = event.target.closest('.carousel__card');
-      if (!card) return;
-
-      event.stopPropagation();
-      const img = card.querySelector('img');
-      if (img) openFullscreen(img.src, img.alt);
-    });
-
-    carousel.addEventListener('click', (event) => {
-      if (event.target.closest('.carousel__card')) return;
-
-      const rect = carousel.getBoundingClientRect();
-      const direction = event.clientX < rect.left + rect.width / 2 ? -1 : 1;
-      stepOnce(direction);
-    });
-
-    carousel.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        stepOnce(-1);
-      }
-      if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        stepOnce(1);
-      }
-    });
-
-    return;
-  }
-
-  if (!cursor) return;
-
-  const cursorX = gsap.quickTo(cursor, 'x', { ease: 'power4' });
-  const cursorY = gsap.quickTo(cursor, 'y', { ease: 'power4' });
-  const cursorDir = gsap.quickSetter(cursor, 'scaleX');
-
-  const delayedMove = gsap.to(window, {
-    paused: true,
-    repeat: -1,
-    onRepeat: move,
-    onStart: move,
-    duration: 0.15,
-  });
-
-  carousel.addEventListener('pointerenter', (event) => {
-    if (introPending) return;
-
-    gsap.to(cursor, { opacity: 1, duration: 0.2 });
-    dir = event.clientX < window.innerWidth / 2 ? -1 : 1;
-    cursorDir(dir);
-    cursorX(event.clientX);
-    cursorY(event.clientY);
-  });
-
-  carousel.addEventListener('pointerleave', () => {
-    delayedMove.pause();
-    pointerActive = false;
-    gsap.to(cursor, { opacity: 0, duration: 0.2 });
-  });
-
-  carousel.addEventListener('pointermove', (event) => {
-    dir = event.clientX < window.innerWidth / 2 ? -1 : 1;
-    cursorDir(dir);
-
-    if (!introPending) {
-      cursorX(event.clientX);
-      cursorY(event.clientY);
-    }
-
-    if (pointerActive && Math.abs(event.clientX - pointerDownX) > 6) {
-      pointerMoved = true;
-    }
-  });
-
-  carousel.addEventListener('pointerdown', (event) => {
-    dismissIntro();
-
-    pointerActive = true;
-    pointerMoved = false;
-    pointerDownX = event.clientX;
-    carousel.setPointerCapture(event.pointerId);
-
-    gsap.to(cursor, { opacity: 1, duration: 0.15 });
-    cursorX(event.clientX);
-    cursorY(event.clientY);
-
-    delayedMove.play(0);
-  });
-
-  const stopPointer = (event) => {
-    if (!pointerActive) return;
-
-    delayedMove.pause();
-    pointerActive = false;
-
-    if (carousel.hasPointerCapture(event.pointerId)) {
-      carousel.releasePointerCapture(event.pointerId);
-    }
-
-    if (!pointerMoved) {
-      const card = event.target.closest?.('.carousel__card');
-      if (card) {
-        const img = card.querySelector('img');
-        if (img) openFullscreen(img.src, img.alt);
-      }
-    }
-  };
-
-  carousel.addEventListener('pointerup', stopPointer);
-  carousel.addEventListener('pointercancel', stopPointer);
+  prevBtn?.addEventListener('click', () => stepOnce(-1));
+  nextBtn?.addEventListener('click', () => stepOnce(1));
 
   carousel.addEventListener('keydown', (event) => {
-    dismissIntro();
-
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
       stepOnce(-1);
@@ -337,4 +201,23 @@ export function initWhereCarousel({ reducedMotion = false } = {}) {
       stepOnce(1);
     }
   });
+
+  nav?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      stepOnce(-1);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      stepOnce(1);
+    }
+  });
+
+  const narrowMq = window.matchMedia(NARROW_MQ);
+  const onViewportChange = () => applyFanLayout({ elastic: false });
+  if (typeof narrowMq.addEventListener === 'function') {
+    narrowMq.addEventListener('change', onViewportChange);
+  } else {
+    narrowMq.addListener(onViewportChange);
+  }
 }
