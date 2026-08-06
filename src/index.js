@@ -458,9 +458,13 @@ function initMenu() {
 
     if (href.startsWith('#') && href.length > 1) {
       e.preventDefault();
-      if (toggleButtonCheckbox?.checked) {
+      const wasOpen = Boolean(toggleButtonCheckbox?.checked);
+      if (wasOpen) {
+        // Programmatic uncheck does not fire `change`; close explicitly so the
+        // toggle stays in sync and the close control works on the next tap.
         toggleButtonCheckbox.checked = false;
-        window.setTimeout(() => scrollToHashTarget(href), 400);
+        closeMenu();
+        window.setTimeout(() => scrollToHashTarget(href), isDesktopMenu() ? 220 : 400);
       } else {
         scrollToHashTarget(href);
       }
@@ -469,6 +473,7 @@ function initMenu() {
 
     if (toggleButtonCheckbox?.checked) {
       toggleButtonCheckbox.checked = false;
+      closeMenu();
     }
   });
 }
@@ -1916,26 +1921,86 @@ function initCarousel() {
 }
 
 function initGallery() {
-  const galleryImages = document.querySelectorAll('.gallery img');
-  const fullscreenOverlay = document.getElementById('fullscreenOverlay');
+  const overlay = document.getElementById('fullscreenOverlay');
   const fullscreenImage = document.getElementById('fullscreenImage');
+  const closeBtn = overlay?.querySelector('.gallery-zoom__close');
+  const carousel = document.querySelector('#where .carousel');
 
-  if (!fullscreenOverlay || !fullscreenImage) return;
+  if (!overlay || !fullscreenImage || !carousel) return;
 
-  galleryImages.forEach((img) => {
-    img.addEventListener('click', () => {
+  // Garantiza que el overlay viva en <body> (fixed = viewport, no la sección)
+  if (overlay.parentElement !== document.body) {
+    document.body.appendChild(overlay);
+  }
+
+  let lastFocus = null;
+  let reopenCooldown = false;
+
+  const openZoom = (img) => {
+    if (!img?.src || reopenCooldown) return;
+    if (overlay.classList.contains('is-open')) {
       fullscreenImage.src = img.src;
-      fullscreenOverlay.classList.add('show');
-    });
+      fullscreenImage.alt = img.alt || 'Imagen ampliada';
+      return;
+    }
+
+    lastFocus = document.activeElement;
+    fullscreenImage.src = img.src;
+    fullscreenImage.alt = img.alt || 'Imagen ampliada';
+    overlay.hidden = false;
+    overlay.setAttribute('aria-hidden', 'false');
+    // Force reflow so the opacity transition runs
+    void overlay.offsetWidth;
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    closeBtn?.focus({ preventScroll: true });
+  };
+
+  const closeZoom = () => {
+    if (!overlay.classList.contains('is-open') && overlay.hidden) return;
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    reopenCooldown = true;
+
+    const finish = () => {
+      if (overlay.classList.contains('is-open')) return;
+      overlay.hidden = true;
+      fullscreenImage.removeAttribute('src');
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        lastFocus.focus({ preventScroll: true });
+      }
+      lastFocus = null;
+      window.setTimeout(() => {
+        reopenCooldown = false;
+      }, 350);
+    };
+
+    window.setTimeout(finish, 280);
+  };
+
+  carousel.addEventListener('click', (event) => {
+    const card = event.target.closest('.carousel__card');
+    if (!card || card.classList.contains('is-fan-edge')) return;
+    const img = card.querySelector('img');
+    if (img) {
+      event.preventDefault();
+      openZoom(img);
+    }
   });
 
-  fullscreenOverlay.addEventListener('click', () => {
-    fullscreenOverlay.classList.remove('show');
+  closeBtn?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    closeZoom();
+  });
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) closeZoom();
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      fullscreenOverlay.classList.remove('show');
+    if (event.key === 'Escape' && overlay.classList.contains('is-open')) {
+      closeZoom();
     }
   });
 }

@@ -185,7 +185,7 @@
   justify-content: center;
   gap: 10px;
   width: 100%;
-  margin-top: clamp(7rem, 18vh, 12rem);
+  margin-top: clamp(12rem, 32vh, 20rem);
   margin-bottom: clamp(1.5rem, 4vw, 3rem);
   padding: 0 clamp(1rem, 3vw, 2rem);
   box-sizing: border-box;
@@ -328,8 +328,8 @@
   box-shadow: -4px 8px 14px rgba(45, 20, 58, 0.22);
   user-select: none;
   background: var(--morado-oscuro);
-  cursor: default;
-  pointer-events: none;
+  cursor: zoom-in;
+  pointer-events: auto;
 }
 
 @media (max-width: 768px) {
@@ -359,6 +359,12 @@
   object-fit: cover;
   display: block;
   pointer-events: none;
+  transition: transform 0.35s ease;
+}
+
+.carousel__card:hover img,
+.carousel__card:focus-visible img {
+  transform: scale(1.06);
 }
 
 .visually-hidden {
@@ -384,8 +390,109 @@
   #where .juego-nav-btn__icon {
     transition: none;
   }
+
+  .carousel__card img {
+    transition: none;
+  }
+
+  .carousel__card:hover img,
+  .carousel__card:focus-visible img {
+    transform: none;
+  }
 }
 
-#fullscreenOverlay {
-  display: none !important;
+/* Zoom lightbox — fijo al viewport (fuera de #donde) */
+.gallery-zoom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100dvh;
+  max-height: 100vh;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  box-sizing: border-box;
+  margin: 0;
+  background: color-mix(in srgb, var(--morado-oscuro, #2d143a) 42%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.gallery-zoom.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.gallery-zoom[hidden] {
+  display: none;
+}
+
+.gallery-zoom.is-open[hidden] {
+  display: flex;
+}
+
+.gallery-zoom__frame {
+  position: relative;
+  margin: 0;
+  max-width: min(92vw, 920px);
+  max-height: min(86vh, 900px);
+  border-radius: 0.75rem;
+  overflow: visible;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+}
+
+.gallery-zoom__img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(92vw, 920px);
+  max-height: min(86vh, 900px);
+  object-fit: contain;
+  border-radius: 0.75rem;
+  background: var(--morado-oscuro, #2d143a);
+}
+
+.gallery-zoom__close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--amarillo-claro, #f6e9a8);
+  background: color-mix(in srgb, var(--morado-oscuro, #2d143a) 78%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.gallery-zoom__close:hover,
+.gallery-zoom__close:focus-visible {
+  transform: scale(1.06);
+  background: color-mix(in srgb, var(--morado, #5b2d91) 88%, transparent);
+  outline: none;
+}
+
+.gallery-zoom__close:focus-visible {
+  outline: 2px solid var(--amarillo-claro, #f6e9a8);
+  outline-offset: 2px;
 }

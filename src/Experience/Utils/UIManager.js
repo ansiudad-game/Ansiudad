@@ -14,9 +14,9 @@ export default class UIManager extends EventEmitter {
         this.currentView = this.appState.currentStep
         this.response = null
         this.cityIntroComplete = false
-        this.eventStackIndex = 0
-        this.roleStackIndex = 0
         this.resultsStacksBound = false
+        this.resultsAnimating = { event: false, role: false }
+        this.resultsPointer = { event: null, role: null }
         this.initUI();
 
         this.addHandlers();
@@ -186,10 +186,18 @@ export default class UIManager extends EventEmitter {
 
                 if (eventBox && responseData.data.events.events) {
                     eventBox.innerHTML = '';
+                    let eventCount = 0;
                     responseData.data.events.events.forEach(event => {
                         if (event?.title && event?.description) {
+                            eventCount += 1;
                             const eventCard = document.createElement('article');
                             eventCard.className = 'slide7-result-card slide7-results__stack-card';
+                            eventCard.dataset.deckIndex = String(eventCount);
+
+                            const eventLabel = document.createElement('p');
+                            eventLabel.className = 'slide7-result-card__player';
+                            eventLabel.textContent = `INCIDENTE ${eventCount}`;
+                            eventCard.appendChild(eventLabel);
 
                             const eventTitle = document.createElement('h3');
                             eventTitle.className = 'slide7-result-card__title';
@@ -208,14 +216,17 @@ export default class UIManager extends EventEmitter {
 
                 if (rolesBox && responseData.data.roles?.roles) {
                     rolesBox.innerHTML = '';
-                    responseData.data.roles.roles.forEach((role, index) => {
+                    let roleCount = 0;
+                    responseData.data.roles.roles.forEach((role) => {
                         if (role?.name || role?.title) {
+                            roleCount += 1;
                             const roleCard = document.createElement('article');
                             roleCard.className = 'slide7-result-card slide7-result-card--role slide7-results__stack-card';
+                            roleCard.dataset.deckIndex = String(roleCount);
 
                             const playerLabel = document.createElement('p');
                             playerLabel.className = 'slide7-result-card__player';
-                            playerLabel.textContent = `JUGADOR ${index + 1}`;
+                            playerLabel.textContent = `JUGADOR ${roleCount}`;
                             roleCard.appendChild(playerLabel);
 
                             const roleTitle = document.createElement('h3');
@@ -233,8 +244,6 @@ export default class UIManager extends EventEmitter {
                     });
                 }
 
-                this.eventStackIndex = 0;
-                this.roleStackIndex = 0;
                 this.syncResultsStack('event');
                 this.syncResultsStack('role');
             }
@@ -253,66 +262,258 @@ export default class UIManager extends EventEmitter {
         const rolesPrev = document.getElementById('slide7RolesPrev');
         const rolesNext = document.getElementById('slide7RolesNext');
 
-        eventPrev?.addEventListener('click', () => {
-            if (this.eventStackIndex <= 0) return;
-            this.eventStackIndex -= 1;
-            this.syncResultsStack('event');
+        eventPrev?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.recycleResultsDeck('event', -1);
         });
 
-        eventNext?.addEventListener('click', () => {
-            const cards = this.getResultsCards('event');
-            if (this.eventStackIndex >= cards.length - 1) return;
-            this.eventStackIndex += 1;
-            this.syncResultsStack('event');
+        eventNext?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.recycleResultsDeck('event', 1);
         });
 
-        rolesPrev?.addEventListener('click', () => {
-            if (this.roleStackIndex <= 0) return;
-            this.roleStackIndex -= 1;
-            this.syncResultsStack('role');
+        rolesPrev?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.recycleResultsDeck('role', -1);
         });
 
-        rolesNext?.addEventListener('click', () => {
-            const cards = this.getResultsCards('role');
-            if (this.roleStackIndex >= cards.length - 1) return;
-            this.roleStackIndex += 1;
-            this.syncResultsStack('role');
+        rolesNext?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.recycleResultsDeck('role', 1);
         });
+
+        this.bindResultsPointer('event');
+        this.bindResultsPointer('role');
 
         this.resultsStacksBound = true;
         this.syncResultsStack('event');
         this.syncResultsStack('role');
     }
 
+    getResultsTrack(kind) {
+        return document.getElementById(kind === 'event' ? 'llama-event' : 'llama-roles');
+    }
+
+    getResultsTinder(kind) {
+        return document.querySelector(`.slide7-tinder[data-tinder="${kind}"]`);
+    }
+
     getResultsCards(kind) {
-        const trackId = kind === 'event' ? 'llama-event' : 'llama-roles';
-        const track = document.getElementById(trackId);
+        const track = this.getResultsTrack(kind);
         if (!track) return [];
         return [...track.querySelectorAll('.slide7-results__stack-card')];
     }
 
+    prefersReducedMotion() {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    stackTransformForOffset(offset) {
+        const scale = Math.max((20 - offset) / 20, 0.88);
+        const y = -34 * offset;
+        return `scale(${scale}) translateY(${y}px)`;
+    }
+
     syncResultsStack(kind) {
         const cards = this.getResultsCards(kind);
-        const index = kind === 'event' ? this.eventStackIndex : this.roleStackIndex;
+        const tinder = this.getResultsTinder(kind);
         const prev = document.getElementById(kind === 'event' ? 'slide7EventPrev' : 'slide7RolesPrev');
         const next = document.getElementById(kind === 'event' ? 'slide7EventNext' : 'slide7RolesNext');
         const nav = prev?.closest('.slide7-results__nav');
+        const visibleDepth = cards.length;
 
-        cards.forEach((card, cardIndex) => {
-            card.classList.remove('is-active', 'is-behind-1', 'is-behind-2');
-            if (cardIndex === index) card.classList.add('is-active');
-            else if (cardIndex === index - 1) card.classList.add('is-behind-1');
-            else if (cardIndex === index - 2) card.classList.add('is-behind-2');
+        cards.forEach((card, index) => {
+            card.classList.remove('is-active', 'is-stacked', 'is-moving', 'is-removed', 'is-behind-1', 'is-behind-2');
+            card.style.transform = '';
+
+            if (index >= visibleDepth) {
+                card.style.opacity = '0';
+                card.style.visibility = 'hidden';
+                card.style.pointerEvents = 'none';
+                card.style.zIndex = '0';
+                return;
+            }
+
+            // Keep stacked titles readable so you can count the deck.
+            card.style.opacity = index === 0 ? '1' : String(Math.max(0.62, 1 - index * 0.07));
+            card.style.visibility = 'visible';
+            card.style.pointerEvents = index === 0 ? 'auto' : 'none';
+            card.style.zIndex = String(cards.length - index);
+            card.style.transform = this.stackTransformForOffset(index);
+
+            if (index === 0) card.classList.add('is-active');
+            else card.classList.add('is-stacked');
         });
 
-        if (prev) prev.disabled = index <= 0 || cards.length <= 1;
-        if (next) next.disabled = index >= cards.length - 1 || cards.length <= 1;
-        if (nav) nav.hidden = cards.length <= 1;
+        const canLoop = cards.length > 1;
+        if (prev) prev.disabled = !canLoop;
+        if (next) next.disabled = !canLoop;
+        if (nav) nav.hidden = !canLoop;
 
         const counter = document.getElementById(kind === 'event' ? 'slide7EventCounter' : 'slide7RolesCounter');
         const total = Math.max(cards.length, 1);
-        const current = cards.length ? index + 1 : 0;
+        const current = cards[0]?.dataset.deckIndex || (cards.length ? '1' : '0');
         if (counter) counter.textContent = `${current}/${total}`;
+
+        if (tinder) {
+            tinder.classList.remove('is-love', 'is-nope');
+            tinder.classList.add('is-loaded');
+        }
+
+        const track = this.getResultsTrack(kind);
+        if (track) {
+            const peekCount = Math.max(cards.length - 1, 0);
+            track.style.paddingTop = `calc(var(--slide7-stack-peek, 2.05rem) * ${Math.min(peekCount, 6)})`;
+        }
+    }
+
+    recycleResultsDeck(kind, direction) {
+        if (this.resultsAnimating[kind]) return;
+
+        const track = this.getResultsTrack(kind);
+        const cards = this.getResultsCards(kind);
+        if (!track || cards.length <= 1) return;
+
+        const throwDir = direction >= 0 ? 1 : -1;
+
+        if (this.prefersReducedMotion()) {
+            if (throwDir > 0) track.appendChild(cards[0]);
+            else track.insertBefore(cards[cards.length - 1], cards[0]);
+            this.syncResultsStack(kind);
+            return;
+        }
+
+        this.resultsAnimating[kind] = true;
+        const tinder = this.getResultsTinder(kind);
+        const moveOutWidth = Math.max(document.body.clientWidth * 1.15, 520);
+
+        if (throwDir > 0) {
+            const card = cards[0];
+            tinder?.classList.add('is-love');
+            card.classList.add('is-removed');
+            card.style.transform = `translate(${moveOutWidth}px, -90px) rotate(-28deg)`;
+
+            window.setTimeout(() => {
+                card.classList.remove('is-removed');
+                card.style.transform = '';
+                track.appendChild(card);
+                this.syncResultsStack(kind);
+                this.resultsAnimating[kind] = false;
+            }, 280);
+            return;
+        }
+
+        const top = cards[0];
+        const last = cards[cards.length - 1];
+        tinder?.classList.add('is-nope');
+        top.classList.add('is-removed');
+        top.style.transform = `translate(-${moveOutWidth}px, -90px) rotate(28deg)`;
+
+        window.setTimeout(() => {
+            top.classList.remove('is-removed');
+            top.style.transform = '';
+            track.insertBefore(last, track.firstElementChild);
+            this.syncResultsStack(kind);
+            this.resultsAnimating[kind] = false;
+        }, 280);
+    }
+
+    bindResultsPointer(kind) {
+        const track = this.getResultsTrack(kind);
+        if (!track || track.dataset.tinderBound === 'true') return;
+        track.dataset.tinderBound = 'true';
+
+        const onPointerDown = (event) => {
+            if (event.button !== undefined && event.button !== 0) return;
+            if (this.resultsAnimating[kind]) return;
+
+            const cards = this.getResultsCards(kind);
+            const card = cards[0];
+            if (!card || !card.contains(event.target)) return;
+            if (cards.length <= 1) return;
+
+            this.resultsPointer[kind] = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                lastX: event.clientX,
+                lastY: event.clientY,
+                lastTime: event.timeStamp,
+                velocityX: 0,
+                card,
+            };
+
+            card.classList.add('is-moving');
+            card.setPointerCapture?.(event.pointerId);
+        };
+
+        const onPointerMove = (event) => {
+            const state = this.resultsPointer[kind];
+            if (!state || state.pointerId !== event.pointerId) return;
+
+            const deltaX = event.clientX - state.startX;
+            const deltaY = event.clientY - state.startY;
+            const dt = Math.max(event.timeStamp - state.lastTime, 1);
+            state.velocityX = (event.clientX - state.lastX) / dt;
+            state.lastX = event.clientX;
+            state.lastY = event.clientY;
+            state.lastTime = event.timeStamp;
+
+            const tinder = this.getResultsTinder(kind);
+            tinder?.classList.toggle('is-love', deltaX > 0);
+            tinder?.classList.toggle('is-nope', deltaX < 0);
+
+            const rotate = deltaX * 0.03 * (deltaY / 80 || 1);
+            state.card.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotate}deg)`;
+        };
+
+        const finishPointer = (event) => {
+            const state = this.resultsPointer[kind];
+            if (!state || state.pointerId !== event.pointerId) return;
+
+            const card = state.card;
+            const deltaX = event.clientX - state.startX;
+            const deltaY = event.clientY - state.startY;
+            const tinder = this.getResultsTinder(kind);
+
+            card.classList.remove('is-moving');
+            tinder?.classList.remove('is-love', 'is-nope');
+            this.resultsPointer[kind] = null;
+
+            const cards = this.getResultsCards(kind);
+            const shouldThrow = Math.abs(deltaX) > 72 || Math.abs(state.velocityX) > 0.45;
+
+            if (!shouldThrow || cards.length <= 1) {
+                card.style.transform = this.stackTransformForOffset(0);
+                return;
+            }
+
+            // Both swipe directions loop the top card to the back (CodePen style).
+            this.resultsAnimating[kind] = true;
+            const moveOutWidth = Math.max(document.body.clientWidth, 420);
+            const endX = Math.max(Math.abs(state.velocityX) * moveOutWidth, moveOutWidth);
+            const toX = deltaX > 0 ? endX : -endX;
+            const endY = Math.abs(deltaY) + 40;
+            const rotate = deltaX * 0.03 * (deltaY / 80 || 1);
+
+            tinder?.classList.toggle('is-love', deltaX > 0);
+            tinder?.classList.toggle('is-nope', deltaX < 0);
+            card.classList.add('is-removed');
+            card.style.transform = `translate(${toX}px, ${endY}px) rotate(${rotate}deg)`;
+
+            window.setTimeout(() => {
+                card.classList.remove('is-removed');
+                card.style.transform = '';
+                track.appendChild(card);
+                this.syncResultsStack(kind);
+                this.resultsAnimating[kind] = false;
+            }, 280);
+        };
+
+        track.addEventListener('pointerdown', onPointerDown);
+        track.addEventListener('pointermove', onPointerMove);
+        track.addEventListener('pointerup', finishPointer);
+        track.addEventListener('pointercancel', finishPointer);
     }
 
 

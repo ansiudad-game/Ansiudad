@@ -172,3 +172,26 @@ a.footer__experience-icon-link:hover,
 .footer__copy a:hover {
   text-decoration: underline;
 }
+
+/* Espacio inferior en móvil/tablet: el botón jugar fijo no tapa créditos ni contacto */
+@media (max-width: 1023px) {
+  #contacto .footer {
+    padding-bottom: calc(
+      var(--site-bottom-play-size, 110px) + clamp(3rem, 10vw, 5rem) +
+        env(safe-area-inset-bottom, 0px)
+    );
+  }
+
+  .footer__bottom {
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  #contacto .footer {
+    padding-bottom: calc(
+      clamp(86px, 22vw, 110px) + clamp(3.5rem, 12vw, 5.5rem) +
+        env(safe-area-inset-bottom, 0px)
+    );
+  }
+}

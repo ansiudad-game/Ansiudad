@@ -367,20 +367,23 @@
   flex: 0 0 auto;
   flex-shrink: 0;
   margin-top: auto;
-  padding-top: 0.65rem;
+  padding-top: 0.4rem;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.35rem, 2vw, 0.75rem);
+  gap: clamp(0.5rem, 2.5vw, 1rem);
   transform: none;
+  max-width: 100%;
 }
 
 #diseno .flip-back .logo {
-  max-width: clamp(72px, 22vw, 110px);
+  max-width: clamp(118px, 50%, 172px);
   width: auto;
+  max-height: clamp(72px, 14vw, 120px);
   height: auto;
+  object-fit: contain;
   margin: 0;
 }
 

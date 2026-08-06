@@ -106,19 +106,19 @@ Date: 05-26 to 07-26
           <div id="menu-panel" class="menu__panel" role="region" aria-label="Secciones">
             <ul class="menu__bottom">
               <li class="menu__item">
-                <a href="#que-es" class="menu__link">¿Qué es Ansiudad?</a>
+                <a href="#que-es" class="menu__link" data-text="¿Qué es Ansiudad?">¿Qué es Ansiudad?</a>
               </li>
               <li class="menu__item">
-                <a href="#desafio" class="menu__link">¿Cuál es el desafío?</a>
+                <a href="#desafio" class="menu__link" data-text="¿Cuál es el desafío?">¿Cuál es el desafío?</a>
               </li>
               <li class="menu__item">
-                <a href="#diseno" class="menu__link">¿Cómo lo diseñamos?</a>
+                <a href="#diseno" class="menu__link" data-text="¿Cómo lo diseñamos?">¿Cómo lo diseñamos?</a>
               </li>
               <li class="menu__item">
-                <a href="#donde" class="menu__link">¿Dónde se ha jugado?</a>
+                <a href="#donde" class="menu__link" data-text="¿Dónde se ha jugado?">¿Dónde se ha jugado?</a>
               </li>
               <li class="menu__item">
-                <a href="#contacto" class="menu__link">Contacto</a>
+                <a href="#contacto" class="menu__link" data-text="Contacto">Contacto</a>
               </li>
             </ul>
           </div>
@@ -915,11 +915,6 @@ Date: 05-26 to 07-26
       </button>
     </div>
 
-    <!-- Overlay fullscreen (se mantiene) -->
-    <div id="fullscreenOverlay" class="hidden">
-      <img id="fullscreenImage" src="" alt="Imagen ampliada" />
-    </div>
-
   </section>
 </section>
 
@@ -1229,6 +1224,18 @@ Date: 05-26 to 07-26
     </aside>
 
     <div class="carousel-cursor" hidden aria-hidden="true"></div>
+
+    <!-- Overlay zoom de galería (en body para position:fixed = viewport) -->
+    <div id="fullscreenOverlay" class="gallery-zoom" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+      <figure class="gallery-zoom__frame">
+        <button type="button" class="gallery-zoom__close" aria-label="Cerrar imagen">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <img id="fullscreenImage" class="gallery-zoom__img" src="" alt="Imagen ampliada" />
+      </figure>
+    </div>
 
     <script async type="module" src="/index.js"></script>
     <script type="module" src="/script.js"></script>

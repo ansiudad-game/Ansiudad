@@ -437,16 +437,14 @@
 
                 <div class="slideContainer" id="slide7">
                     <div class="leftToRightWrapper slide7-layout">
-                        <aside class="llama-instructions">
+                        <aside class="llama-instructions slide7-llama">
                             <div class="portrait-wrapper">
                                 <img src="brand/pachallama-closeup.gif" alt="Pacha-Llama">
                             </div>
 
                             <div class="text-wrapper">
                                 <h3>¡Volví!</h3>
-
-                                <p>Gracias por tu paciencia; ir al plano místico es toda una aventura. Esto es lo que veo en nuestro futuro:</p>
-                                <p>¡Ahora sí, todo listo para jugar!</p>
+                                <p>Esto es lo que veo en nuestro futuro. ¡Todo listo para jugar!</p>
 
                                 <div class="buttons-wrapper">
                                     <button type="button" class="juego-nav-btn juego-nav-btn--next juego-nav-btn--labeled goToLlamaGeneration" id="another-one" aria-label="Generar otro">
@@ -469,14 +467,19 @@
                                     <h2 class="slide7-results__heading">Incidente</h2>
                                     <span class="slide7-results__counter" id="slide7EventCounter" aria-live="polite">1/1</span>
                                 </div>
-                                <div class="slide7-results__stack">
-                                    <div id="llama-event" class="slide7-results__track">
-                                        <article class="slide7-result-card slide7-results__stack-card is-active">
+                                <div class="slide7-results__stack slide7-tinder" data-tinder="event">
+                                    <div class="slide7-tinder__status" aria-hidden="true">
+                                        <span class="slide7-tinder__status-icon slide7-tinder__status-icon--love"></span>
+                                        <span class="slide7-tinder__status-icon slide7-tinder__status-icon--nope"></span>
+                                    </div>
+                                    <div id="llama-event" class="slide7-results__track slide7-tinder__cards">
+                                        <article class="slide7-result-card slide7-results__stack-card is-active" data-deck-index="1">
+                                            <p class="slide7-result-card__player">INCIDENTE 1</p>
                                             <h3 class="slide7-result-card__title">False title</h3>
                                             <p class="slide7-result-card__body">False body Lorem ipsum dolor sit amet.</p>
                                         </article>
                                     </div>
-                                    <div class="juego-instructions-nav slide7-results__nav">
+                                    <div class="juego-instructions-nav slide7-results__nav slide7-tinder__buttons">
                                         <button type="button" class="juego-nav-btn juego-nav-btn--back" id="slide7EventPrev" aria-label="Incidente anterior">
                                             <span class="juego-nav-btn__slide" aria-hidden="true">
                                                 <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
@@ -502,15 +505,19 @@
                                     <h2 class="slide7-results__heading">Roles</h2>
                                     <span class="slide7-results__counter" id="slide7RolesCounter" aria-live="polite">1/1</span>
                                 </div>
-                                <div class="slide7-results__stack">
-                                    <div id="llama-roles" class="slide7-results__track">
-                                        <article class="slide7-result-card slide7-result-card--role slide7-results__stack-card is-active">
+                                <div class="slide7-results__stack slide7-tinder" data-tinder="role">
+                                    <div class="slide7-tinder__status" aria-hidden="true">
+                                        <span class="slide7-tinder__status-icon slide7-tinder__status-icon--love"></span>
+                                        <span class="slide7-tinder__status-icon slide7-tinder__status-icon--nope"></span>
+                                    </div>
+                                    <div id="llama-roles" class="slide7-results__track slide7-tinder__cards">
+                                        <article class="slide7-result-card slide7-result-card--role slide7-results__stack-card is-active" data-deck-index="1">
                                             <p class="slide7-result-card__player">JUGADOR 1</p>
                                             <h3 class="slide7-result-card__title">False title</h3>
                                             <p class="slide7-result-card__body">False body Lorem ipsum dolor sit amet.</p>
                                         </article>
                                     </div>
-                                    <div class="juego-instructions-nav slide7-results__nav">
+                                    <div class="juego-instructions-nav slide7-results__nav slide7-tinder__buttons">
                                         <button type="button" class="juego-nav-btn juego-nav-btn--back" id="slide7RolesPrev" aria-label="Rol anterior">
                                             <span class="juego-nav-btn__slide" aria-hidden="true">
                                                 <svg class="juego-nav-btn__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="20" height="20" focusable="false">
