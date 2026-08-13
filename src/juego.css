@@ -1186,9 +1186,11 @@ article#juegoContainer.pageContainer {
 
 #slide7 .slide7-results__panel {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, clamp(14.5rem, 22vw, 20rem)));
-    gap: clamp(1.25rem, 4vw, 3.5rem);
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    row-gap: clamp(4.5rem, 12vh, 7rem);
+    column-gap: 0;
+    align-items: start;
     justify-content: center;
     justify-items: center;
     width: 100%;
@@ -1202,7 +1204,8 @@ article#juegoContainer.pageContainer {
     background: color-mix(in srgb, var(--morado-oscuro, #3E1581) 42%, transparent);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    overflow: visible;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #slide7 .slide7-results__column {
@@ -1212,10 +1215,19 @@ article#juegoContainer.pageContainer {
     min-width: 0;
     min-height: 0;
     width: 100%;
-    max-width: clamp(14.5rem, 22vw, 20rem);
-    height: 100%;
-    justify-self: center;
+    max-width: none;
+    height: auto;
+    justify-self: stretch;
+    align-items: center;
     overflow: visible;
+}
+
+#slide7 .slide7-results__column--incident {
+    padding-bottom: clamp(1.5rem, 4vh, 2.75rem);
+}
+
+#slide7 .slide7-results__column--roles {
+    padding-top: clamp(1.5rem, 4vh, 2.75rem);
 }
 
 #slide7 .slide7-results__heading-row {
@@ -1251,163 +1263,126 @@ article#juegoContainer.pageContainer {
     flex-direction: column;
     gap: 0.85rem;
     flex: 1 1 auto;
-    align-items: stretch;
+    align-items: center;
+    justify-content: center;
     position: relative;
     min-height: 0;
     width: 100%;
 }
 
-#slide7 .slide7-results__track {
-    --slide7-stack-peek: 2.05rem;
-    position: relative;
+/* Fan / hand — filas de hasta 7 cartas; hover abre TODA la mano */
+#slide7 .slide7-hand {
+    --card-w: clamp(8.75rem, 13vw, 12rem);
+    --card-h: clamp(12.5rem, 19vw, 17rem);
+    --fan-step: 12deg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: clamp(1.25rem, 3vh, 2rem);
     width: 100%;
-    flex: 1 1 auto;
-    min-height: 0;
-    max-height: min(26rem, 48vh);
-    height: min(26rem, 48vh);
-    overflow: visible;
-    padding-top: calc(var(--slide7-stack-peek) * 5);
+    max-width: calc((var(--card-w) * 7) + 4.5rem);
+    margin: 0 auto;
+    padding: 0.5rem 0 0.25rem;
     box-sizing: border-box;
-}
-
-#slide7 .slide7-tinder {
     opacity: 0;
-    transition: opacity 0.15s ease-in-out;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
 }
 
-#slide7 .slide7-tinder.is-loaded {
+#slide7 .slide7-hand.is-loaded {
     opacity: 1;
 }
 
-#slide7 .slide7-tinder__status {
-    position: absolute;
-    top: 48%;
-    left: 0;
-    z-index: 6;
-    width: 100%;
-    margin-top: -1.25rem;
-    text-align: center;
-    pointer-events: none;
+#slide7 .slide7-hand__row {
+    --n: 1;
+    display: inline-grid;
+    grid-template-columns: repeat(var(--n), 0);
+    gap: 0;
+    justify-content: center;
+    align-items: end;
+    width: max-content;
+    max-width: 100%;
+    min-height: calc(var(--card-h) + 1.75rem);
+    padding-top: 0.75rem;
+    transition: grid-template-columns 200ms ease-out, gap 200ms ease-out;
 }
 
-#slide7 .slide7-tinder__status-icon {
-    position: absolute;
-    left: 50%;
-    width: 3.25rem;
-    height: 3.25rem;
-    margin-left: -1.625rem;
-    border-radius: 50%;
-    opacity: 0;
-    transform: scale(0.3);
-    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-    background: color-mix(in srgb, var(--amarillo-claro, #E7F2A5) 92%, #fff 8%);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
-}
-
-#slide7 .slide7-tinder__status-icon::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: 0.95rem;
-    height: 0.95rem;
-    border-right: 3px solid var(--morado-oscuro, #3E1581);
-    border-bottom: 3px solid var(--morado-oscuro, #3E1581);
-    box-sizing: border-box;
-}
-
-#slide7 .slide7-tinder__status-icon--love::before {
-    transform: translate(-1px, 0) rotate(-45deg);
-}
-
-#slide7 .slide7-tinder__status-icon--nope::before {
-    transform: translate(1px, 0) rotate(135deg);
-}
-
-#slide7 .slide7-tinder.is-love .slide7-tinder__status-icon--love,
-#slide7 .slide7-tinder.is-nope .slide7-tinder__status-icon--nope {
-    opacity: 0.9;
-    transform: scale(1);
-}
-
-#slide7 .slide7-results__stack-card {
-    position: absolute;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    max-width: clamp(14.5rem, 22vw, 20rem);
-    height: calc(100% - 0.35rem);
-    max-height: min(20rem, 38vh);
-    margin-inline: auto;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    will-change: transform;
-    transform-origin: 50% 100%;
-    cursor: grab;
-    transition:
-        opacity 0.3s ease-in-out,
-        transform 0.3s ease-in-out,
-        visibility 0.3s ease-in-out;
-    touch-action: none;
-    user-select: none;
-}
-
-#slide7 .slide7-results__stack-card.is-active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-}
-
-#slide7 .slide7-results__stack-card.is-stacked {
-    opacity: 1;
-    visibility: visible;
-}
-
-#slide7 .slide7-results__stack-card.is-moving {
-    transition: none;
-    cursor: grabbing;
-}
-
-#slide7 .slide7-results__stack-card.is-removed {
-    pointer-events: none;
+#slide7 .slide7-hand:hover .slide7-hand__row {
+    grid-template-columns: repeat(var(--n), var(--card-w));
+    gap: clamp(0.35rem, 1vw, 0.85rem);
 }
 
 #slide7 .slide7-result-card {
+    position: relative;
+    justify-self: center;
+    width: var(--card-w);
+    height: var(--card-h);
     margin: 0;
-    padding: clamp(1rem, 2vh, 1.35rem) clamp(0.9rem, 1.8vw, 1.2rem);
+    padding: 0.75rem 0.7rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 0.45rem;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    max-width: none;
-    border-radius: 18px;
-    background: color-mix(in srgb, var(--morado-oscuro) 88%, #000 12%);
-    box-shadow: 4px 16px 22px rgba(0, 0, 0, 0.3);
+    gap: 0.35rem;
+    border-radius: 14px;
+    box-shadow: 4px 12px 18px rgba(0, 0, 0, 0.28);
     box-sizing: border-box;
-    color: var(--amarillo-claro, #E7F2A5);
     overflow: hidden;
     text-align: center;
+    cursor: pointer;
+    transform-origin: 50% 100%;
+    transform: rotate(calc(((var(--i) - ((var(--n) - 1) / 2)) * var(--fan-step))));
+    z-index: calc(var(--i) + 1);
+    transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+    outline: none;
+    border: none;
+}
+
+/* Incidente: fondo morado-claro */
+#slide7 .slide7-results__column--incident .slide7-result-card {
+    background: var(--morado-claro);
+    color: var(--amarillo-oscuro, #DBDB7B);
+}
+
+#slide7 .slide7-results__column--incident .slide7-result-card__player,
+#slide7 .slide7-results__column--incident .slide7-result-card__title,
+#slide7 .slide7-results__column--incident .slide7-result-card__body {
+    color: var(--amarillo-oscuro, #DBDB7B);
+}
+
+/* Roles: fondo amarillo-oscuro, texto morado-oscuro */
+#slide7 .slide7-results__column--roles .slide7-result-card,
+#slide7 .slide7-result-card--role {
+    background: var(--amarillo-oscuro, #DBDB7B);
+    color: var(--morado-oscuro, #3E1581);
+}
+
+#slide7 .slide7-results__column--roles .slide7-result-card__player,
+#slide7 .slide7-results__column--roles .slide7-result-card__title,
+#slide7 .slide7-results__column--roles .slide7-result-card__body,
+#slide7 .slide7-result-card--role .slide7-result-card__player,
+#slide7 .slide7-result-card--role .slide7-result-card__title,
+#slide7 .slide7-result-card--role .slide7-result-card__body {
+    color: var(--morado-oscuro, #3E1581);
+}
+
+#slide7 .slide7-hand:hover .slide7-result-card {
+    transform: rotate(0);
+}
+
+#slide7 .slide7-hand:hover .slide7-result-card:hover {
+    transform: rotate(0) translateY(-18%);
+    z-index: 30;
+    box-shadow: 6px 18px 24px rgba(0, 0, 0, 0.34);
 }
 
 #slide7 .slide7-result-card__player {
     margin: 0;
     flex: 0 0 auto;
-    min-height: 1.35rem;
-    font-size: clamp(0.72rem, 1.2vw, 0.88rem);
+    min-height: 1.2rem;
+    font-size: clamp(0.65rem, 1.1vw, 0.8rem);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--amarillo-oscuro, #DBDB7B);
     text-align: center;
     width: 100%;
     pointer-events: none;
@@ -1416,10 +1391,9 @@ article#juegoContainer.pageContainer {
 #slide7 .slide7-result-card__title {
     margin: 0;
     flex: 0 0 auto;
-    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
     font-weight: 700;
     line-height: 1.2;
-    color: var(--amarillo-claro, #E7F2A5);
     text-align: center;
     width: 100%;
     pointer-events: none;
@@ -1427,10 +1401,9 @@ article#juegoContainer.pageContainer {
 
 #slide7 .slide7-result-card__body {
     margin: 0;
-    font-size: clamp(0.82rem, 1.35vw, 1rem);
+    font-size: clamp(0.72rem, 1.2vw, 0.88rem);
     font-weight: 300;
-    line-height: 1.45;
-    color: var(--amarillo-claro, #E7F2A5);
+    line-height: 1.4;
     text-align: center;
     width: 100%;
     overflow-y: auto;
@@ -1443,9 +1416,8 @@ article#juegoContainer.pageContainer {
     -webkit-overflow-scrolling: touch;
 }
 
-#slide7 .slide7-results__nav {
-    justify-content: center;
-    flex: 0 0 auto;
+#slide7 .juego-instructions-nav.slide7-results__nav {
+    display: none;
 }
 
 #slide7 .slide7-results__nav .juego-nav-btn:disabled {
@@ -1454,10 +1426,46 @@ article#juegoContainer.pageContainer {
     pointer-events: none;
 }
 
+/* Mobile stack (sin expansión) */
+#slide7 .slide7-hand__stack {
+    position: relative;
+    width: var(--card-w);
+    min-height: var(--card-h);
+    margin: 0 auto;
+    padding-top: 1.5rem;
+}
+
+#slide7 .slide7-hand__stack .slide7-result-card {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 1.5rem;
+    width: 100%;
+    transform: scale(calc(1 - (var(--stack-i, 0) * 0.045))) translateY(calc(var(--stack-i, 0) * -0.7rem));
+    opacity: 0;
+    z-index: calc(20 - var(--stack-i, 0));
+    pointer-events: none;
+    visibility: hidden;
+}
+
+#slide7 .slide7-hand__stack .slide7-result-card.is-stack-visible {
+    visibility: visible;
+    opacity: calc(1 - (var(--stack-i, 0) * 0.18));
+}
+
+#slide7 .slide7-hand__stack .slide7-result-card.is-active {
+    position: relative;
+    top: 0;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    z-index: 30;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    #slide7 .slide7-tinder,
-    #slide7 .slide7-results__stack-card,
-    #slide7 .slide7-tinder__status-icon {
+    #slide7 .slide7-hand__row,
+    #slide7 .slide7-result-card {
         transition: none;
     }
 }
@@ -2124,7 +2132,9 @@ button#another-one.juego-nav-btn {
     }
 
     #slide7 .slide7-results__panel {
-        grid-template-columns: minmax(0, min(18rem, 100%));
+        grid-template-columns: 1fr;
+        row-gap: clamp(3rem, 9vh, 5rem);
+        column-gap: 0;
         width: 100%;
         max-width: none;
         height: 100%;
@@ -2135,25 +2145,40 @@ button#another-one.juego-nav-btn {
     }
 
     #slide7 .slide7-results__column {
-        max-width: min(18rem, 100%);
+        max-width: 100%;
         min-height: 0;
-    }
-
-    #slide7 .slide7-results__track {
-        height: min(22rem, 42vh);
-        max-height: min(22rem, 42vh);
-        min-height: 0;
-    }
-
-    #slide7 .slide7-results__stack-card {
-        left: 0;
-        right: 0;
-        top: auto;
-        bottom: 0;
         width: 100%;
-        max-width: min(18rem, 100%);
-        max-height: min(17rem, 34vh);
-        margin-inline: auto;
+    }
+
+    #slide7 .slide7-hand {
+        --card-w: clamp(9rem, 72vw, 14rem);
+        --card-h: clamp(13rem, 52vh, 20rem);
+        max-width: 100%;
+    }
+
+    /* Sin expansión en móvil: solo stack + flechas */
+    #slide7 .slide7-hand:hover .slide7-hand__row {
+        grid-template-columns: repeat(var(--n), 0);
+        gap: 0;
+    }
+
+    #slide7 .slide7-hand:hover .slide7-result-card,
+    #slide7 .slide7-hand:hover .slide7-result-card:hover {
+        transform: none;
+        box-shadow: 4px 12px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    #slide7 .slide7-hand__stack .slide7-result-card {
+        transform: scale(calc(1 - (var(--stack-i, 0) * 0.045))) translateY(calc(var(--stack-i, 0) * -0.7rem));
+    }
+
+    #slide7 .slide7-hand__stack .slide7-result-card.is-active {
+        transform: none;
+    }
+
+    #slide7 .juego-instructions-nav.slide7-results__nav,
+    #slide7 .slide7-results__nav {
+        display: flex;
     }
 
     .cards-container,

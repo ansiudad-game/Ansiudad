@@ -15,8 +15,7 @@ export default class UIManager extends EventEmitter {
         this.response = null
         this.cityIntroComplete = false
         this.resultsStacksBound = false
-        this.resultsAnimating = { event: false, role: false }
-        this.resultsPointer = { event: null, role: null }
+        this.resultsHandIndex = { event: 0, role: 0 }
         this.initUI();
 
         this.addHandlers();
@@ -191,8 +190,10 @@ export default class UIManager extends EventEmitter {
                         if (event?.title && event?.description) {
                             eventCount += 1;
                             const eventCard = document.createElement('article');
-                            eventCard.className = 'slide7-result-card slide7-results__stack-card';
+                            eventCard.className = 'slide7-result-card';
                             eventCard.dataset.deckIndex = String(eventCount);
+                            eventCard.style.setProperty('--i', String(eventCount - 1));
+                            eventCard.tabIndex = 0;
 
                             const eventLabel = document.createElement('p');
                             eventLabel.className = 'slide7-result-card__player';
@@ -221,8 +222,10 @@ export default class UIManager extends EventEmitter {
                         if (role?.name || role?.title) {
                             roleCount += 1;
                             const roleCard = document.createElement('article');
-                            roleCard.className = 'slide7-result-card slide7-result-card--role slide7-results__stack-card';
+                            roleCard.className = 'slide7-result-card slide7-result-card--role';
                             roleCard.dataset.deckIndex = String(roleCount);
+                            roleCard.style.setProperty('--i', String(roleCount - 1));
+                            roleCard.tabIndex = 0;
 
                             const playerLabel = document.createElement('p');
                             playerLabel.className = 'slide7-result-card__player';
@@ -244,6 +247,7 @@ export default class UIManager extends EventEmitter {
                     });
                 }
 
+                this.resultsHandIndex = { event: 0, role: 0 };
                 this.syncResultsStack('event');
                 this.syncResultsStack('role');
             }
@@ -257,6 +261,8 @@ export default class UIManager extends EventEmitter {
     setupResultsStacks() {
         if (this.resultsStacksBound) return;
 
+        this.resultsHandIndex = { event: 0, role: 0 };
+
         const eventPrev = document.getElementById('slide7EventPrev');
         const eventNext = document.getElementById('slide7EventNext');
         const rolesPrev = document.getElementById('slide7RolesPrev');
@@ -264,26 +270,26 @@ export default class UIManager extends EventEmitter {
 
         eventPrev?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.recycleResultsDeck('event', -1);
+            this.stepResultsHand('event', -1);
         });
 
         eventNext?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.recycleResultsDeck('event', 1);
+            this.stepResultsHand('event', 1);
         });
 
         rolesPrev?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.recycleResultsDeck('role', -1);
+            this.stepResultsHand('role', -1);
         });
 
         rolesNext?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.recycleResultsDeck('role', 1);
+            this.stepResultsHand('role', 1);
         });
 
-        this.bindResultsPointer('event');
-        this.bindResultsPointer('role');
+        this.bindResultsHand('event');
+        this.bindResultsHand('role');
 
         this.resultsStacksBound = true;
         this.syncResultsStack('event');
@@ -294,228 +300,159 @@ export default class UIManager extends EventEmitter {
         return document.getElementById(kind === 'event' ? 'llama-event' : 'llama-roles');
     }
 
-    getResultsTinder(kind) {
-        return document.querySelector(`.slide7-tinder[data-tinder="${kind}"]`);
-    }
-
     getResultsCards(kind) {
         const track = this.getResultsTrack(kind);
         if (!track) return [];
-        return [...track.querySelectorAll('.slide7-results__stack-card')];
+        return [...track.querySelectorAll('.slide7-result-card')];
     }
 
-    prefersReducedMotion() {
-        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    }
-
-    stackTransformForOffset(offset) {
-        const scale = Math.max((20 - offset) / 20, 0.88);
-        const y = -34 * offset;
-        return `scale(${scale}) translateY(${y}px)`;
+    isResultsMobileLayout() {
+        return window.matchMedia('(max-width: 767px)').matches;
     }
 
     syncResultsStack(kind) {
-        const cards = this.getResultsCards(kind);
-        const tinder = this.getResultsTinder(kind);
+        const track = this.getResultsTrack(kind);
+        if (!track) return;
+
+        const cards = [...track.querySelectorAll('.slide7-result-card')];
         const prev = document.getElementById(kind === 'event' ? 'slide7EventPrev' : 'slide7RolesPrev');
         const next = document.getElementById(kind === 'event' ? 'slide7EventNext' : 'slide7RolesNext');
         const nav = prev?.closest('.slide7-results__nav');
-        const visibleDepth = cards.length;
 
-        cards.forEach((card, index) => {
-            card.classList.remove('is-active', 'is-stacked', 'is-moving', 'is-removed', 'is-behind-1', 'is-behind-2');
-            card.style.transform = '';
+        if (!this.resultsHandIndex) this.resultsHandIndex = { event: 0, role: 0 };
+        if (this.resultsHandIndex[kind] >= cards.length) this.resultsHandIndex[kind] = Math.max(cards.length - 1, 0);
+        if (this.resultsHandIndex[kind] < 0) this.resultsHandIndex[kind] = 0;
 
-            if (index >= visibleDepth) {
-                card.style.opacity = '0';
-                card.style.visibility = 'hidden';
-                card.style.pointerEvents = 'none';
-                card.style.zIndex = '0';
-                return;
+        const activeIndex = this.resultsHandIndex[kind];
+        const mobile = this.isResultsMobileLayout();
+        const perRow = 7;
+
+        track.replaceChildren();
+        track.classList.add('is-loaded');
+        track.classList.toggle('is-mobile-stack', mobile);
+
+        if (mobile) {
+            const stack = document.createElement('div');
+            stack.className = 'slide7-hand__stack';
+
+            cards.forEach((card, index) => {
+                const depth = (index - activeIndex + cards.length) % Math.max(cards.length, 1);
+                card.style.setProperty('--i', '0');
+                card.style.setProperty('--stack-i', String(depth));
+                card.dataset.deckIndex = card.dataset.deckIndex || String(index + 1);
+                card.classList.toggle('is-active', index === activeIndex);
+                card.classList.toggle('is-stack-visible', depth > 0 && depth < 4);
+                card.classList.remove('is-stacked-behind');
+                card.tabIndex = index === activeIndex ? 0 : -1;
+                stack.appendChild(card);
+            });
+
+            track.appendChild(stack);
+        } else {
+            for (let start = 0; start < cards.length; start += perRow) {
+                const rowCards = cards.slice(start, start + perRow);
+                const row = document.createElement('div');
+                row.className = 'slide7-hand__row';
+                row.style.setProperty('--n', String(rowCards.length));
+
+                rowCards.forEach((card, indexInRow) => {
+                    const absoluteIndex = start + indexInRow;
+                    card.style.setProperty('--i', String(indexInRow));
+                    card.style.removeProperty('--stack-i');
+                    card.dataset.deckIndex = card.dataset.deckIndex || String(absoluteIndex + 1);
+                    card.classList.toggle('is-active', absoluteIndex === activeIndex);
+                    card.classList.remove('is-stack-visible');
+                    card.tabIndex = 0;
+                    row.appendChild(card);
+                });
+
+                track.appendChild(row);
             }
 
-            // Keep stacked titles readable so you can count the deck.
-            card.style.opacity = index === 0 ? '1' : String(Math.max(0.62, 1 - index * 0.07));
-            card.style.visibility = 'visible';
-            card.style.pointerEvents = index === 0 ? 'auto' : 'none';
-            card.style.zIndex = String(cards.length - index);
-            card.style.transform = this.stackTransformForOffset(index);
+            if (!cards.length) {
+                const row = document.createElement('div');
+                row.className = 'slide7-hand__row';
+                row.style.setProperty('--n', '1');
+                track.appendChild(row);
+            }
+        }
 
-            if (index === 0) card.classList.add('is-active');
-            else card.classList.add('is-stacked');
-        });
-
-        const canLoop = cards.length > 1;
-        if (prev) prev.disabled = !canLoop;
-        if (next) next.disabled = !canLoop;
-        if (nav) nav.hidden = !canLoop;
+        const canNav = cards.length > 1;
+        if (prev) prev.disabled = !canNav;
+        if (next) next.disabled = !canNav;
+        if (nav) nav.hidden = !canNav;
 
         const counter = document.getElementById(kind === 'event' ? 'slide7EventCounter' : 'slide7RolesCounter');
         const total = Math.max(cards.length, 1);
-        const current = cards[0]?.dataset.deckIndex || (cards.length ? '1' : '0');
+        const current = cards[activeIndex]?.dataset.deckIndex || (cards.length ? String(activeIndex + 1) : '0');
         if (counter) counter.textContent = `${current}/${total}`;
-
-        if (tinder) {
-            tinder.classList.remove('is-love', 'is-nope');
-            tinder.classList.add('is-loaded');
-        }
-
-        const track = this.getResultsTrack(kind);
-        if (track) {
-            const peekCount = Math.max(cards.length - 1, 0);
-            track.style.paddingTop = `calc(var(--slide7-stack-peek, 2.05rem) * ${Math.min(peekCount, 6)})`;
-        }
     }
 
-    recycleResultsDeck(kind, direction) {
-        if (this.resultsAnimating[kind]) return;
-
-        const track = this.getResultsTrack(kind);
+    selectResultsCard(kind, index) {
         const cards = this.getResultsCards(kind);
-        if (!track || cards.length <= 1) return;
+        if (!cards.length) return;
+        const nextIndex = ((index % cards.length) + cards.length) % cards.length;
+        this.resultsHandIndex[kind] = nextIndex;
 
-        const throwDir = direction >= 0 ? 1 : -1;
-
-        if (this.prefersReducedMotion()) {
-            if (throwDir > 0) track.appendChild(cards[0]);
-            else track.insertBefore(cards[cards.length - 1], cards[0]);
+        if (this.isResultsMobileLayout()) {
             this.syncResultsStack(kind);
             return;
         }
 
-        this.resultsAnimating[kind] = true;
-        const tinder = this.getResultsTinder(kind);
-        const moveOutWidth = Math.max(document.body.clientWidth * 1.15, 520);
+        cards.forEach((card, cardIndex) => {
+            card.classList.toggle('is-active', cardIndex === nextIndex);
+        });
 
-        if (throwDir > 0) {
-            const card = cards[0];
-            tinder?.classList.add('is-love');
-            card.classList.add('is-removed');
-            card.style.transform = `translate(${moveOutWidth}px, -90px) rotate(-28deg)`;
-
-            window.setTimeout(() => {
-                card.classList.remove('is-removed');
-                card.style.transform = '';
-                track.appendChild(card);
-                this.syncResultsStack(kind);
-                this.resultsAnimating[kind] = false;
-            }, 280);
-            return;
-        }
-
-        const top = cards[0];
-        const last = cards[cards.length - 1];
-        tinder?.classList.add('is-nope');
-        top.classList.add('is-removed');
-        top.style.transform = `translate(-${moveOutWidth}px, -90px) rotate(28deg)`;
-
-        window.setTimeout(() => {
-            top.classList.remove('is-removed');
-            top.style.transform = '';
-            track.insertBefore(last, track.firstElementChild);
-            this.syncResultsStack(kind);
-            this.resultsAnimating[kind] = false;
-        }, 280);
+        const counter = document.getElementById(kind === 'event' ? 'slide7EventCounter' : 'slide7RolesCounter');
+        const total = Math.max(cards.length, 1);
+        const current = cards[nextIndex]?.dataset.deckIndex || String(nextIndex + 1);
+        if (counter) counter.textContent = `${current}/${total}`;
     }
 
-    bindResultsPointer(kind) {
+    stepResultsHand(kind, direction) {
+        const cards = this.getResultsCards(kind);
+        if (cards.length <= 1) return;
+        const current = this.resultsHandIndex?.[kind] || 0;
+        this.selectResultsCard(kind, current + direction);
+    }
+
+    bindResultsHand(kind) {
         const track = this.getResultsTrack(kind);
-        if (!track || track.dataset.tinderBound === 'true') return;
-        track.dataset.tinderBound = 'true';
+        if (!track || track.dataset.handBound === 'true') return;
+        track.dataset.handBound = 'true';
 
-        const onPointerDown = (event) => {
-            if (event.button !== undefined && event.button !== 0) return;
-            if (this.resultsAnimating[kind]) return;
-
+        track.addEventListener('click', (event) => {
+            const card = event.target.closest('.slide7-result-card');
+            if (!card || !track.contains(card)) return;
             const cards = this.getResultsCards(kind);
-            const card = cards[0];
-            if (!card || !card.contains(event.target)) return;
-            if (cards.length <= 1) return;
+            const index = cards.indexOf(card);
+            if (index < 0) return;
+            this.selectResultsCard(kind, index);
+        });
 
-            this.resultsPointer[kind] = {
-                pointerId: event.pointerId,
-                startX: event.clientX,
-                startY: event.clientY,
-                lastX: event.clientX,
-                lastY: event.clientY,
-                lastTime: event.timeStamp,
-                velocityX: 0,
-                card,
-            };
-
-            card.classList.add('is-moving');
-            card.setPointerCapture?.(event.pointerId);
-        };
-
-        const onPointerMove = (event) => {
-            const state = this.resultsPointer[kind];
-            if (!state || state.pointerId !== event.pointerId) return;
-
-            const deltaX = event.clientX - state.startX;
-            const deltaY = event.clientY - state.startY;
-            const dt = Math.max(event.timeStamp - state.lastTime, 1);
-            state.velocityX = (event.clientX - state.lastX) / dt;
-            state.lastX = event.clientX;
-            state.lastY = event.clientY;
-            state.lastTime = event.timeStamp;
-
-            const tinder = this.getResultsTinder(kind);
-            tinder?.classList.toggle('is-love', deltaX > 0);
-            tinder?.classList.toggle('is-nope', deltaX < 0);
-
-            const rotate = deltaX * 0.03 * (deltaY / 80 || 1);
-            state.card.style.transform = `translate(${deltaX}px, ${deltaY}px) rotate(${rotate}deg)`;
-        };
-
-        const finishPointer = (event) => {
-            const state = this.resultsPointer[kind];
-            if (!state || state.pointerId !== event.pointerId) return;
-
-            const card = state.card;
-            const deltaX = event.clientX - state.startX;
-            const deltaY = event.clientY - state.startY;
-            const tinder = this.getResultsTinder(kind);
-
-            card.classList.remove('is-moving');
-            tinder?.classList.remove('is-love', 'is-nope');
-            this.resultsPointer[kind] = null;
-
-            const cards = this.getResultsCards(kind);
-            const shouldThrow = Math.abs(deltaX) > 72 || Math.abs(state.velocityX) > 0.45;
-
-            if (!shouldThrow || cards.length <= 1) {
-                card.style.transform = this.stackTransformForOffset(0);
-                return;
+        track.addEventListener('keydown', (event) => {
+            const card = event.target.closest('.slide7-result-card');
+            if (!card || !track.contains(card)) return;
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                const cards = this.getResultsCards(kind);
+                const index = cards.indexOf(card);
+                if (index >= 0) this.selectResultsCard(kind, index);
             }
+        });
 
-            // Both swipe directions loop the top card to the back (CodePen style).
-            this.resultsAnimating[kind] = true;
-            const moveOutWidth = Math.max(document.body.clientWidth, 420);
-            const endX = Math.max(Math.abs(state.velocityX) * moveOutWidth, moveOutWidth);
-            const toX = deltaX > 0 ? endX : -endX;
-            const endY = Math.abs(deltaY) + 40;
-            const rotate = deltaX * 0.03 * (deltaY / 80 || 1);
-
-            tinder?.classList.toggle('is-love', deltaX > 0);
-            tinder?.classList.toggle('is-nope', deltaX < 0);
-            card.classList.add('is-removed');
-            card.style.transform = `translate(${toX}px, ${endY}px) rotate(${rotate}deg)`;
-
-            window.setTimeout(() => {
-                card.classList.remove('is-removed');
-                card.style.transform = '';
-                track.appendChild(card);
-                this.syncResultsStack(kind);
-                this.resultsAnimating[kind] = false;
-            }, 280);
-        };
-
-        track.addEventListener('pointerdown', onPointerDown);
-        track.addEventListener('pointermove', onPointerMove);
-        track.addEventListener('pointerup', finishPointer);
-        track.addEventListener('pointercancel', finishPointer);
+        if (!this.resultsResizeBound) {
+            this.resultsResizeBound = true;
+            let resizeTimer = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = window.setTimeout(() => {
+                    this.syncResultsStack('event');
+                    this.syncResultsStack('role');
+                }, 150);
+            });
+        }
     }
-
 
     handleLlamaHelper(newStep) {
         const element = document.getElementById('llama-helper');
