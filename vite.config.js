@@ -51,7 +51,7 @@ function sendPromptApiDev(rootDir) {
                 }
 
                 try {
-                    const moduleUrl = pathToFileURL(join(rootDir, 'api', 'sendPrompt.js')).href
+                    const moduleUrl = `${pathToFileURL(join(rootDir, 'api', 'sendPrompt.js')).href}?t=${Date.now()}`
                     const { default: handler } = await import(moduleUrl)
                     await handler(req, res)
                 } catch (err) {
@@ -72,6 +72,9 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, projectRoot, '')
     if (env.GROQ_API_KEY) {
         process.env.GROQ_API_KEY = env.GROQ_API_KEY
+    }
+    if (env.GROQ_MODEL) {
+        process.env.GROQ_MODEL = env.GROQ_MODEL
     }
 
     return {

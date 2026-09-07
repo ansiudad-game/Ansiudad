@@ -20,7 +20,7 @@ main {
 }
 
 .juego-home-btn {
-    --juego-home-btn-w: 12rem;
+    --juego-home-btn-w: min(12rem, calc(50vw - 18px));
     --juego-home-btn-h: 3.5rem;
     --juego-home-btn-slide-h: 3rem;
 
@@ -71,6 +71,7 @@ main {
     position: relative;
     z-index: 0;
     transform: translateX(0.5rem);
+    white-space: nowrap;
     transition: color 0.5s ease;
 }
 
@@ -97,17 +98,22 @@ main {
 }
 
 .juego-instructions-btn {
-    --juego-home-btn-w: 12.5rem;
     left: auto;
     right: max(12px, env(safe-area-inset-right, 0px));
     border: none;
     cursor: pointer;
 }
 
+.juego-instructions-btn .juego-home-btn__label {
+    transform: translateX(-0.5rem);
+}
+
 .juego-instructions-btn__slide {
-    width: var(--juego-home-btn-slide-h) !important;
-    height: var(--juego-home-btn-slide-h) !important;
-    border-radius: 50% !important;
+    left: auto;
+    right: 4px;
+    width: 25%;
+    height: var(--juego-home-btn-slide-h);
+    border-radius: 50%;
     overflow: hidden;
 }
 
@@ -120,9 +126,9 @@ main {
 
 .juego-instructions-btn:hover .juego-instructions-btn__slide,
 .juego-instructions-btn:focus-visible .juego-instructions-btn__slide {
-    width: calc(var(--juego-home-btn-w) - 8px) !important;
-    height: calc(var(--juego-home-btn-h) - 8px) !important;
-    border-radius: 9999px !important;
+    width: calc(var(--juego-home-btn-w) - 8px);
+    height: calc(var(--juego-home-btn-h) - 8px);
+    border-radius: 9999px;
 }
 
 .juego-instructions-panel {
@@ -512,11 +518,6 @@ body.juego-instructions-open {
         max-width: none;
     }
 
-    .juego-instructions-btn {
-        --juego-home-btn-w: 10.5rem;
-        font-size: 0.78rem;
-    }
-
     .juego-instructions-cartas__stage {
         min-height: 24rem;
     }
@@ -584,6 +585,7 @@ body.juego-instructions-open {
     position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .juego-nav-btn {
@@ -1084,22 +1086,21 @@ article#juegoContainer.pageContainer {
 #slide7 .leftToRightWrapper,
 #slide7 .leftToRightWrapper.slide7-layout {
     position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
     min-height: 0;
     overflow: hidden;
-    padding:
-        calc(var(--juego-home-btn-h, 3.5rem) + max(8px, env(safe-area-inset-top, 0px)) + 9.25rem)
-        clamp(10px, 2vw, 20px)
-        clamp(10px, 2vh, 18px);
+    padding: clamp(8px, 1.2vh, 14px) clamp(10px, 2vw, 20px) clamp(10px, 2vh, 18px);
     box-sizing: border-box;
 }
 
 #slide7 .llama-instructions.slide7-llama {
-    position: absolute;
-    top: calc(var(--juego-home-btn-h, 3.5rem) + max(8px, env(safe-area-inset-top, 0px)) + 8px);
-    left: max(12px, env(safe-area-inset-left, 0px));
+    position: relative;
+    top: auto;
+    left: auto;
     right: auto;
     transform: none;
     z-index: 5;
@@ -1107,13 +1108,16 @@ article#juegoContainer.pageContainer {
     flex-direction: row;
     align-items: center;
     gap: 0.65rem;
-    width: min(340px, calc(100% - 24px));
+    width: min(340px, 100%);
     min-width: 0;
     max-width: 360px;
     margin: 0;
     height: auto;
     padding: 0;
     pointer-events: auto;
+    grid-area: llama;
+    justify-self: start;
+    align-self: start;
 }
 
 #slide7 .slide7-llama .portrait-wrapper {
@@ -1187,10 +1191,15 @@ article#juegoContainer.pageContainer {
 #slide7 .slide7-results__panel {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    row-gap: clamp(4.5rem, 12vh, 7rem);
+    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+        "llama"
+        "incident"
+        "roles";
+    row-gap: clamp(0.55rem, 1.4vh, 1rem);
     column-gap: 0;
-    align-items: start;
+    align-content: center;
+    align-items: center;
     justify-content: center;
     justify-items: center;
     width: 100%;
@@ -1211,23 +1220,25 @@ article#juegoContainer.pageContainer {
 #slide7 .slide7-results__column {
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.5rem;
     min-width: 0;
     min-height: 0;
     width: 100%;
     max-width: none;
-    height: auto;
+    height: 100%;
     justify-self: stretch;
     align-items: center;
     overflow: visible;
 }
 
 #slide7 .slide7-results__column--incident {
-    padding-bottom: clamp(1.5rem, 4vh, 2.75rem);
+    grid-area: incident;
+    padding-bottom: 0;
 }
 
 #slide7 .slide7-results__column--roles {
-    padding-top: clamp(1.5rem, 4vh, 2.75rem);
+    grid-area: roles;
+    padding-top: 0;
 }
 
 #slide7 .slide7-results__heading-row {
@@ -1270,10 +1281,50 @@ article#juegoContainer.pageContainer {
     width: 100%;
 }
 
+@media (min-width: 768px) {
+    #slide7 .slide7-results__column {
+        overflow: visible;
+    }
+
+    #slide7 .slide7-results__stack {
+        overflow: visible;
+        justify-content: center;
+        justify-content: safe center;
+    }
+
+    #slide7 .slide7-hand {
+        flex: 0 0 auto;
+        min-height: auto;
+        height: auto;
+        overflow: visible;
+        padding-bottom: 0.85rem;
+    }
+
+    #slide7 .slide7-results__panel {
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: color-mix(in srgb, var(--amarillo-oscuro, #DBDB7B) 55%, transparent) transparent;
+    }
+
+    #slide7 .slide7-results__panel::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #slide7 .slide7-results__panel::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--amarillo-oscuro, #DBDB7B) 55%, transparent);
+        border-radius: 999px;
+    }
+
+    #slide7 .slide7-results__panel::-webkit-scrollbar-track {
+        background: transparent;
+    }
+}
+
 /* Fan / hand — filas de hasta 7 cartas; hover abre TODA la mano */
 #slide7 .slide7-hand {
     --card-w: clamp(8.75rem, 13vw, 12rem);
-    --card-h: clamp(12.5rem, 19vw, 17rem);
+    --card-h: min(15.25rem, 28vh);
     --fan-step: 12deg;
     display: flex;
     flex-direction: column;
@@ -1283,9 +1334,11 @@ article#juegoContainer.pageContainer {
     width: 100%;
     max-width: calc((var(--card-w) * 7) + 4.5rem);
     margin: 0 auto;
-    padding: 0.5rem 0 0.25rem;
+    padding: 0.35rem 0 0;
     box-sizing: border-box;
     opacity: 0;
+    min-height: 0;
+    overflow: visible;
 }
 
 #slide7 .slide7-hand.is-loaded {
@@ -1301,8 +1354,10 @@ article#juegoContainer.pageContainer {
     align-items: end;
     width: max-content;
     max-width: 100%;
-    min-height: calc(var(--card-h) + 1.75rem);
-    padding-top: 0.75rem;
+    min-height: calc(var(--card-h) + 0.85rem);
+    padding-top: 0.85rem;
+    box-sizing: border-box;
+    overflow: visible;
     transition: grid-template-columns 200ms ease-out, gap 200ms ease-out;
 }
 
@@ -1396,6 +1451,12 @@ article#juegoContainer.pageContainer {
     line-height: 1.2;
     text-align: center;
     width: 100%;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
     pointer-events: none;
 }
 
@@ -1403,17 +1464,18 @@ article#juegoContainer.pageContainer {
     margin: 0;
     font-size: clamp(0.72rem, 1.2vw, 0.88rem);
     font-weight: 300;
-    line-height: 1.4;
+    line-height: 1.35;
     text-align: center;
     width: 100%;
-    overflow-y: auto;
+    overflow: hidden;
+    overflow-wrap: anywhere;
     flex: 1 1 auto;
     min-height: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 7;
+    line-clamp: 7;
     pointer-events: none;
-    -webkit-overflow-scrolling: touch;
 }
 
 #slide7 .juego-instructions-nav.slide7-results__nav {
@@ -2097,24 +2159,32 @@ button#another-one.juego-nav-btn {
         padding: 0;
     }
 
+    #slide7.show {
+        position: relative;
+        height: calc(100dvh - 64px);
+        min-height: 0;
+        overflow: hidden;
+        padding: 0 10px 12px;
+        box-sizing: border-box;
+    }
+
     #slide7 .leftToRightWrapper {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
         height: 100%;
         min-height: 0;
-        padding:
-            calc(var(--juego-home-btn-h, 3.5rem) + max(8px, env(safe-area-inset-top, 0px)) + 8.75rem)
-            10px
-            12px;
+        padding: 8px 10px 12px;
         overflow: hidden;
     }
 
     #slide7 .llama-instructions {
-        position: absolute;
-        top: calc(var(--juego-home-btn-h, 3.5rem) + max(8px, env(safe-area-inset-top, 0px)) + 8px);
-        left: max(12px, env(safe-area-inset-left, 0px));
+        position: relative;
+        top: auto;
+        left: auto;
         transform: none;
-        width: min(100% - 24px, 340px);
+        width: min(100%, 340px);
         min-width: 0;
         max-width: 360px;
     }
@@ -2133,26 +2203,33 @@ button#another-one.juego-nav-btn {
 
     #slide7 .slide7-results__panel {
         grid-template-columns: 1fr;
-        row-gap: clamp(3rem, 9vh, 5rem);
+        grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "llama"
+            "incident"
+            "roles";
+        row-gap: clamp(0.45rem, 1.4vh, 0.75rem);
         column-gap: 0;
         width: 100%;
         max-width: none;
         height: 100%;
         justify-content: center;
         justify-items: center;
+        overflow-x: hidden;
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
     }
 
     #slide7 .slide7-results__column {
         max-width: 100%;
         min-height: 0;
         width: 100%;
+        height: 100%;
+        overflow: visible;
     }
 
     #slide7 .slide7-hand {
-        --card-w: clamp(9rem, 72vw, 14rem);
-        --card-h: clamp(13rem, 52vh, 20rem);
+        --card-w: clamp(8.25rem, 52vw, 11.5rem);
+        --card-h: min(12.25rem, 22vh);
         max-width: 100%;
     }
 

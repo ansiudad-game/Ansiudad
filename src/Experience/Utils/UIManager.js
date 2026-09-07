@@ -202,12 +202,12 @@ export default class UIManager extends EventEmitter {
 
                             const eventTitle = document.createElement('h3');
                             eventTitle.className = 'slide7-result-card__title';
-                            eventTitle.textContent = event.title;
+                            eventTitle.textContent = this.limitCardWords(event.title, 6);
                             eventCard.appendChild(eventTitle);
 
                             const eventDescription = document.createElement('p');
                             eventDescription.className = 'slide7-result-card__body';
-                            eventDescription.textContent = event.description;
+                            eventDescription.textContent = this.limitCardWords(event.description, 28);
                             eventCard.appendChild(eventDescription);
 
                             eventBox.appendChild(eventCard);
@@ -234,12 +234,12 @@ export default class UIManager extends EventEmitter {
 
                             const roleTitle = document.createElement('h3');
                             roleTitle.className = 'slide7-result-card__title';
-                            roleTitle.textContent = role.name || role.title;
+                            roleTitle.textContent = this.limitCardWords(role.name || role.title, 6);
                             roleCard.appendChild(roleTitle);
 
                             const rolePriorities = document.createElement('p');
                             rolePriorities.className = 'slide7-result-card__body';
-                            rolePriorities.textContent = role.priorities || role.prioridades || '';
+                            rolePriorities.textContent = this.limitCardWords(role.priorities || role.prioridades || '', 28);
                             roleCard.appendChild(rolePriorities);
 
                             rolesBox.appendChild(roleCard);
@@ -300,6 +300,14 @@ export default class UIManager extends EventEmitter {
         return document.getElementById(kind === 'event' ? 'llama-event' : 'llama-roles');
     }
 
+    limitCardWords(text, maxWords) {
+        const normalized = String(text ?? '').replace(/\s+/g, ' ').trim();
+        if (!normalized) return '';
+        const words = normalized.split(' ');
+        if (words.length <= maxWords) return normalized;
+        return `${words.slice(0, maxWords).join(' ')}…`;
+    }
+
     getResultsCards(kind) {
         const track = this.getResultsTrack(kind);
         if (!track) return [];
@@ -330,6 +338,7 @@ export default class UIManager extends EventEmitter {
         track.replaceChildren();
         track.classList.add('is-loaded');
         track.classList.toggle('is-mobile-stack', mobile);
+        track.classList.toggle('has-extra-rows', !mobile && cards.length > perRow);
 
         if (mobile) {
             const stack = document.createElement('div');
