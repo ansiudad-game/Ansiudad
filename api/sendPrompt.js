@@ -1,5 +1,7 @@
 import { Groq } from "groq-sdk"
 
+const GROQ_MODEL = process.env.GROQ_MODEL?.trim() || "openai/gpt-oss-120b"
+
 function getGroqClient() {
     const apiKey = process.env.GROQ_API_KEY?.trim()
 
@@ -10,23 +12,110 @@ function getGroqClient() {
     return new Groq({ apiKey })
 }
 
+function createChatCompletion(groq, messages) {
+    return groq.chat.completions.create({
+        messages,
+        model: GROQ_MODEL,
+        temperature: 0.9,
+        reasoning_effort: "low",
+        reasoning_format: "parsed",
+        max_completion_tokens: 4096,
+    })
+}
+
+function getMessageText(response) {
+    const message = response?.choices?.[0]?.message
+    if (!message) return ""
+
+    if (typeof message.content === "string" && message.content.trim()) {
+        return message.content
+    }
+
+    if (Array.isArray(message.content)) {
+        return message.content.map((part) => part?.text ?? "").join("")
+    }
+
+    return ""
+}
+
 function cleanJsonResponse(str) {
-    try {
-        const cleanStr = str.replace(/```(json)?\n?/g, "").replace(/\n```$/, "")
-        return JSON.parse(cleanStr)
-    } catch (e) {
+    if (!str || !str.trim()) {
+        throw new Error("Empty model response")
+    }
+
+    const cleanStr = str.replace(/```(?:json)?/gi, "").replace(/```/g, "").trim()
+    const candidates = [cleanStr]
+
+    const start = cleanStr.indexOf("{")
+    const end = cleanStr.lastIndexOf("}")
+    if (start !== -1 && end > start) {
+        candidates.push(cleanStr.slice(start, end + 1))
+    }
+
+    let lastError
+    for (const candidate of candidates) {
         try {
-            const fixedStr = str.replace(/'/g, '"')
-            return JSON.parse(fixedStr)
-        } catch (e2) {
+            return JSON.parse(candidate)
+        } catch (error) {
+            lastError = error
             try {
-                const cleanedStr = str.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t")
-                return JSON.parse(cleanedStr)
-            } catch (e3) {
-                throw new Error("Unable to parse JSON string: " + e3.message)
+                return JSON.parse(candidate.replace(/'/g, '"'))
+            } catch (quotedError) {
+                lastError = quotedError
             }
         }
     }
+
+    throw new Error("Unable to parse JSON string: " + (lastError?.message ?? "unknown error"))
+}
+
+function buildEventPrompt(theme, numberOfTeams) {
+    return [
+        {
+            role: "system",
+            content: `Eres el narrador de un juego de mesa llamado Ansiudad.
+Usa humor satírico y un toque fantasioso.
+Responde SOLO con JSON válido, sin markdown y sin texto extra.
+El objeto debe tener exactamente esta forma:
+{"events":[{"title":"string","description":"string","type":"string"}]}
+No cambies los nombres de las llaves.
+Ejemplo:
+{"events":[{"title":"Manejo de desechos","description":"Los altos niveles de toxicidad en el vertedero de Ansiudad han dotado a las ratas de súper fuerza y resistencia a los raticidas.","type":"residuos"}]}`,
+        },
+        {
+            role: "user",
+            content: `Genera exactamente ${numberOfTeams} eventos de juego para Ansiudad.
+Tema: ${theme}
+Devuelve únicamente el JSON con la clave "events".`,
+        },
+    ]
+}
+
+function buildRolePrompt(theme, numberOfRoles) {
+    return [
+        {
+            role: "system",
+            content: `Eres el narrador de Ansiudad.
+Genera roles realistas de habitantes de una metrópolis moderna, de diversos ámbitos y contextos.
+Responde SOLO con JSON válido, sin markdown y sin texto extra.
+El objeto debe tener exactamente esta forma:
+{"roles":[{"name":"string","priorities":"string","interests":"string"}]}
+No cambies los nombres de las llaves.
+Ejemplo:
+{"roles":[{"name":"Mujeres","priorities":"Tu prioridad es alcanzar la igualdad de género, con acceso a servicios de salud reproductiva, seguridad en espacios públicos, y oportunidades laborales y educativas equitativas.","interests":"Salud, seguridad y oportunidades equitativas."}]}`,
+        },
+        {
+            role: "user",
+            content: `Genera exactamente ${numberOfRoles} roles de personajes para Ansiudad.
+Tema: ${theme}
+Devuelve únicamente el JSON con la clave "roles".`,
+        },
+    ]
+}
+
+async function completeJson(groq, messages) {
+    const response = await createChatCompletion(groq, messages)
+    return cleanJsonResponse(getMessageText(response))
 }
 
 export default async function handler(req, res) {
@@ -37,7 +126,7 @@ export default async function handler(req, res) {
     const { prompt, _numberOfTeams, _numberOfRoles } = req.body ?? {};
     const themePrompt = (typeof prompt === 'string' && prompt.trim())
         ? prompt.trim()
-        : 'Elige un tema socioambiental aleatorio relevante para una metrópolis moderna llamada Ansiudad.';
+        : 'Elige un tema socioambiental aleatorio, relevante para una metrópolis moderna llamada Ansiudad';
 
     if (!_numberOfTeams || !_numberOfRoles) {
         return res.status(400).json({
@@ -46,75 +135,12 @@ export default async function handler(req, res) {
         });
     }
 
-    const guideline = "Solo entrega el objeto en formato JSON, omite cualquier otro texto o introduccion"
-    const guideline2 = "No cambies los nombres de las llaves, tienen que estar como en el siquiente ejemplo para poder extraerlas con JSON"
-    const guideline3 = "Recuerda generar roles realisticos de perfiles de habitantes de una metropolis moderna, de diversos ambitos y contextos"
-
-    const eventPrompt = [
-        {
-            role: "system",
-            content: `Eres el narrador de un juego de mesa llamado Ansiudad. Genera ${_numberOfTeams} eventos basados en el tema que proporcione el usuario. ${guideline2}, recuerda usar un poco de humor satirico, y un poco fantasioso.
-Genera ${_numberOfTeams} eventos basados en el tema que proporcione a continuacion el usuario.
-Formatea la respuesta como un objeto JSON con estos campos para cada evento. ${guideline}:
-- title: string (título corto del evento)
-- description: string (descripción breve con un toque de humor y fantasía)
-- type: string (categoría del evento)
-Formato y narrativas de ejemplo:
-{
-  "events": [
-    {
-      "title": "Manejo de desechos",
-      "description": "Los altos niveles de toxicidad en el vertedero de Ansiudad han dotado a las ratas de súper fuerza y resistencia a los raticidas."
-    }
-  ]
-}`
-        },
-        {
-            role: "user",
-            content: themePrompt
-        }
-    ]
-
-    const rolePrompt = [
-        {
-            role: "system",
-            content: `Eres el narrador de Ansiudad. Genera roles ${_numberOfRoles} de personajes basados en los siguientes lineamientos: ${guideline3}.
-Genera ${_numberOfRoles} roles. ${guideline2}
-Formatea la respuesta como un objeto JSON con estos campos para cada rol. ${guideline}:
-- name: string (título del rol)
-- priorities: string (principales preocupaciones y objetivos)
-- interests: string (lo que les importa)
-Formato y narrativas de ejemplo:
-{
-  "roles": [
-    {
-      "name": "Mujeres",
-      "priorities": "Tu prioridad es alcanzar la igualdad de género, con acceso a servicios de salud reproductiva, seguridad en espacios públicos, y oportunidades laborales y educativas equitativas."
-    }
-  ]
-}`
-        },
-        {
-            role: "user",
-            content: themePrompt
-        }
-    ]
-
     try {
         const groq = getGroqClient()
-        const eventResponse = await groq.chat.completions.create({
-            messages: eventPrompt,
-            model: "llama-3.3-70b-versatile",
-            temperature: 0.9,
-        })
-        const roleResponse = await groq.chat.completions.create({
-            messages: rolePrompt,
-            model: "llama-3.3-70b-versatile",
-            temperature: 0.9,
-        })
-
-        const parsedEventResponse = cleanJsonResponse(eventResponse.choices[0].message.content)
-        const parsedRoleResponse = cleanJsonResponse(roleResponse.choices[0].message.content)
+        const [parsedEventResponse, parsedRoleResponse] = await Promise.all([
+            completeJson(groq, buildEventPrompt(themePrompt, _numberOfTeams)),
+            completeJson(groq, buildRolePrompt(themePrompt, _numberOfRoles)),
+        ])
 
         return res.status(200).json({
             success: true,
