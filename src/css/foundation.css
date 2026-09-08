@@ -354,8 +354,10 @@ main {
 }
 
 #que-es {
+  /* Por encima del parallax de .home (sky / section-top-wave) */
+  z-index: 2;
   --section-bg: var(--amarillo-oscuro);
-  --section-wave-bg: var(--morado-claro);
+  --section-wave-bg: var(--morado-oscuro);
 }
 
 #desafio {
