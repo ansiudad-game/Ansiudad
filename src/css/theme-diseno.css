@@ -306,14 +306,48 @@
 }
 
 .flip-card__body--team {
-  gap: 0.65rem;
+  gap: clamp(0.3rem, 1.1vw, 0.5rem);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  justify-content: flex-start;
+}
+
+/* Quiénes somos: mismo alto que las otras; contenido compacto, sin scroll */
+.flip-card:nth-child(1) .flip-back,
+.flip-card:nth-child(1) .flip-card__scroll {
+  overflow: hidden;
+}
+
+.flip-card:nth-child(1) .flip-card__scroll {
+  display: flex;
+  flex-direction: column;
+}
+
+.flip-card:nth-child(1) .flip-card__body--team {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.flip-card:nth-child(1) .flip-card__scroll-btn {
+  display: none !important;
 }
 
 .flip-card__member {
   display: grid;
-  grid-template-columns: minmax(72px, 32%) minmax(0, 1fr);
-  gap: clamp(0.5rem, 2vw, 0.75rem);
+  grid-template-columns: minmax(64px, 30%) minmax(0, 1fr);
+  gap: clamp(0.4rem, 1.8vw, 0.65rem);
   align-items: start;
+  min-height: 0;
+}
+
+.flip-card__body--team .flip-card__member {
+  flex: 1 1 0;
+}
+
+.flip-card__body--team .flip-card__member p {
+  font-size: clamp(0.72rem, 1.65vw, 0.9rem);
+  line-height: 1.28;
 }
 
 .flip-card__member p {
@@ -323,6 +357,7 @@
 .flip-card__photo {
   margin: 0;
   text-align: center;
+  min-width: 0;
 }
 
 .flip-card__photo-placeholder {
@@ -338,6 +373,7 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   height: auto;
+  max-height: clamp(64px, 18vw, 110px);
   object-fit: cover;
   object-position: center 18%;
   border-radius: 0.5rem;
@@ -348,12 +384,43 @@
 }
 
 .flip-card__photo figcaption {
-  margin-top: 0.35rem;
-  font-size: 0.68rem;
+  margin-top: 0.25rem;
+  font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   opacity: 0.65;
+}
+
+@media (max-width: 1023px) {
+  .flip-card:nth-child(1) .flip-back h3 {
+    font-size: clamp(0.95rem, 3.2vw, 1.25rem);
+    margin-bottom: 0.4rem;
+  }
+
+  .flip-card__body--team {
+    gap: 0.35rem;
+    padding: clamp(0.85rem, 2.5vw, 1.2rem);
+  }
+
+  .flip-card__body--team .flip-card__member {
+    grid-template-columns: minmax(52px, 26%) minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+
+  .flip-card__body--team .flip-card__member p {
+    font-size: clamp(0.68rem, 2.4vw, 0.82rem);
+    line-height: 1.25;
+  }
+
+  .flip-card__photo img {
+    max-height: clamp(52px, 16vw, 88px);
+  }
+
+  .flip-card__photo figcaption {
+    font-size: 0.58rem;
+    margin-top: 0.15rem;
+  }
 }
 
 .flip-card__copy {

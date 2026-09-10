@@ -491,7 +491,7 @@ const layers = [
   { el: document.getElementById('l1'), depth: 0.015 },
   { el: document.getElementById('l2'), depth: 0.032 },
   { el: document.getElementById('l3'), depth: 0.058 },
-  { el: document.getElementById('l4'), depth: 0.088 },
+  { el: document.getElementById('l4'), depth: 0.05 },
 ].filter((x) => x.el);
 
 const mobileParallaxMq = window.matchMedia('(max-width: 767px)');
@@ -1837,6 +1837,14 @@ const updateFlipCardScrollBtn = (card) => {
   const scroll = card.querySelector('.flip-card__scroll');
   const btn = card.querySelector('.flip-card__scroll-btn');
   if (!scroll || !btn) return;
+
+  /* Quiénes somos: contenido compacto a la fuerza; sin flecha de scroll */
+  if (card.querySelector('.flip-card__body--team')) {
+    btn.hidden = true;
+    btn.classList.remove('is-at-bottom');
+    card.classList.remove('flip-card--scrollable');
+    return;
+  }
 
   const hasOverflow = scroll.scrollHeight > scroll.clientHeight + 4;
   const atBottom =

@@ -3,7 +3,6 @@
 */
 .home {
   position: relative;
-  /* Por encima de slogan + sky solo vía #l4; el resto del parallax queda clippeado en #scene */
   z-index: 3;
   width: 100%;
   max-width: 100vw;
@@ -11,23 +10,42 @@
   min-height: 100dvh;
   overflow-x: clip;
   overflow-y: visible;
-  --trees-hang: 22vh;
+  --trees-hang: 14vh;
+  --trees-layer-height: 86%;
   /* scroll-margin-top: 72px; */
 }
 
-/* Puente morado bajo los trees (el slogan se clippea arriba y ya no pinta detrás del SVG) */
+/* Puente morado: solo en la junta inferior (hang). Arriba se clippea
+   justo al arranque de trees para que el morado no traspase el SVG. */
 .home::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(-1 * var(--trees-hang, 22vh));
-  height: calc(var(--trees-hang, 22vh) + 2px);
+  bottom: calc(-1 * var(--trees-hang) - 2px);
+  /* trees-hang (bajo .home) + un pelín dentro de .home = junta limpia abajo */
+  height: calc(var(--trees-hang) + 3vh + 2px);
   background-color: var(--morado-oscuro);
-  z-index: 3;
+  z-index: 2;
   pointer-events: none;
 }
 
+/* Trees: clipping desde donde arranca el SVG (banda inferior); hang intacto abajo */
+#l4 {
+  z-index: 3;
+  --layer-opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  left: -18%;
+  right: -18%;
+  width: 136%;
+  top: 48%;
+  bottom: calc(-0.15 * var(--trees-hang));
+  height: auto;
+  pointer-events: none;
+}
 
 .TOP {
   position: absolute;
@@ -99,27 +117,16 @@ z-index: -8;
   justify-content: center;
 }
 
-/* Base móvil; tablet+ en responsive.css; ajuste fino móvil al final de este archivo */
 #l3 > img {
   width: 97%;
   height: var(--wheel-layer-height, 100%) !important;
   object-fit: cover;
   object-position: center 50%;
 }
-#l4 {
-  z-index: 4;
-  --layer-opacity: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  overflow: visible;
-  bottom: calc(-1 * var(--trees-hang, 22vh));
-  pointer-events: none;
-}
 
 #l4 > img {
   width: 100%;
-  height: var(--trees-layer-height, 100%) !important;
+  height: 100% !important;
   object-fit: cover;
   object-position: center bottom;
 }
@@ -326,22 +333,25 @@ body.bg-loaded .home-logo__part--dad {
   width: 100%;
   max-width: 100vw;
   height: auto;
-  /* Sube bajo los trees; el clip de arriba evita que el container se vea detrás del SVG */
-  margin-top: calc(-1 * var(--trees-hang, 20vh));
-  min-height: calc(var(--trees-hang, 22vh) + 20rem);
+  --trees-hang: 14vh;
+  margin-top: calc(-1 * var(--trees-hang) - 3px);
+  min-height: calc(var(--trees-hang) + 16rem);
   display: flex;
   align-items: flex-end;
   justify-content: center;
   padding:
-    calc(var(--trees-hang, 22vh) + 15rem)
+    calc(var(--trees-hang) + 7.5rem)
     var(--page-padding)
     clamp(2rem, 5.5vh, 3.5rem);
   box-sizing: border-box;
   background-color: var(--morado-oscuro);
   overflow: hidden;
-  /* Clipping mask: recorta la franja superior (área de trees) */
-  -webkit-clip-path: inset(var(--trees-hang, 22vh) 0 0 0);
-  clip-path: inset(var(--trees-hang, 22vh) 0 0 0);
+  -webkit-clip-path: inset(calc(var(--trees-hang) - 3px) 0 0 0);
+  clip-path: inset(calc(var(--trees-hang) - 3px) 0 0 0);
+}
+
+.home-slogan > .bg-noise {
+  display: none;
 }
 
 .home-slogan__inner {
@@ -623,5 +633,45 @@ body.bg-loaded .home__scroll-hint:not(.is-hidden) {
 
     object-fit: contain;
     object-position: center;
+  }
+}
+
+/* ── Responsive lock: trees NUNCA tapan el slogan; morado no se ve detrás del SVG ── */
+@media (max-width: 1023px) {
+  .home {
+    z-index: 1;
+    --trees-hang: 0px;
+    /* Junta limpia con slogan, sin morado detrás de trees */
+    border-bottom: 1px solid var(--morado-oscuro);
+  }
+
+  /* Trees solo dentro de .home */
+  #l4 {
+    z-index: 3;
+    top: 52%;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  /* Sin puente alto: ese morado se veía traspasando trees */
+  .home::after {
+    display: none;
+  }
+
+  .home-slogan {
+    z-index: 4;
+    --trees-hang: 0px;
+    /* Sin solape bajo trees: el morado empieza debajo de .home */
+    margin-top: 0;
+    min-height: 12rem;
+    padding-top: clamp(2.5rem, 8vh, 4rem);
+    -webkit-clip-path: none;
+    clip-path: none;
+  }
+
+  .slogan-container,
+  .slogan-container.is-revealed {
+    position: relative;
+    z-index: 5;
   }
 }
