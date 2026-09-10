@@ -354,7 +354,6 @@ main {
 }
 
 #que-es {
-  /* Por encima del parallax de .home (sky / section-top-wave + slogan) */
   z-index: 3;
   --section-bg: var(--amarillo-oscuro);
   --section-wave-bg: var(--morado-oscuro);
@@ -402,7 +401,6 @@ main {
   background-size: var(--noise-size);
 }
 
-/* Onda sky.svg: contenedores unificados (#what, #desafioFlow, #how, #where, .footer) */
 #what,
 #desafioFlow,
 #how,
