@@ -135,3 +135,7 @@ static/models/base/tex
 static/models/base/*.c4d
 static/models/base/*.psd
 static/models/base/backup
+# Cloudflare local state and secrets
+.wrangler/
+.dev.vars
+.dev.vars.*
