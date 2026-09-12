@@ -1,4 +1,1 @@
-import { inject } from "@vercel/analytics"
-import { injectSpeedInsights } from '@vercel/speed-insights';
-inject();
-injectSpeedInsights();
+// Analytics can be configured independently of the hosting provider.

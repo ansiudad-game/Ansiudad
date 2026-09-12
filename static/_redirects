@@ -1,0 +1,2 @@
+# Serve the homepage while preserving explicit .html URLs.
+/ /index.html 200
