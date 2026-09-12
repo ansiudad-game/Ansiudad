@@ -17,7 +17,7 @@ function createChatCompletion(groq, messages, model) {
     const payload = {
         messages,
         model,
-        temperature: 0.9,
+        temperature: 0.6,
         reasoning_effort: "low",
         reasoning_format: "parsed",
         max_completion_tokens: 4096,
@@ -157,14 +157,19 @@ function buildEventPrompt(theme, numberOfTeams) {
     return [
         {
             role: "system",
-            content: `Eres el narrador de un juego de mesa llamado Ansiudad.
-Usa humor satírico y un toque fantasioso.
+            content: `Genera situaciones ficticias de una metrópolis contemporánea. 
+            Usa humor satírico basado en contradicciones sociales, burocracia y conflictos cotidianos. 
+            Las causas y consecuencias deben ser posibles en el mundo real. 
+            Evita magia, superpoderes, mutaciones extraordinarias y fenómenos sobrenaturales. 
+            Presenta un conflicto concreto que permita discutir decisiones y sus consecuencias.
+            Cada situación debe ser autónoma y no depender de otras.
+            El tema debe ser relevante para una metrópolis moderna llamada Ansiudad.
 Responde SOLO con JSON válido, sin markdown y sin texto extra.
 El objeto debe tener exactamente esta forma:
 {"events":[{"title":"string","description":"string","type":"string"}]}
 No cambies los nombres de las llaves.
 Límites de longitud (obligatorios, para que quepa en una carta):
-- title: máximo 6 palabras
+- title: máximo 4 palabras
 - description: máximo 28 palabras, en una o dos frases cortas
 - type: una sola palabra
 Ejemplo:
@@ -190,7 +195,7 @@ El objeto debe tener exactamente esta forma:
 {"roles":[{"name":"string","priorities":"string","interests":"string"}]}
 No cambies los nombres de las llaves.
 Límites de longitud (obligatorios, para que quepa en una carta):
-- name: máximo 6 palabras
+- name: máximo 4 palabras
 - priorities: máximo 28 palabras, en una o dos frases cortas
 - interests: máximo 10 palabras
 Ejemplo:
