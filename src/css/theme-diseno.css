@@ -313,7 +313,6 @@
   justify-content: flex-start;
 }
 
-/* Quiénes somos: mismo alto que las otras; contenido compacto, sin scroll */
 .flip-card:nth-child(1) .flip-back,
 .flip-card:nth-child(1) .flip-card__scroll {
   overflow: hidden;

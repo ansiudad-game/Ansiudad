@@ -2228,8 +2228,8 @@ button#another-one.juego-nav-btn {
     }
 
     #slide7 .slide7-hand {
-        --card-w: clamp(8.25rem, 52vw, 11.5rem);
-        --card-h: min(12.25rem, 22vh);
+        --card-w: clamp(8.5rem, 58vw, 12.5rem);
+        --card-h: min(14.5rem, 28vh);
         max-width: 100%;
     }
 
@@ -2637,17 +2637,31 @@ button#another-one.juego-nav-btn {
         padding: 24px 20px;
     }
 }
-/* The setup form grows with its content inside the mobile page scroller. */
+/* Slide5: un solo scroll interno para llegar a tema + Jugar. */
 @media (max-width: 767px) {
     #slide5.show {
-        height: auto;
-        max-height: none;
-        overflow: visible;
+        height: calc(100dvh - 64px);
+        max-height: calc(100dvh - 64px);
+        min-height: 0;
+        overflow: hidden;
         touch-action: pan-y;
     }
-    #slide5 .slide5-layout,
+    #slide5 .slide5-layout {
+        flex: 1 1 auto;
+        align-self: stretch;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior-y: contain;
+    }
     #slide5 .slide5-cards-row,
-    #slide5 .cards-container .card-wrapper.fitHeight {
+    #slide5 .cards-container .card-wrapper.fitHeight,
+    #slide5 .cards-container .card-wrapper.llama-input-cards {
         flex: 0 0 auto;
         height: auto;
         min-height: 0;
@@ -2659,31 +2673,75 @@ button#another-one.juego-nav-btn {
         padding-bottom: max(24px, env(safe-area-inset-bottom));
     }
 
-    /* Reserve full card and navigation heights; scroll results when necessary. */
+    /* Grupo = título + contador + cartas + flechas; más aire solo entre secciones. */
     #slide7 .slide7-results__panel {
         grid-template-rows: auto auto auto;
         align-content: start;
-        row-gap: 1.5rem;
+        row-gap: clamp(1rem, 2.5vh, 1.35rem);
         padding-bottom: 1.5rem;
+    }
+    #slide7 .slide7-llama {
+        margin-bottom: clamp(0.85rem, 3vh, 1.5rem);
     }
     #slide7 .slide7-results__column {
         height: auto;
         flex-shrink: 0;
+        gap: 0.1rem;
+    }
+    #slide7 .slide7-results__column--incident {
+        margin-top: clamp(0.65rem, 2.2vh, 1.1rem);
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    #slide7 .slide7-results__column--roles {
+        margin-top: clamp(3.5rem, 11vh, 5.5rem);
+        padding-top: 0;
+    }
+    #slide7 .slide7-results__heading-row {
+        margin: 0;
     }
     #slide7 .slide7-results__stack {
         flex: 0 0 auto;
         justify-content: flex-start;
+        gap: 0.4rem;
     }
     #slide7 .slide7-hand,
     #slide7 .slide7-hand__stack,
     #slide7 .slide7-results__nav {
         flex-shrink: 0;
     }
-    #slide7 .slide7-hand { --card-h: 15rem; }
-    #slide7 .slide7-hand__stack { box-sizing: content-box; }
+    #slide7 .slide7-hand {
+        --card-w: clamp(8.5rem, 58vw, 12.5rem);
+        --card-h: min(14.5rem, 28vh);
+    }
+    #slide7 .slide7-hand__stack {
+        box-sizing: content-box;
+        margin-bottom: 0.75rem;
+        padding-top: 0.05rem;
+        min-height: calc(var(--card-h) + 0.45rem);
+    }
+    #slide7 .slide7-hand__stack .slide7-result-card {
+        top: 0.5rem;
+    }
+    #slide7 .slide7-hand__stack .slide7-result-card.is-active {
+        top: 0;
+    }
     #slide7 .slide7-results__nav {
         position: relative;
-        margin-top: 0.75rem;
+        z-index: 40;
+        margin-top: -1.7rem;
+        padding-top: 0;
+        gap: 0.55rem;
+    }
+    #slide7 .slide7-results__nav .juego-nav-btn {
+        --juego-nav-btn-size: 1.85rem;
+        --juego-nav-btn-slide-h: 1.8rem;
+        background-color: color-mix(in srgb, var(--morado-oscuro) 38%, transparent);
+        opacity: 0.72;
+    }
+    #slide7 .slide7-results__nav .juego-nav-btn__icon {
+        width: 13px;
+        height: 13px;
     }
     #slide7 .slide7-result-card__body { overflow-y: auto; }
 }
