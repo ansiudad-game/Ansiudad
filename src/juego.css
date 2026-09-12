@@ -1098,9 +1098,9 @@ article#juegoContainer.pageContainer {
 }
 
 #slide7 .llama-instructions.slide7-llama {
-    position: relative;
-    top: auto;
-    left: auto;
+    position: absolute;
+    top: clamp(0.75rem, 1.5vw, 1.15rem);
+    left: clamp(0.75rem, 1.5vw, 1.15rem);
     right: auto;
     transform: none;
     z-index: 5;
@@ -1108,14 +1108,13 @@ article#juegoContainer.pageContainer {
     flex-direction: row;
     align-items: center;
     gap: 0.65rem;
-    width: min(340px, 100%);
+    width: min(340px, calc(100% - 1.5rem));
     min-width: 0;
     max-width: 360px;
     margin: 0;
     height: auto;
     padding: 0;
     pointer-events: auto;
-    grid-area: llama;
     justify-self: start;
     align-self: start;
 }
@@ -1191,9 +1190,8 @@ article#juegoContainer.pageContainer {
 #slide7 .slide7-results__panel {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
-        "llama"
         "incident"
         "roles";
     row-gap: clamp(0.55rem, 1.4vh, 1rem);
@@ -1208,6 +1206,7 @@ article#juegoContainer.pageContainer {
     min-height: 0;
     margin: 0;
     padding: clamp(0.75rem, 1.5vw, 1.15rem);
+    padding-top: clamp(6.25rem, 14vh, 8rem);
     border-radius: 22px;
     box-sizing: border-box;
     background: color-mix(in srgb, var(--morado-oscuro, #3E1581) 42%, transparent);
@@ -2187,7 +2186,7 @@ button#another-one.juego-nav-btn {
 
     #slide7 .leftToRightWrapper {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         justify-content: center;
         width: 100%;
         height: 100%;
@@ -2196,40 +2195,51 @@ button#another-one.juego-nav-btn {
         overflow: hidden;
     }
 
-    #slide7 .llama-instructions {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        width: min(100%, 340px);
-        min-width: 0;
-        max-width: 360px;
-    }
-
     #slide7 .slide7-results {
         position: relative;
         top: auto;
         left: auto;
         transform: none;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
         width: 100%;
         max-width: none;
         height: 100%;
         min-height: 0;
         margin: 0;
+        gap: 0.75rem;
+        overflow: hidden;
+    }
+
+    #slide7 .llama-instructions,
+    #slide7 .llama-instructions.slide7-llama {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        flex: 0 0 auto;
+        width: min(100%, 340px);
+        min-width: 0;
+        max-width: 360px;
+        margin: 0;
+        z-index: 2;
     }
 
     #slide7 .slide7-results__panel {
         grid-template-columns: 1fr;
-        grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto;
         grid-template-areas:
-            "llama"
             "incident"
             "roles";
         row-gap: clamp(0.45rem, 1.4vh, 0.75rem);
         column-gap: 0;
         width: 100%;
         max-width: none;
-        height: 100%;
+        height: auto;
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: clamp(0.75rem, 1.5vw, 1.15rem);
         justify-content: center;
         justify-items: center;
         overflow-x: hidden;
@@ -2695,13 +2705,17 @@ button#another-one.juego-nav-btn {
     }
 
     #slide7 .slide7-results__panel {
-        grid-template-rows: auto auto auto;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "incident"
+            "roles";
         align-content: start;
         row-gap: clamp(1rem, 2.5vh, 1.35rem);
+        padding: clamp(0.75rem, 1.5vw, 1.15rem);
         padding-bottom: 1.5rem;
     }
     #slide7 .slide7-llama {
-        margin-bottom: clamp(2.75rem, 9vh, 4.5rem);
+        margin-bottom: 0;
     }
     #slide7 .slide7-results__column {
         height: auto;
@@ -2709,7 +2723,7 @@ button#another-one.juego-nav-btn {
         gap: 0.1rem;
     }
     #slide7 .slide7-results__column--incident {
-        margin-top: clamp(2rem, 6.5vh, 3.5rem);
+        margin-top: 0;
         margin-bottom: 0;
         padding-bottom: 0;
     }
