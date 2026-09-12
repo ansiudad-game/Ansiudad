@@ -318,6 +318,35 @@ export default class UIManager extends EventEmitter {
         return window.matchMedia('(max-width: 767px)').matches;
     }
 
+    applyResultsMobileStackClasses(cards, activeIndex) {
+        const total = cards.length;
+        cards.forEach((card, index) => {
+            card.classList.remove('is-active', 'is-behind-1', 'is-behind-2', 'is-stack-visible', 'is-stacked-behind');
+            card.style.removeProperty('--stack-i');
+            card.tabIndex = index === activeIndex ? 0 : -1;
+        });
+
+        if (!total) return;
+
+        cards[activeIndex]?.classList.add('is-active');
+
+        if (total > 1) {
+            const behind1 = (activeIndex - 1 + total) % total;
+            if (behind1 !== activeIndex) cards[behind1].classList.add('is-behind-1');
+        }
+        if (total > 2) {
+            const behind2 = (activeIndex - 2 + total) % total;
+            if (behind2 !== activeIndex) cards[behind2].classList.add('is-behind-2');
+        }
+    }
+
+    updateResultsCounter(kind, cards, activeIndex) {
+        const counter = document.getElementById(kind === 'event' ? 'slide7EventCounter' : 'slide7RolesCounter');
+        const total = Math.max(cards.length, 1);
+        const current = cards[activeIndex]?.dataset.deckIndex || (cards.length ? String(activeIndex + 1) : '0');
+        if (counter) counter.textContent = `${current}/${total}`;
+    }
+
     syncResultsStack(kind) {
         const track = this.getResultsTrack(kind);
         if (!track) return;
@@ -335,29 +364,33 @@ export default class UIManager extends EventEmitter {
         const mobile = this.isResultsMobileLayout();
         const perRow = 7;
 
-        track.replaceChildren();
         track.classList.add('is-loaded');
         track.classList.toggle('is-mobile-stack', mobile);
         track.classList.toggle('has-extra-rows', !mobile && cards.length > perRow);
 
         if (mobile) {
-            const stack = document.createElement('div');
-            stack.className = 'slide7-hand__stack';
+            let stack = track.querySelector(':scope > .slide7-hand__stack');
+            const stackedCards = stack ? [...stack.querySelectorAll('.slide7-result-card')] : [];
+            const sameDeck =
+                stack &&
+                stackedCards.length === cards.length &&
+                stackedCards.every((card, index) => card === cards[index]);
 
-            cards.forEach((card, index) => {
-                const depth = (index - activeIndex + cards.length) % Math.max(cards.length, 1);
-                card.style.setProperty('--i', '0');
-                card.style.setProperty('--stack-i', String(depth));
-                card.dataset.deckIndex = card.dataset.deckIndex || String(index + 1);
-                card.classList.toggle('is-active', index === activeIndex);
-                card.classList.toggle('is-stack-visible', depth > 0 && depth < 4);
-                card.classList.remove('is-stacked-behind');
-                card.tabIndex = index === activeIndex ? 0 : -1;
-                stack.appendChild(card);
-            });
+            if (!sameDeck) {
+                track.replaceChildren();
+                stack = document.createElement('div');
+                stack.className = 'slide7-hand__stack';
+                cards.forEach((card, index) => {
+                    card.style.setProperty('--i', '0');
+                    card.dataset.deckIndex = card.dataset.deckIndex || String(index + 1);
+                    stack.appendChild(card);
+                });
+                track.appendChild(stack);
+            }
 
-            track.appendChild(stack);
+            this.applyResultsMobileStackClasses([...stack.querySelectorAll('.slide7-result-card')], activeIndex);
         } else {
+            track.replaceChildren();
             for (let start = 0; start < cards.length; start += perRow) {
                 const rowCards = cards.slice(start, start + perRow);
                 const row = document.createElement('div');
@@ -369,8 +402,8 @@ export default class UIManager extends EventEmitter {
                     card.style.setProperty('--i', String(indexInRow));
                     card.style.removeProperty('--stack-i');
                     card.dataset.deckIndex = card.dataset.deckIndex || String(absoluteIndex + 1);
+                    card.classList.remove('is-behind-1', 'is-behind-2', 'is-stack-visible');
                     card.classList.toggle('is-active', absoluteIndex === activeIndex);
-                    card.classList.remove('is-stack-visible');
                     card.tabIndex = 0;
                     row.appendChild(card);
                 });
@@ -391,10 +424,7 @@ export default class UIManager extends EventEmitter {
         if (next) next.disabled = !canNav;
         if (nav) nav.hidden = !canNav;
 
-        const counter = document.getElementById(kind === 'event' ? 'slide7EventCounter' : 'slide7RolesCounter');
-        const total = Math.max(cards.length, 1);
-        const current = cards[activeIndex]?.dataset.deckIndex || (cards.length ? String(activeIndex + 1) : '0');
-        if (counter) counter.textContent = `${current}/${total}`;
+        this.updateResultsCounter(kind, cards, activeIndex);
     }
 
     selectResultsCard(kind, index) {
@@ -404,6 +434,14 @@ export default class UIManager extends EventEmitter {
         this.resultsHandIndex[kind] = nextIndex;
 
         if (this.isResultsMobileLayout()) {
+            const track = this.getResultsTrack(kind);
+            const stack = track?.querySelector(':scope > .slide7-hand__stack');
+            const stackedCards = stack ? [...stack.querySelectorAll('.slide7-result-card')] : [];
+            if (stack && stackedCards.length === cards.length) {
+                this.applyResultsMobileStackClasses(stackedCards, nextIndex);
+                this.updateResultsCounter(kind, stackedCards, nextIndex);
+                return;
+            }
             this.syncResultsStack(kind);
             return;
         }
@@ -412,10 +450,7 @@ export default class UIManager extends EventEmitter {
             card.classList.toggle('is-active', cardIndex === nextIndex);
         });
 
-        const counter = document.getElementById(kind === 'event' ? 'slide7EventCounter' : 'slide7RolesCounter');
-        const total = Math.max(cards.length, 1);
-        const current = cards[nextIndex]?.dataset.deckIndex || String(nextIndex + 1);
-        if (counter) counter.textContent = `${current}/${total}`;
+        this.updateResultsCounter(kind, cards, nextIndex);
     }
 
     stepResultsHand(kind, direction) {

@@ -158,7 +158,7 @@ function buildEventPrompt(theme, numberOfTeams) {
         {
             role: "system",
             content: `Genera situaciones ficticias de una metrópolis contemporánea. 
-            Usa humor satírico basado en contradicciones sociales, burocracia y conflictos cotidianos. 
+            Usa humor satírico basado en contradicciones sociales, burocracia y conflictos cotidianos con un toque surrealista. 
             Las causas y consecuencias deben ser posibles en el mundo real. 
             Evita magia, superpoderes, mutaciones extraordinarias y fenómenos sobrenaturales. 
             Presenta un conflicto concreto que permita discutir decisiones y sus consecuencias.
