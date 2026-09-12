@@ -97,6 +97,13 @@ export default class UIManager extends EventEmitter {
         this.views[this.currentView].classList.remove('show');
         this.views[this.currentView].classList.remove('noBlur');
         this.views[newStep].classList.add('show');
+        if (this.views[newStep].id === 'slide7') {
+            // A new result must start at the heading, not the previous deck's scroll.
+            document.querySelector('.allSlidesContainer')?.scrollTo(0, 0);
+            this.views[newStep].scrollTo(0, 0);
+            this.views[newStep].querySelector('.slide7-results')?.scrollTo(0, 0);
+            this.views[newStep].querySelector('.slide7-results__panel')?.scrollTo(0, 0);
+        }
         setTimeout(_ => {
             this.views[newStep].classList.add('noBlur');
         }, 200);
