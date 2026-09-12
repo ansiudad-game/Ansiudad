@@ -17,7 +17,7 @@ function createChatCompletion(groq, messages, model) {
     const payload = {
         messages,
         model,
-        temperature: 0.6,
+        temperature: 0.15,
         reasoning_effort: "low",
         reasoning_format: "parsed",
         max_completion_tokens: 4096,

@@ -2637,3 +2637,53 @@ button#another-one.juego-nav-btn {
         padding: 24px 20px;
     }
 }
+/* The setup form grows with its content inside the mobile page scroller. */
+@media (max-width: 767px) {
+    #slide5.show {
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        touch-action: pan-y;
+    }
+    #slide5 .slide5-layout,
+    #slide5 .slide5-cards-row,
+    #slide5 .cards-container .card-wrapper.fitHeight {
+        flex: 0 0 auto;
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        overflow: visible;
+    }
+    #slide5 .juego-slide-nav--setup {
+        flex-shrink: 0;
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+    }
+
+    /* Reserve full card and navigation heights; scroll results when necessary. */
+    #slide7 .slide7-results__panel {
+        grid-template-rows: auto auto auto;
+        align-content: start;
+        row-gap: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+    #slide7 .slide7-results__column {
+        height: auto;
+        flex-shrink: 0;
+    }
+    #slide7 .slide7-results__stack {
+        flex: 0 0 auto;
+        justify-content: flex-start;
+    }
+    #slide7 .slide7-hand,
+    #slide7 .slide7-hand__stack,
+    #slide7 .slide7-results__nav {
+        flex-shrink: 0;
+    }
+    #slide7 .slide7-hand { --card-h: 15rem; }
+    #slide7 .slide7-hand__stack { box-sizing: content-box; }
+    #slide7 .slide7-results__nav {
+        position: relative;
+        margin-top: 0.75rem;
+    }
+    #slide7 .slide7-result-card__body { overflow-y: auto; }
+}

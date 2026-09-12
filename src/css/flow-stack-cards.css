@@ -76,3 +76,46 @@
     transition: none;
   }
 }
+
+/* Mobile cards use page flow instead of a scroll-pinned timeline. */
+.is-mobile-flow .what-flow__pin,
+.is-mobile-flow .desafio-flow__pin {
+  height: auto; min-height: 100svh; overflow: visible;
+  grid-template-rows: auto auto;
+}
+.is-mobile-flow .what-flow__header,
+.is-mobile-flow .desafio-flow__header { margin: 0; padding: 2rem 1rem; }
+.is-mobile-flow .intro__title { margin: 0; }
+.is-mobile-flow .what-flow__layout,
+.is-mobile-flow .desafio-flow__layout {
+  transform: none; max-height: none;
+  padding: 2rem var(--page-padding); gap: 2rem;
+}
+.is-mobile-flow .what-flow__text-track,
+.is-mobile-flow .desafio-flow__text-track {
+  display: grid; height: auto; min-height: 0; transform: none;
+}
+.is-mobile-flow .flow-stack-cards .flow-stack-card {
+  grid-area: 1 / 1; position: relative; left: auto; top: auto;
+  transform: none !important; visibility: hidden !important;
+  opacity: 0 !important; pointer-events: none;
+}
+.is-mobile-flow .flow-stack-card.is-active {
+  visibility: visible !important; opacity: 1 !important; pointer-events: auto;
+}
+.flow-mobile-nav { display: flex; align-items: center; gap: 1.25rem; padding: 0.75rem 0; }
+.flow-mobile-nav button {
+  position: relative; width: 3.5rem; height: 3.5rem; border: 0;
+  border-radius: 999px; background: var(--morado-oscuro); cursor: pointer;
+}
+.flow-mobile-nav button span {
+  display: grid; place-items: center; width: 55%; height: 100%;
+  border-radius: 999px 0.85rem 0.85rem 999px;
+  background: var(--amarillo-oscuro); color: var(--morado-oscuro);
+  font-size: 1.5rem; transition: width 0.5s ease, border-radius 0.5s ease;
+}
+.flow-mobile-nav button:is(:hover, :focus-visible, :active) span { width: 100%; border-radius: 999px; }
+.flow-mobile-nav button:disabled { opacity: 0.35; cursor: default; }
+@media (prefers-reduced-motion: reduce) {
+  .flow-mobile-nav button span { transition: none; }
+}

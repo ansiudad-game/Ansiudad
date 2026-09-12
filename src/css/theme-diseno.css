@@ -466,3 +466,10 @@
 .flip-card:not(.flipped):focus-visible .flip-inner {
   transform: rotateY(8deg);
 }
+
+/* Explicit face visibility also protects against mobile compositor bleed-through. */
+.flip-inner { -webkit-transform-style: preserve-3d; }
+.flip-front { transform: rotateY(0deg) translateZ(1px); }
+.flip-back { transform: rotateY(180deg) translateZ(1px); visibility: hidden; pointer-events: none; }
+.flip-card.flipped .flip-front { visibility: hidden; pointer-events: none; }
+.flip-card.flipped .flip-back { visibility: visible; pointer-events: auto; }

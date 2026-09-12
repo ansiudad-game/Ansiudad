@@ -1402,7 +1402,7 @@ function resetAnimationsAfterMenuJump() {
   }
 
   const whatFlow = document.getElementById('whatFlow');
-  if (whatFlow) {
+  if (whatFlow && !whatFlow.classList.contains('is-mobile-flow')) {
     const whatTextPanes = [...whatFlow.querySelectorAll('.what-flow__text-pane')];
     resetFlowParallaxState('whatFlow', {
       titleSelector: '.intro__title',
@@ -1414,7 +1414,7 @@ function resetAnimationsAfterMenuJump() {
     });
   }
   const desafioFlow = document.getElementById('desafioFlow');
-  if (desafioFlow) {
+  if (desafioFlow && !desafioFlow.classList.contains('is-mobile-flow')) {
     const textPanes = [...desafioFlow.querySelectorAll('.desafio-flow__text-pane')];
     const finale = desafioFlow.querySelector('.desafio-flow__finale');
     resetFlowParallaxState('desafioFlow', {
@@ -1431,7 +1431,7 @@ function resetAnimationsAfterMenuJump() {
 
 function playWhatMenuIntro() {
   const flow = document.getElementById('whatFlow');
-  if (!flow || prefersReducedMotion.matches) return;
+  if (!flow || flow.classList.contains('is-mobile-flow') || prefersReducedMotion.matches) return;
 
   const title = flow.querySelector('.intro__title');
   const cards = [...flow.querySelectorAll('.what-flow__card')];
@@ -1494,7 +1494,7 @@ function playWhatMenuIntro() {
 
 function playDesafioMenuIntro() {
   const flow = document.getElementById('desafioFlow');
-  if (!flow || prefersReducedMotion.matches) return;
+  if (!flow || flow.classList.contains('is-mobile-flow') || prefersReducedMotion.matches) return;
 
   const title = flow.querySelector('.desafio-flow__title');
   const cards = [...flow.querySelectorAll('.desafio-flow__card')];
@@ -2098,8 +2098,7 @@ function trimPageEndSpace() {
    INIT
 ============================================================================= */
 const init = () => {
-  initWhatParallax();
-  initDesafioParallax();
+  initResponsiveFlows();
   initDisenoReveal();
   initFlipCards();
   initCarousel();
@@ -2130,4 +2129,59 @@ if (!window.location.pathname.includes('juego')) {
   initGallery();
   initVideoLoader();
   initContactForm();
+}
+
+function initResponsiveFlows() {
+  const media = gsap.matchMedia();
+  media.add('(min-width: 768px)', () => {
+    initWhatParallax();
+    initDesafioParallax();
+    return () => { whatParallaxTimeline = null; desafioParallaxTimeline = null; };
+  });
+  media.add('(max-width: 767px)', () => {
+    const cleanups = ['what', 'desafio'].map((kind) => {
+      const flow = document.getElementById(kind === 'what' ? 'whatFlow' : 'desafioFlow');
+      if (!flow) return () => {};
+      flow.classList.add('is-mobile-flow');
+      const panes = [...flow.querySelectorAll('.flow-stack-card')];
+      const dots = flow.querySelector('.flow-stack-dots');
+      const cards = [...flow.querySelectorAll('.' + kind + '-flow__card')];
+      gsap.set(flow.querySelector(kind === 'what' ? '.intro__title' : '.desafio-flow__title'), { autoAlpha: 1, x: 0, y: 0 });
+      const nav = document.createElement('nav');
+      nav.className = 'flow-mobile-nav';
+      nav.setAttribute('aria-label', 'Navegar tarjetas');
+      nav.innerHTML = '<button type="button" aria-label="Tarjeta anterior"><span aria-hidden="true">&#8592;</span></button><output aria-live="polite"></output><button type="button" aria-label="Tarjeta siguiente"><span aria-hidden="true">&#8594;</span></button>';
+      dots.after(nav);
+      const [prev, next] = nav.querySelectorAll('button');
+      let active = 0;
+      const render = (animate = true) => {
+        panes.forEach((pane, i) => {
+          pane.setAttribute('aria-hidden', String(i !== active));
+          pane.inert = i !== active;
+        });
+        syncFlowStackActiveState(panes, active, { dots });
+        cards.forEach((card, i) => {
+          if (kind === 'what') setWhatCardTransform(card, getWhatCardSlot(i, active), { alpha: 1 });
+          else setDesafioCardTransform(card, getDesafioCardSlot(i, active), { alpha: 1 });
+        });
+        prev.disabled = active === 0;
+        next.disabled = active === panes.length - 1;
+        nav.querySelector('output').textContent = (active + 1) + ' / ' + panes.length;
+        if (animate && !prefersReducedMotion.matches) {
+          gsap.fromTo(panes[active].firstElementChild, { y: 20, opacity: 0 }, {
+            y: 0, opacity: 1, duration: 0.35, overwrite: true,
+          });
+        }
+      };
+      prev.onclick = () => { active = Math.max(0, active - 1); render(); };
+      next.onclick = () => { active = Math.min(panes.length - 1, active + 1); render(); };
+      render(false);
+      return () => {
+        nav.remove();
+        flow.classList.remove('is-mobile-flow');
+        panes.forEach((pane) => { pane.removeAttribute('aria-hidden'); pane.inert = false; });
+      };
+    });
+    return () => cleanups.forEach((cleanup) => cleanup());
+  });
 }

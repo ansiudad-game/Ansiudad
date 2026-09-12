@@ -213,6 +213,28 @@ export function initWhereCarousel({ reducedMotion = false } = {}) {
     }
   });
 
+  // A gesture must start on a card; vertical gestures remain native page scroll.
+  let gesture = null;
+  cardsWrapper.addEventListener('pointerdown', (event) => {
+    const card = event.target.closest('.carousel__card');
+    if (!card || !event.isPrimary || event.button !== 0) return;
+    gesture = { id: event.pointerId, x: event.clientX, y: event.clientY, card };
+    card.setPointerCapture(event.pointerId);
+  });
+  cardsWrapper.addEventListener('pointerup', (event) => {
+    if (!gesture || gesture.id !== event.pointerId) return;
+    const { x, y, card } = gesture;
+    gesture = null;
+    const dx = event.clientX - x;
+    const dy = event.clientY - y;
+    if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      stepOnce(dx < 0 ? 1 : -1);
+    } else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+      stepOnce(Number(gsap.getProperty(card, 'rotate')) < 0 ? -1 : 1);
+    }
+  });
+  cardsWrapper.addEventListener('pointercancel', () => { gesture = null; });
+
   const narrowMq = window.matchMedia(NARROW_MQ);
   const onViewportChange = () => applyFanLayout({ elastic: false });
   if (typeof narrowMq.addEventListener === 'function') {

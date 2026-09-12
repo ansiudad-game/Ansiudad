@@ -496,3 +496,5 @@
   outline: 2px solid var(--amarillo-claro, #f6e9a8);
   outline-offset: 2px;
 }
+
+#where .carousel__card { touch-action: pan-y; user-select: none; }
