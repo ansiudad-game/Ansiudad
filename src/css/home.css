@@ -367,6 +367,7 @@ body.bg-loaded .home-logo__part--dad {
   position: relative;
   z-index: 10;
   width: 100%;
+  box-sizing: border-box;
   height: 2px;
   padding: 0;
   overflow: hidden;
@@ -422,7 +423,7 @@ body.bg-loaded .slogan-container.is-line-ready:not(.is-revealed) {
   height: auto;
   padding: clamp(12px, 2vh, 18px) clamp(16px, 3.5vw, 26px);
   border-radius: 24px;
-  width: min(94vw, 40rem);
+  width: 100%;
 }
 
 .slogan-container:not(.is-revealed) .slogan-text {
@@ -517,7 +518,7 @@ body.bg-loaded .home__scroll-hint:not(.is-hidden) {
   }
 
   .slogan-container.is-measuring {
-    width: calc(100% - 2 * var(--page-padding));
+    width: 100%;
     max-width: none;
     overflow: visible;
     display: flex;
@@ -525,11 +526,12 @@ body.bg-loaded .home__scroll-hint:not(.is-hidden) {
   }
 
   .slogan-text {
-    width: max-content;
-    max-width: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     margin-inline: auto;
-    text-wrap: nowrap;
-    white-space: nowrap;
+    text-wrap: balance;
+    white-space: normal;
     overflow: visible;
     text-align: center;
     font-size: clamp(1.5rem, 2.35vw, 3.5rem);
