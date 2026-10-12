@@ -98,7 +98,7 @@ export default defineConfig(({ mode }) => {
             },
         },
         plugins: [
-            restart({ restart: ['../static/**'] }),
+            restart({ restart: ['../static/**', '../server/**', '../api/**'] }),
             glsl(),
             sendPromptApiDev(projectRoot),
         ],
