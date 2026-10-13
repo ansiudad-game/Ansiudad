@@ -30,7 +30,6 @@
   pointer-events: none;
 }
 
-/* Trees: clipping desde donde arranca el SVG (banda inferior); hang intacto abajo */
 #l4 {
   z-index: 3;
   --layer-opacity: 1;
@@ -188,10 +187,11 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
 .page-title-container {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem 0.75rem;
+  gap: clamp(0.2rem, 0.9vh, 0.55rem);
   text-align: center;
   color: var(--morado-claro);
   width: 100%;
@@ -210,12 +210,13 @@ body.bg-loaded #l4 > img { animation: bg-bounce-in 1.2s cubic-bezier(0.16, 1, 0.
   margin: 0;
 }
 
-.page-title--left {
-  flex: 0 1 auto;
+.page-title--left,
+.page-title--right {
+  flex: 0 0 auto;
+  width: 100%;
 }
 
 .page-title--right {
-  flex: 0 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -296,9 +297,10 @@ body.bg-loaded .home-logo__part--dad {
 }
 
 .home__welcome-logo {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   overflow: visible;
 }
 
@@ -308,6 +310,7 @@ body.bg-loaded .home-logo__part--dad {
   height: clamp(96px, min(32vw, 42vh), 380px);
   max-width: min(94vw, 460px);
   max-height: 42vh;
+  margin-inline: auto;
   color: var(--morado-oscuro);
   overflow: visible;
 }
@@ -589,32 +592,9 @@ body.bg-loaded .home__scroll-hint:not(.is-hidden) {
     max-height: calc(100dvh - var(--site-bottom-pad, 64px) - clamp(3rem, 10vh, 4.5rem));
   }
 
-  .page-title-container {
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: clamp(0.2rem, 0.9vh, 0.5rem);
-  }
-
-  .page-title--left,
-  .page-title--right {
-    flex: 0 0 auto;
-    width: 100%;
-  }
-
-  .page-title--right {
-    display: flex;
-    justify-content: center;
-  }
-
   .page-title {
     font-size: clamp(1.05rem, 4.2vw, 1.5rem);
     line-height: 1.1;
-  }
-
-  .home__welcome-logo {
-    width: 100%;
-    justify-content: center;
   }
 
   .home__welcome-logo-svg {
@@ -675,5 +655,17 @@ body.bg-loaded .home__scroll-hint:not(.is-hidden) {
   .slogan-container.is-revealed {
     position: relative;
     z-index: 5;
+  }
+}
+
+/* Desktop panorámico: conservar el tamaño relativo de árboles del formato
+   estándar hasta 2:1. Reducir solo el exceso lateral al ensanchar la ventana;
+   el mínimo de 100vw mantiene cubierta la junta inferior en ultrawide.
+   No usar transform: el parallax controla esa propiedad desde index.js. */
+@media (min-width: 1024px) and (min-aspect-ratio: 2/1) {
+  #l4 {
+    width: clamp(100vw, 272vh, 136vw);
+    left: calc((100vw - clamp(100vw, 272vh, 136vw)) / 2);
+    right: auto;
   }
 }

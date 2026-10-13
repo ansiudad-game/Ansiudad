@@ -168,14 +168,17 @@
 
     <main data-taxi>
         <div id="loader-container">
-            <div id="loader" class="juego-loader" role="status" aria-label="Cargando juego">
-                <span class="juego-loader__ring" aria-hidden="true"></span>
-                <img
-                    class="juego-loader__logo"
-                    src="brand/A_morado.svg"
-                    alt=""
-                    decoding="async"
-                />
+            <div class="juego-loader-block">
+                <div id="loader" class="juego-loader" aria-hidden="true">
+                    <span class="juego-loader__ring"></span>
+                    <img
+                        class="juego-loader__logo"
+                        src="brand/A_morado.svg"
+                        alt=""
+                        decoding="async"
+                    />
+                </div>
+                <p id="loader-status" class="juego-loader__status" role="status" aria-live="polite">Trazando ciudad</p>
             </div>
         </div>
         <article data-taxi-view id="juegoContainer" class="pageContainer">

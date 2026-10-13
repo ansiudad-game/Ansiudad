@@ -13,11 +13,11 @@ function getGroqClient(env) {
     return new Groq({ apiKey, timeout: 60000, maxRetries: 0 })
 }
 
-function createChatCompletion(groq, messages, model) {
+function createChatCompletion(groq, messages, model, temperature) {
     const payload = {
         messages,
         model,
-        temperature: 0.15,
+        temperature,
         reasoning_effort: "low",
         reasoning_format: "parsed",
         max_completion_tokens: 4096,
@@ -157,23 +157,24 @@ function buildEventPrompt(theme, numberOfTeams) {
     return [
         {
             role: "system",
-            content: `Genera situaciones ficticias de una metrópolis contemporánea. 
-            Usa humor satírico basado en contradicciones sociales, burocracia y conflictos cotidianos con un toque surrealista. 
-            Las causas y consecuencias deben ser posibles en el mundo real. 
-            Evita magia, superpoderes, mutaciones extraordinarias y fenómenos sobrenaturales. 
-            Presenta un conflicto concreto que permita discutir decisiones y sus consecuencias.
-            Cada situación debe ser autónoma y no depender de otras.
-            El tema debe ser relevante para una metrópolis moderna llamada Ansiudad.
+            content: `Eres quien redacta las cartas del juego de mesa Ansiudad, una metrópolis ficticia con problemas socioambientales.
+Escribe en español, con el tono de una noticia breve: directo y accesible, con un poco de humor satírico y un toque fantasioso, sin burlarte de grupos vulnerables.
+Parte de situaciones que sí podrían suceder en una ciudad: plagas, contaminación, fallas de infraestructura, escasez de agua, conflictos de transporte o tecnologías mal implementadas.
+El toque fantasioso debe ser ligero: una coincidencia insólita, una mutacion extraordinaria, una exageración periodística, un nombre divertido o una medida burocrática absurda. Usa como máximo un detalle de este tipo por evento.
+Las causas y consecuencias deben ser físicamente plausibles. Los animales pueden adaptarse o resistir controles. Los robots e inventos deben tener funciones tecnológicas verosímiles. Evita magia y objetos con voluntad propia.
+El humor surge de contradicciones urbanas y decisiones humanas. Por ejemplo, una campaña de limpieza que genera más basura o una fábrica de patitos de hule que contamina el agua.
+Antes de responder, comprueba que cada noticia podría ocurrir sin fenómenos sobrenaturales y que el detalle insólito no desplaza el problema socioambiental.
+Cada evento es autónomo y plantea un conflicto que el equipo debe resolver. No des la solución ni impongas una única respuesta correcta.
 Responde SOLO con JSON válido, sin markdown y sin texto extra.
 El objeto debe tener exactamente esta forma:
 {"events":[{"title":"string","description":"string","type":"string"}]}
 No cambies los nombres de las llaves.
 Límites de longitud (obligatorios, para que quepa en una carta):
-- title: máximo 4 palabras
-- description: máximo 28 palabras, en una o dos frases cortas
+- title: categoría socioambiental de máximo 3 palabras, como "Manejo de desechos", "Movilidad y transporte" o "Crisis hídrica"
+- description: máximo 25 palabras en total, en una o dos frases cortas; usa palabras sencillas y evita detalles secundarios para que el texto quepa completo en la carta
 - type: una sola palabra
-Ejemplo:
-{"events":[{"title":"Manejo de desechos","description":"Los altos niveles de toxicidad en el vertedero de Ansiudad han dotado a las ratas de súper fuerza y resistencia a los raticidas.","type":"residuos"}]}`,
+Ejemplos de estilo y estructura:
+{"events":[{"title":"Manejo de desechos","description":"Las ratas del vertedero de Ansiudad resisten los raticidas habituales. Vecinos las apodan las invencibles mientras la basura sigue acumulándose.","type":"residuos"},{"title":"Movilidad y transporte","description":"Una tuneladora apodada el monstruo del subsuelo daña una línea del metro de Ansiudad durante las obras de ampliación. Miles de usuarios quedan sin servicio.","type":"movilidad"},{"title":"Crisis hídrica","description":"Explosión en la fábrica de patitos de hule de Ansiudad provoca la filtración de residuos contaminantes en un pozo que abastece a varios barrios.","type":"agua"}]}`,
         },
         {
             role: "user",
@@ -210,8 +211,8 @@ Devuelve únicamente el JSON con la clave "roles".`,
     ]
 }
 
-async function completeJson(groq, messages, model) {
-    const response = await createChatCompletion(groq, messages, model)
+async function completeJson(groq, messages, model, temperature) {
+    const response = await createChatCompletion(groq, messages, model, temperature)
     const text = getMessageText(response)
     try {
         return cleanJsonResponse(text)
@@ -235,8 +236,8 @@ export async function generateGame(body, env) {
         const groq = getGroqClient(env);
         const model = env.GROQ_MODEL?.trim() || DEFAULT_MODEL;
         const [events, roles] = await Promise.all([
-            completeJson(groq, buildEventPrompt(theme, Number(_numberOfTeams)), model),
-            completeJson(groq, buildRolePrompt(theme, Number(_numberOfRoles)), model),
+            completeJson(groq, buildEventPrompt(theme, Number(_numberOfTeams)), model, 0.6),
+            completeJson(groq, buildRolePrompt(theme, Number(_numberOfRoles)), model, 0.3),
         ]);
         return { status: 200, body: { success: true, data: { events, roles } } };
     } catch (error) {

@@ -214,7 +214,7 @@ export default class UIManager extends EventEmitter {
 
                             const eventDescription = document.createElement('p');
                             eventDescription.className = 'slide7-result-card__body';
-                            eventDescription.textContent = this.limitCardWords(event.description, 28);
+                            eventDescription.textContent = this.limitCardWords(event.description, 35);
                             eventCard.appendChild(eventDescription);
 
                             eventBox.appendChild(eventCard);
