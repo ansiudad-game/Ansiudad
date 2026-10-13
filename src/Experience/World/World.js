@@ -23,9 +23,19 @@ export default class World
             this.TunnelScene = new TunnelScene()
 
             this.positionScenes()
-            this.CityScene.playIntroSequence(() => {
-                this.experience.events.trigger('cityIntroComplete')
-            })
+
+            const startIntro = () => {
+                this.CityScene.playIntroSequence(() => {
+                    this.experience.events.trigger('cityIntroComplete')
+                })
+            }
+
+            const loader = this.experience.loader
+            if (!loader || loader.hidden) {
+                startIntro()
+            } else {
+                loader.on('loaderHidden', startIntro)
+            }
         })
     }
     
